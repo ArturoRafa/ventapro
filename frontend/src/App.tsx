@@ -1,35 +1,58 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Box, Typography, Container } from '@mui/material';
-
-function HomePage(): React.ReactElement {
-  return (
-    <Container maxWidth="sm" sx={{ textAlign: 'center', mt: 10 }}>
-      <Typography variant="h3" component="h1" gutterBottom color="primary">
-        cafe-pos
-      </Typography>
-      <Typography variant="h6" color="text.secondary">
-        Sistema de inventario, punto de venta y gestión de créditos
-      </Typography>
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="body2" color="text.secondary">
-          Setup completo. Próximo paso: Auth + Roles
-        </Typography>
-      </Box>
-    </Container>
-  );
-}
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ConfigProvider } from './context/ConfigContext';
+import { SnackbarProvider } from './context/SnackbarContext';
+import ProtectedRoute from './components/ui/ProtectedRoute';
+import MainLayout from './components/layout/MainLayout';
+import LoginPage from './pages/LoginPage';
+import ProductsPage from './pages/ProductsPage';
+import CategoriesPage from './pages/CategoriesPage';
+import InventoryPage from './pages/InventoryPage';
+import CustomersPage from './pages/CustomersPage';
+import ConfigPage from './pages/ConfigPage';
 
 function App(): React.ReactElement {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        {/* TODO(setup): Add module routes */}
-        {/* <Route path="/login" element={<LoginPage />} /> */}
-        {/* <Route path="/productos" element={<ProductsPage />} /> */}
-        {/* <Route path="/pos" element={<PosPage />} /> */}
-        {/* <Route path="/creditos" element={<CreditsPage />} /> */}
-      </Routes>
+      <AuthProvider>
+        <ConfigProvider>
+          <SnackbarProvider>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <MainLayout />
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate to="/productos" replace />} />
+                <Route path="productos" element={<ProductsPage />} />
+                <Route path="categorias" element={<CategoriesPage />} />
+                <Route
+                  path="inventario"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <InventoryPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="clientes" element={<CustomersPage />} />
+                <Route
+                  path="configuracion"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <ConfigPage />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </SnackbarProvider>
+        </ConfigProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
