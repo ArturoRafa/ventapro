@@ -1,0 +1,211 @@
+**DECISIONES TÉCNICAS**
+
+Sistema de Inventario y POS — cafe-pos
+
+Versión 1.0 — Marzo 2026 | Contrato de implementación
+
+# 1. Resumen Ejecutivo
+
+Este documento consolida todas las decisiones técnicas tomadas para la implementación del sistema cafe-pos. Sirve como contrato entre el cliente y el equipo de desarrollo. Cualquier cambio a estas decisiones debe documentarse como una nueva versión.
+
+# 2. Repositorio
+
+| **Aspecto** | **Decisión** |
+| --- | --- |
+| Nombre del repositorio | cafe-pos |
+| Estructura | Monorepo con /frontend y /backend |
+| Plataforma | GitHub |
+| Negocio placeholder | Cafetería El Buen Sabor |
+
+# 3. Decisiones por Módulo
+
+## 3.1 Clientes (para fiado)
+
+Se crea la entidad Cliente que no existía en el modelo de datos original.
+
+| **Campo** | **Tipo** | **Requerido** | **Notas** |
+| --- | --- | --- | --- |
+| id | INT (PK) | Auto | Autoincremental |
+| nombre | VARCHAR(100) | Sí | Nombre completo del cliente |
+| telefono | VARCHAR(20) | Sí | Teléfono principal de contacto |
+| telefono_alternativo | VARCHAR(20) | No | Segundo número de contacto |
+| direccion | TEXT | No | Dirección física del cliente |
+| estado | VARCHAR(10) | Sí | activo / inactivo (default: activo) |
+| created_at | TIMESTAMP | Auto | Fecha de registro |
+| updated_at | TIMESTAMP | Auto | Última actualización |
+
+## 3.2 Configuración del Negocio
+
+Tabla editable desde el panel Admin. Permite personalización white-label sin tocar código.
+
+| **Campo** | **Tipo** | **Default MVP** | **Notas** |
+| --- | --- | --- | --- |
+| id | INT (PK) | 1 | Solo un registro (single-tenant MVP) |
+| nombre_negocio | VARCHAR(100) | Cafetería El Buen Sabor | Se muestra en tickets y UI |
+| logo_url | TEXT | null | URL de imagen del logo |
+| color_primario | VARCHAR(7) | #1B5E20 | Color hex para tema MUI |
+| color_secundario | VARCHAR(7) | #FF6F00 | Color secundario del tema |
+| moneda | VARCHAR(3) | COP | Código ISO de moneda |
+| simbolo_moneda | VARCHAR(5) | $ | Símbolo para formateo |
+| impuesto_porcentaje | DECIMAL(5,2) | 0.00 | 0% en MVP, campo listo para activar |
+| usa_fiado | BOOLEAN | true | Activa/desactiva módulo de créditos |
+| telefono_negocio | VARCHAR(20) | null | Para tickets y WhatsApp |
+| direccion_negocio | TEXT | null | Para tickets |
+| requiere_monto_apertura | BOOLEAN | false | Si true, monto inicial obligatorio |
+
+## 3.3 Control de Caja
+
+Caja completa con configuración flexible según las decisiones del cliente:
+
+**Monto inicial: **Opcional. La tabla de configuración tiene un flag requiere_monto_apertura. Si es false, el cajero puede abrir caja sin ingresar monto. Si es true, el campo es obligatorio.
+
+**Cierre de caja: **Obligatorio. El cajero debe registrar el monto real contado. El sistema calcula la diferencia (sobrante/faltante) automáticamente.
+
+**Precondición: **No se puede registrar ninguna venta sin una caja abierta para el día.
+
+**Restricción: **No se puede abrir una nueva caja si ya existe una abierta.
+
+Modelo de datos actualizado para caja:
+
+| **Campo** | **Tipo** | **Notas** |
+| --- | --- | --- |
+| id | INT (PK) | Autoincremental |
+| cajero_id | INT (FK) | Usuario que abrió la caja |
+| monto_inicial | DECIMAL(12,2) | Nullable si requiere_monto_apertura=false |
+| monto_cierre_real | DECIMAL(12,2) | Monto físico contado al cerrar |
+| monto_cierre_sistema | DECIMAL(12,2) | Calculado: monto_inicial + ventas_efectivo |
+| diferencia | DECIMAL(12,2) | real - sistema (positivo=sobrante, negativo=faltante) |
+| estado | VARCHAR(10) | abierta / cerrada |
+| fecha_apertura | TIMESTAMP | Momento de apertura |
+| fecha_cierre | TIMESTAMP | Momento de cierre (null si abierta) |
+| notas_cierre | TEXT | Observaciones opcionales del cajero al cerrar |
+
+## 3.4 Impuestos
+
+**Decisión: **0% en el MVP. No se calcula impuesto en ventas.
+
+El campo impuesto_porcentaje existe en la configuración del negocio para activarlo en una futura iteración sin cambios de esquema. La lógica de cálculo se implementa pero se aplica con 0%.
+
+## 3.5 Tipos de Producto
+
+**Decisión: **Dos tipos desde el inicio.
+
+| **Tipo** | **Valor en BD** | **Descuenta stock** | **Ejemplo** |
+| --- | --- | --- | --- |
+| Inventario | inventory | Sí — impide venta sin stock | Café molido, gaseosas, galletas |
+| Comida | food | No — solo reportes de venta | Almuerzos, empanadas, hamburguesas |
+
+Ambos tipos se venden desde el mismo POS. La diferencia es solo en la validación y descuento de stock.
+
+## 3.6 Tickets
+
+**Decisión: **HTML imprimible como formato principal, con opción de descarga PDF.
+
+Se prioriza HTML porque funciona en cualquier dispositivo sin dependencias adicionales y permite impresión directa desde el navegador. pdf-lib se usa como opción secundaria para descargar.
+
+## 3.7 Datos Iniciales (Seed)
+
+Se crea un script de seed que:
+
+**1. **Crea el usuario Admin por defecto (credenciales en variables de entorno).
+
+**2. **Crea el registro de configuración del negocio con valores default.
+
+**3. **Opcionalmente carga categorías y productos de ejemplo para desarrollo.
+
+# 4. Modelo de Datos Completo (MVP)
+
+Entidades finales incluyendo las decisiones tomadas. Los nombres de tablas y columnas están en español según las convenciones.
+
+| **Tabla** | **Columnas clave** | **Relaciones** |
+| --- | --- | --- |
+| usuarios | id, nombre, email, password_hash, rol, estado, created_at | cajas, ventas |
+| configuracion_negocio | id, nombre_negocio, moneda, impuesto_porcentaje, usa_fiado, requiere_monto_apertura | Ninguna (singleton) |
+| productos | id, codigo, nombre, categoria, tipo (inventory/food), precio, stock, stock_minimo, estado, created_at | detalle_ventas |
+| clientes | id, nombre, telefono, telefono_alternativo, direccion, estado, created_at | ventas, creditos, abonos |
+| cajas | id, cajero_id, monto_inicial, monto_cierre_real, monto_cierre_sistema, diferencia, estado, fecha_apertura, fecha_cierre | ventas |
+| ventas | id, caja_id, cliente_id (nullable), cajero_id, total, forma_pago, estado (paid/pending), created_at | detalle_ventas, creditos |
+| detalle_ventas | id, venta_id, producto_id, cantidad, precio_unitario, subtotal | ventas, productos |
+| creditos | id, cliente_id, venta_id, monto_total, saldo_pendiente, estado, created_at | clientes, ventas, abonos |
+| abonos | id, credito_id, cliente_id, monto, fecha, notas | creditos, clientes |
+
+# 5. Plan de Fases Actualizado
+
+Las fases se ajustan para incorporar las decisiones tomadas:
+
+## Fase 1 — Auth + Productos + Inventario + Config
+
+| **Tarea** | **Descripción** | **Prioridad** |
+| --- | --- | --- |
+| Setup monorepo | Estructura /frontend + /backend, TypeScript, ESLint, Prettier | Crítica |
+| Base de datos | Conexión Neon, TypeORM config, migraciones iniciales | Crítica |
+| Auth + Roles | Login JWT, middleware Admin/Cajero, seed de Admin | Crítica |
+| Configuración del negocio | Tabla + API + UI Admin para editar config | Alta |
+| CRUD Productos | Dos tipos (inventory/food), categorías, estado activo/inactivo | Crítica |
+| Módulo Inventario | Stock, ajustes manuales, alertas stock mínimo | Crítica |
+| Entidad Clientes | CRUD de clientes para el módulo de fiado | Alta |
+| UI completa Fase 1 | Vistas MUI: login, productos, inventario, config, clientes | Crítica |
+
+**Duración estimada: **2 semanas
+
+## Fase 2 — Caja + POS + Tickets
+
+| **Tarea** | **Descripción** | **Prioridad** |
+| --- | --- | --- |
+| Control de Caja | Apertura (monto opcional configurable), cierre obligatorio con conteo | Crítica |
+| POS — Inventario | Carrito, validación stock, transacción atómica | Crítica |
+| POS — Comidas | Venta sin descuento de inventario | Crítica |
+| Tickets HTML | Vista imprimible con datos del negocio desde config | Alta |
+| Tickets PDF | Descarga con pdf-lib como opción secundaria | Media |
+| UI POS | Vista de caja MUI, carrito, formas de pago, confirmación | Crítica |
+
+**Duración estimada: **2 semanas
+
+## Fase 3 — Créditos + Reportes + WhatsApp
+
+| **Tarea** | **Descripción** | **Prioridad** |
+| --- | --- | --- |
+| Ventas a crédito | Estado pendiente, registro en tabla crédito | Crítica |
+| Abonos parciales | Registro, actualización de saldo | Crítica |
+| Historial por cliente | Consulta con filtro por fecha | Alta |
+| Reporte diario | Resumen en lenguaje simple (no tablas financieras) | Alta |
+| Botón WhatsApp | Deep link wa.me con resumen codificado | Media |
+| UI Créditos y Reportes | Vistas MUI con resúmenes y tablas | Alta |
+
+**Duración estimada: **1.5 semanas
+
+## Fase 4 — Testing + Deploy
+
+| **Tarea** | **Descripción** | **Prioridad** |
+| --- | --- | --- |
+| Tests de integración | Flujos: venta+stock, crédito+abono, caja | Crítica |
+| Deploy | Vercel + Railway + Neon producción | Crítica |
+| Migraciones prod | TypeORM en entorno productivo | Crítica |
+| QA final | Reglas de negocio, roles, flujos completos | Crítica |
+
+**Duración estimada: **1 semana
+
+### Resumen de Tiempos
+
+| **Fase** | **Módulos** | **Duración** |
+| --- | --- | --- |
+| 1 | Auth + Config + Productos + Inventario + Clientes | 2 semanas |
+| 2 | Caja + POS + Tickets | 2 semanas |
+| 3 | Créditos + Abonos + Reportes + WhatsApp | 1.5 semanas |
+| 4 | Testing + Deploy | 1 semana |
+| Total |  | 6.5 semanas |
+
+# 6. Stack Confirmado
+
+| **Capa** | **Tecnología** | **Notas** |
+| --- | --- | --- |
+| Frontend | React 18 + TypeScript + MUI v5 | Vercel (gratuito) |
+| Backend | Node.js 20 + Express + TypeScript | Railway (~$5/mes) |
+| ORM | TypeORM 0.3+ | Migraciones, QueryRunner para transacciones |
+| Base de datos | PostgreSQL 15+ (Neon) | Free tier 0.5 GB |
+| Auth | JWT + bcrypt (12 salt rounds) | Roles Admin / Cajero |
+| Tickets | HTML imprimible + pdf-lib | HTML prioritario |
+
+*Documento generado: Marzo 2026 — cafe-pos v1.0*
+
+*Este documento es el contrato de implementación. Cualquier cambio requiere nueva versión.*
