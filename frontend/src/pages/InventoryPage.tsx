@@ -3,12 +3,14 @@ import {
   Box, Typography, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, TextField, TablePagination, IconButton,
   Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControlLabel, Switch,
+  CircularProgress,
 } from '@mui/material';
 import { TuneRounded } from '@mui/icons-material';
 import type { Product } from '../types/product.types';
 import * as inventoryService from '../services/inventory.service';
 import { useSnackbar } from '../context/SnackbarContext';
 import { formatCurrency } from '../utils/formatCurrency';
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function InventoryPage(): React.ReactElement {
   const { showSnackbar } = useSnackbar();
@@ -17,7 +19,9 @@ export default function InventoryPage(): React.ReactElement {
   const [page, setPage] = useState(0);
   const [limit] = useState(20);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
   const [lowStockOnly, setLowStockOnly] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Adjust dialog
   const [adjustOpen, setAdjustOpen] = useState(false);
@@ -26,10 +30,17 @@ export default function InventoryPage(): React.ReactElement {
   const [reason, setReason] = useState('');
 
   const fetchStock = useCallback(async () => {
-    const result = await inventoryService.getStockView({ page: page + 1, limit, search: search || undefined, lowStockOnly });
-    setProducts(result.data);
-    setTotal(result.meta.total);
-  }, [page, limit, search, lowStockOnly]);
+    setLoading(true);
+    try {
+      const result = await inventoryService.getStockView({ page: page + 1, limit, search: debouncedSearch || undefined, lowStockOnly });
+      setProducts(result.data);
+      setTotal(result.meta.total);
+    } catch {
+      showSnackbar('Error al cargar inventario', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit, debouncedSearch, lowStockOnly, showSnackbar]);
 
   useEffect(() => { fetchStock(); }, [fetchStock]);
 
@@ -70,6 +81,9 @@ export default function InventoryPage(): React.ReactElement {
         />
       </Box>
 
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>
+      ) : (
       <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
@@ -107,6 +121,7 @@ export default function InventoryPage(): React.ReactElement {
           </TableBody>
         </Table>
       </TableContainer>
+      )}
 
       <TablePagination
         component="div"

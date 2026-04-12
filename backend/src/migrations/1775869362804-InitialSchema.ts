@@ -58,8 +58,18 @@ export class InitialSchema1775869362804 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        // Drop triggers first
+        await queryRunner.query(`DROP TRIGGER IF EXISTS trg_clientes_updated_at ON "clientes"`);
+        await queryRunner.query(`DROP TRIGGER IF EXISTS trg_productos_updated_at ON "productos"`);
+        await queryRunner.query(`DROP TRIGGER IF EXISTS trg_subcategorias_updated_at ON "subcategorias"`);
+        await queryRunner.query(`DROP TRIGGER IF EXISTS trg_categorias_updated_at ON "categorias"`);
+        await queryRunner.query(`DROP TRIGGER IF EXISTS trg_usuarios_updated_at ON "usuarios"`);
+        // Drop trigger function
+        await queryRunner.query(`DROP FUNCTION IF EXISTS fn_actualizar_updated_at()`);
+        // Drop foreign keys
         await queryRunner.query(`ALTER TABLE "productos" DROP CONSTRAINT "FK_bbe10e43f73d5d1033b61a3a389"`);
         await queryRunner.query(`ALTER TABLE "subcategorias" DROP CONSTRAINT "FK_b15fe98fc00a27b01420611b73b"`);
+        // Drop tables
         await queryRunner.query(`DROP TABLE "clientes"`);
         await queryRunner.query(`DROP TABLE "configuracion_negocio"`);
         await queryRunner.query(`DROP TABLE "productos"`);

@@ -4,6 +4,7 @@ import {
   TableHead, TableRow, Paper, IconButton, TextField, TablePagination,
   Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select,
   FormControl, InputLabel, RadioGroup, FormControlLabel, Radio, FormLabel,
+  CircularProgress,
 } from '@mui/material';
 import { Add, Edit, ToggleOn, ToggleOff } from '@mui/icons-material';
 import type { Product, CreateProductDto } from '../types/product.types';
@@ -15,6 +16,7 @@ import ConfirmDialog from '../components/ui/ConfirmDialog';
 import { useSnackbar } from '../context/SnackbarContext';
 import { useAuth } from '../context/AuthContext';
 import { formatCurrency } from '../utils/formatCurrency';
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function ProductsPage(): React.ReactElement {
   const { user } = useAuth();
@@ -26,6 +28,8 @@ export default function ProductsPage(): React.ReactElement {
   const [page, setPage] = useState(0);
   const [limit] = useState(20);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
+  const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
 
@@ -40,15 +44,26 @@ export default function ProductsPage(): React.ReactElement {
   const [toggleTarget, setToggleTarget] = useState<Product | null>(null);
 
   const fetchProducts = useCallback(async () => {
-    const result = await productService.getProducts({ page: page + 1, limit, search: search || undefined, status: isAdmin ? undefined : 'activo' });
-    setProducts(result.data);
-    setTotal(result.meta.total);
-  }, [page, limit, search, isAdmin]);
+    setLoading(true);
+    try {
+      const result = await productService.getProducts({ page: page + 1, limit, search: debouncedSearch || undefined, status: isAdmin ? undefined : 'activo' });
+      setProducts(result.data);
+      setTotal(result.meta.total);
+    } catch {
+      showSnackbar('Error al cargar productos', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit, debouncedSearch, isAdmin, showSnackbar]);
 
   const fetchCategories = useCallback(async () => {
-    const cats = await categoryService.getCategories(true);
-    setCategories(cats);
-  }, []);
+    try {
+      const cats = await categoryService.getCategories(true);
+      setCategories(cats);
+    } catch {
+      showSnackbar('Error al cargar categorias', 'error');
+    }
+  }, [showSnackbar]);
 
   useEffect(() => { fetchProducts(); }, [fetchProducts]);
   useEffect(() => { fetchCategories(); }, [fetchCategories]);
@@ -56,11 +71,20 @@ export default function ProductsPage(): React.ReactElement {
   useEffect(() => {
     if (selectedCategoryId > 0) {
       const cat = categories.find((c) => c.id === selectedCategoryId);
-      setSubcategories(cat?.subcategories?.filter((s) => s.status === 'activo') ?? []);
+      const activeSubs = cat?.subcategories?.filter((s) => s.status === 'activo') ?? [];
+      // When editing, include the product's current subcategory even if inactive
+      if (editingProduct && editingProduct.subcategory?.category?.id === selectedCategoryId) {
+        const currentSubId = editingProduct.subcategoryId;
+        if (!activeSubs.some((s) => s.id === currentSubId)) {
+          const currentSub = cat?.subcategories?.find((s) => s.id === currentSubId);
+          if (currentSub) activeSubs.push(currentSub);
+        }
+      }
+      setSubcategories(activeSubs);
     } else {
       setSubcategories([]);
     }
-  }, [selectedCategoryId, categories]);
+  }, [selectedCategoryId, categories, editingProduct]);
 
   const openCreate = (): void => {
     setEditingProduct(null);
@@ -120,6 +144,9 @@ export default function ProductsPage(): React.ReactElement {
         sx={{ mb: 2, width: 300 }}
       />
 
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>
+      ) : (
       <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
@@ -160,6 +187,7 @@ export default function ProductsPage(): React.ReactElement {
           </TableBody>
         </Table>
       </TableContainer>
+      )}
 
       <TablePagination
         component="div"

@@ -17,8 +17,8 @@ interface ProductFilters {
 }
 
 export async function findAll(filters: ProductFilters = {}): Promise<{ data: Product[]; meta: { total: number; page: number; limit: number } }> {
-  const page = filters.page ?? 1;
-  const limit = filters.limit ?? 20;
+  const page = Math.max(1, filters.page ?? 1);
+  const limit = Math.min(100, Math.max(1, filters.limit ?? 20));
   const skip = (page - 1) * limit;
 
   const qb = repo()
@@ -78,6 +78,7 @@ export async function update(id: number, dto: UpdateProductDto): Promise<Product
   if (dto.subcategoryId && dto.subcategoryId !== product.subcategoryId) {
     const sub = await subRepo().findOne({ where: { id: dto.subcategoryId } });
     if (!sub) throw Errors.notFound(`Subcategory ${dto.subcategoryId} not found`);
+    if (sub.status === 'inactivo') throw Errors.validation('Cannot assign product to inactive subcategory');
   }
 
   Object.assign(product, dto);

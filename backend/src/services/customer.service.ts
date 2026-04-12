@@ -13,8 +13,8 @@ interface CustomerFilters {
 }
 
 export async function findAll(filters: CustomerFilters = {}): Promise<{ data: Customer[]; meta: { total: number; page: number; limit: number } }> {
-  const page = filters.page ?? 1;
-  const limit = filters.limit ?? 20;
+  const page = Math.max(1, filters.page ?? 1);
+  const limit = Math.min(100, Math.max(1, filters.limit ?? 20));
   const skip = (page - 1) * limit;
 
   const qb = repo()

@@ -51,15 +51,15 @@ async function seed(): Promise<void> {
       categoryRepo.create({ name: 'Bebidas', order: 1 }),
       categoryRepo.create({ name: 'Comidas', order: 2 }),
       categoryRepo.create({ name: 'Snacks', order: 3 }),
-      categoryRepo.create({ name: 'Panaderia', order: 4 }),
+      categoryRepo.create({ name: 'Panadería', order: 4 }),
     ]);
     console.warn(`${categories.length} categories created`);
 
     // Seed subcategories
     const subcategories = [
       // Bebidas
-      { categoryId: categories[0].id, name: 'Cafe caliente', order: 1 },
-      { categoryId: categories[0].id, name: 'Cafe frio', order: 2 },
+      { categoryId: categories[0].id, name: 'Café caliente', order: 1 },
+      { categoryId: categories[0].id, name: 'Café frío', order: 2 },
       { categoryId: categories[0].id, name: 'Jugos naturales', order: 3 },
       { categoryId: categories[0].id, name: 'Gaseosas', order: 4 },
       // Comidas

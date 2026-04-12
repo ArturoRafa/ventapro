@@ -5,11 +5,12 @@ import { validateCreateCustomerDto, validateUpdateCustomerDto } from '../dtos/cu
 
 export async function findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
+    const statusParam = req.query.status as string | undefined;
     const result = await customerService.findAll({
       page: req.query.page ? Number(req.query.page) : undefined,
       limit: req.query.limit ? Number(req.query.limit) : undefined,
       search: req.query.search as string | undefined,
-      status: req.query.status as 'activo' | 'inactivo' | undefined,
+      status: statusParam && ['activo', 'inactivo'].includes(statusParam) ? statusParam as 'activo' | 'inactivo' : undefined,
     });
     res.json(result);
   } catch (error) {

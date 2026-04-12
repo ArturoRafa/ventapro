@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Box, Typography, Button, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, IconButton, TextField, TablePagination,
-  Dialog, DialogTitle, DialogContent, DialogActions,
+  Dialog, DialogTitle, DialogContent, DialogActions, CircularProgress,
 } from '@mui/material';
 import { Add, Edit, ToggleOn, ToggleOff } from '@mui/icons-material';
 import type { Customer, CreateCustomerDto } from '../types/customer.types';
@@ -11,6 +11,7 @@ import StatusChip from '../components/ui/StatusChip';
 import ConfirmDialog from '../components/ui/ConfirmDialog';
 import { useSnackbar } from '../context/SnackbarContext';
 import { useAuth } from '../context/AuthContext';
+import { useDebounce } from '../hooks/useDebounce';
 
 export default function CustomersPage(): React.ReactElement {
   const { user } = useAuth();
@@ -22,6 +23,8 @@ export default function CustomersPage(): React.ReactElement {
   const [page, setPage] = useState(0);
   const [limit] = useState(20);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search);
+  const [loading, setLoading] = useState(true);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
@@ -31,10 +34,17 @@ export default function CustomersPage(): React.ReactElement {
   const [toggleTarget, setToggleTarget] = useState<Customer | null>(null);
 
   const fetchCustomers = useCallback(async () => {
-    const result = await customerService.getCustomers({ page: page + 1, limit, search: search || undefined });
-    setCustomers(result.data);
-    setTotal(result.meta.total);
-  }, [page, limit, search]);
+    setLoading(true);
+    try {
+      const result = await customerService.getCustomers({ page: page + 1, limit, search: debouncedSearch || undefined });
+      setCustomers(result.data);
+      setTotal(result.meta.total);
+    } catch {
+      showSnackbar('Error al cargar clientes', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [page, limit, debouncedSearch, showSnackbar]);
 
   useEffect(() => { fetchCustomers(); }, [fetchCustomers]);
 
@@ -94,6 +104,9 @@ export default function CustomersPage(): React.ReactElement {
         sx={{ mb: 2, width: 300 }}
       />
 
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>
+      ) : (
       <TableContainer component={Paper}>
         <Table size="small">
           <TableHead>
@@ -130,6 +143,7 @@ export default function CustomersPage(): React.ReactElement {
           </TableBody>
         </Table>
       </TableContainer>
+      )}
 
       <TablePagination
         component="div"

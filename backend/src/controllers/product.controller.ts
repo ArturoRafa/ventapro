@@ -5,12 +5,14 @@ import { validateCreateProductDto, validateUpdateProductDto } from '../dtos/prod
 
 export async function findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
+    const typeParam = req.query.type as string | undefined;
+    const statusParam = req.query.status as string | undefined;
     const result = await productService.findAll({
       page: req.query.page ? Number(req.query.page) : undefined,
       limit: req.query.limit ? Number(req.query.limit) : undefined,
       subcategoryId: req.query.subcategoryId ? Number(req.query.subcategoryId) : undefined,
-      type: req.query.type as 'inventory' | 'food' | undefined,
-      status: req.query.status as 'activo' | 'inactivo' | undefined,
+      type: typeParam && ['inventory', 'food'].includes(typeParam) ? typeParam as 'inventory' | 'food' : undefined,
+      status: statusParam && ['activo', 'inactivo'].includes(statusParam) ? statusParam as 'activo' | 'inactivo' : undefined,
       search: req.query.search as string | undefined,
     });
     res.json(result);

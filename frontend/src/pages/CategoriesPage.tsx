@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Box, Typography, Button, Grid, List, ListItemButton, ListItemText,
   Paper, TextField, Dialog, DialogTitle, DialogContent, DialogActions,
-  IconButton, Chip, Divider,
+  IconButton, Chip, Divider, CircularProgress,
 } from '@mui/material';
 import { Add, Edit, ToggleOn, ToggleOff } from '@mui/icons-material';
 import type { Category, Subcategory } from '../types/category.types';
@@ -15,6 +15,7 @@ export default function CategoriesPage(): React.ReactElement {
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCat, setSelectedCat] = useState<Category | null>(null);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Category dialog
   const [catDialogOpen, setCatDialogOpen] = useState(false);
@@ -29,9 +30,16 @@ export default function CategoriesPage(): React.ReactElement {
   const [subOrder, setSubOrder] = useState(0);
 
   const fetchCategories = useCallback(async () => {
-    const cats = await categoryService.getCategories(true);
-    setCategories(cats);
-  }, []);
+    setLoading(true);
+    try {
+      const cats = await categoryService.getCategories(true);
+      setCategories(cats);
+    } catch {
+      showSnackbar('Error al cargar categorias', 'error');
+    } finally {
+      setLoading(false);
+    }
+  }, [showSnackbar]);
 
   useEffect(() => { fetchCategories(); }, [fetchCategories]);
 
@@ -119,6 +127,9 @@ export default function CategoriesPage(): React.ReactElement {
   return (
     <Box>
       <Typography variant="h5" sx={{ mb: 3 }}>Categorias y Subcategorias</Typography>
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>
+      ) : (
       <Grid container spacing={3}>
         {/* Categories panel */}
         <Grid item xs={12} md={5}>
@@ -176,6 +187,7 @@ export default function CategoriesPage(): React.ReactElement {
           </Paper>
         </Grid>
       </Grid>
+      )}
 
       {/* Category Dialog */}
       <Dialog open={catDialogOpen} onClose={() => setCatDialogOpen(false)}>

@@ -27,7 +27,20 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
-    const error: ApiErrorResponse = await response.json();
+    // Auto-logout on 401 (expired/invalid token)
+    if (response.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+      throw new ApiError('Sesion expirada', 'UNAUTHORIZED', 401);
+    }
+
+    let error: ApiErrorResponse;
+    try {
+      error = await response.json();
+    } catch {
+      throw new ApiError(`Error del servidor (${response.status})`, 'SERVER_ERROR', response.status);
+    }
     throw new ApiError(error.message, error.code, error.status, error.details);
   }
 
