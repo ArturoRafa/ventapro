@@ -4,7 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Sale } from './Sale';
+import { Credit } from './Credit';
+import { CreditPayment } from './CreditPayment';
 
 @Entity('clientes')
 export class Customer {
@@ -36,4 +41,13 @@ export class Customer {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+
+  @OneToMany(() => Sale, (sale) => sale.customer)
+  sales!: Sale[];
+
+  @OneToMany(() => Credit, (credit) => credit.customer)
+  credits!: Credit[];
+
+  @OneToMany(() => CreditPayment, (payment) => payment.customer)
+  creditPayments!: CreditPayment[];
 }

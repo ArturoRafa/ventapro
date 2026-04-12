@@ -4,7 +4,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { CashRegister } from './CashRegister';
+import { Sale } from './Sale';
 
 @Entity('usuarios')
 export class User {
@@ -41,4 +45,10 @@ export class User {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+
+  @OneToMany(() => CashRegister, (register) => register.cashier)
+  cashRegisters!: CashRegister[];
+
+  @OneToMany(() => Sale, (sale) => sale.cashier)
+  sales!: Sale[];
 }

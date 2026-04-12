@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 
 import { Subcategory } from './Subcategory';
+import { SaleDetail } from './SaleDetail';
 
 const decimalTransformer = {
   to: (value: number): number => value,
@@ -72,4 +74,7 @@ export class Product {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
+
+  @OneToMany(() => SaleDetail, (detail) => detail.product)
+  saleDetails!: SaleDetail[];
 }

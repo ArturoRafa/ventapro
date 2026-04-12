@@ -4,3 +4,8 @@ export { Category } from './Category';
 export { Subcategory } from './Subcategory';
 export { Product } from './Product';
 export { Customer } from './Customer';
+export { CashRegister } from './CashRegister';
+export { Sale } from './Sale';
+export { SaleDetail } from './SaleDetail';
+export { Credit } from './Credit';
+export { CreditPayment } from './CreditPayment';
