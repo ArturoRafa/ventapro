@@ -14,6 +14,7 @@ import inventoryRoutes from './routes/inventory.routes';
 import customerRoutes from './routes/customer.routes';
 import cashRegisterRoutes from './routes/cash-register.routes';
 import saleRoutes from './routes/sale.routes';
+import creditRoutes from './routes/credit.routes';
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use('/api/inventario', inventoryRoutes);
 app.use('/api/clientes', customerRoutes);
 app.use('/api/cajas', cashRegisterRoutes);
 app.use('/api/ventas', saleRoutes);
+app.use('/api/creditos', creditRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);

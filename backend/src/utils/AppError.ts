@@ -45,4 +45,15 @@ export const Errors = {
 
   cashRegisterClosed: (): AppError =>
     new AppError('No open cash register found', 'CASH_REGISTER_CLOSED', 422),
+
+  creditAlreadyPaid: (): AppError =>
+    new AppError('This credit has already been fully paid', 'CREDIT_ALREADY_PAID', 422),
+
+  paymentExceedsBalance: (amount: number, balance: number): AppError =>
+    new AppError(
+      `Payment amount (${amount}) exceeds pending balance (${balance})`,
+      'PAYMENT_EXCEEDS_BALANCE',
+      422,
+      { amount, balance },
+    ),
 };
