@@ -184,7 +184,9 @@ export async function findAll(
     qb.andWhere('s.createdAt >= :from', { from: filters.from });
   }
   if (filters.to) {
-    qb.andWhere('s.createdAt <= :to', { to: filters.to });
+    const toNextDay = new Date(filters.to);
+    toNextDay.setDate(toNextDay.getDate() + 1);
+    qb.andWhere('s.createdAt < :toNextDay', { toNextDay: toNextDay.toISOString().split('T')[0] });
   }
 
   const [data, total] = await qb.skip(skip).take(limit).getManyAndCount();
