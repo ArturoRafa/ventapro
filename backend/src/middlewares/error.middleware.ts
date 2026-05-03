@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { env } from '@/config/env';
-import { AppError } from '@/utils/AppError';
+import { env } from '../config/env';
+import { AppError } from '../utils/AppError';
 
 export function errorHandler(err: Error, _req: Request, res: Response, _next: NextFunction): void {
   if (err instanceof AppError) {
