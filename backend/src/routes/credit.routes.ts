@@ -5,11 +5,9 @@ import { authenticate, authorize } from '../middlewares/auth.middleware';
 
 const router = Router();
 
-// Admin only: list credits with filters
-router.get('/', authenticate, authorize('admin'), creditController.findAll);
-
-// Admin only: credit detail with payments
-router.get('/:id', authenticate, authorize('admin'), creditController.findById);
+// Any authenticated user: list and view credits
+router.get('/', authenticate, creditController.findAll);
+router.get('/:id', authenticate, creditController.findById);
 
 // Any authenticated user (must have open cash register — checked in service)
 router.post('/:id/abonos', authenticate, creditController.createPayment);

@@ -93,7 +93,7 @@ export default function CustomersPage(): React.ReactElement {
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h5">Clientes</Typography>
-        {isAdmin && <Button variant="contained" startIcon={<Add />} onClick={openCreate}>Nuevo Cliente</Button>}
+        <Button variant="contained" startIcon={<Add />} onClick={openCreate}>Nuevo Cliente</Button>
       </Box>
 
       <TextField
