@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe - Inventario</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #212121; }
+  .appbar { background: #1976d2; color: white; height: 64px; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.14); }
+  .appbar h1 { font-size: 20px; font-weight: 500; margin-left: 240px; flex: 1; }
+  .appbar-user { display: flex; align-items: center; gap: 12px; }
+  .chip-role { padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; background: #ce93d8; color: white; }
+  .btn-logout { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 6px 16px; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500; font-family: 'Roboto', sans-serif; }
+  .sidebar { width: 240px; background: white; position: fixed; top: 64px; left: 0; bottom: 0; border-right: 1px solid #e0e0e0; }
+  .nav-item { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; font-size: 14px; color: #616161; gap: 16px; }
+  .nav-item:hover { background: #f5f5f5; }
+  .nav-item.active { background: #e3f2fd; color: #1976d2; }
+  .nav-item .material-icons { font-size: 24px; color: inherit; }
+  .nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+  .main { margin-left: 240px; margin-top: 64px; padding: 24px; }
+  .badge-admin { font-size: 11px; background: #e3f2fd; color: #1565c0; padding: 2px 8px; border-radius: 4px; font-weight: 500; margin-left: 8px; }
+
+  .filters-row { display: flex; gap: 16px; margin-bottom: 16px; align-items: center; }
+  .search-field { padding: 10px 14px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; width: 300px; }
+  .switch-label { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+  .switch-track { width: 36px; height: 20px; border-radius: 10px; background: #bdbdbd; position: relative; transition: background 0.2s; }
+  .switch-track.on { background: #1976d2; }
+  .switch-thumb { width: 16px; height: 16px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+  .switch-track.on .switch-thumb { left: 18px; }
+
+  .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 500; color: #757575; border-bottom: 2px solid #e0e0e0; }
+  td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #fafafa; }
+  .low-stock-row td { background: #ffebee !important; }
+
+  .status-ok { color: #2e7d32; font-weight: 500; }
+  .status-low { color: #c62828; font-weight: 700; }
+
+  .icon-btn { background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 50%; color: #757575; }
+  .icon-btn:hover { background: #f5f5f5; }
+
+  .pagination { display: flex; justify-content: flex-end; align-items: center; padding: 12px 16px; gap: 16px; font-size: 13px; color: #757575; }
+
+  .dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 200; }
+  .dialog-overlay.active { display: flex; }
+  .dialog { background: white; border-radius: 8px; padding: 24px; min-width: 420px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .dialog h3 { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .dialog-sub { font-size: 13px; color: #757575; margin-bottom: 16px; }
+  .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+  .btn { padding: 8px 22px; border-radius: 4px; border: none; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; }
+  .btn-primary { background: #1976d2; color: white; }
+  .btn-text { background: transparent; color: #1976d2; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; color: #757575; margin-bottom: 4px; }
+  .form-group input { width: 100%; padding: 10px 14px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; }
+
+  .adjust-preview { background: #f5f5f5; border-radius: 8px; padding: 12px 16px; margin: 12px 0; display: flex; justify-content: space-between; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <h1>Cafeteria El Buen Sabor</h1>
+  <div class="appbar-user">
+    <span class="chip-role">Admin</span>
+    <span style="font-size: 14px;">Juan Perez</span>
+    <button class="btn-logout">SALIR</button>
+  </div>
+</div>
+
+<div class="sidebar">
+  <a href="index.html" style="display:flex;align-items:center;padding:8px 16px;gap:8px;font-size:12px;color:#1976d2;text-decoration:none;border-bottom:1px solid #e0e0e0;"><span class="material-icons" style="font-size:16px;">home</span> Mapa de Wireframes</a>
+  <a href="01-caja.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">point_of_sale</span> Caja</a>
+  <a href="02-pos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">storefront</span> POS</a>
+  <div class="nav-divider"></div>
+  <a href="00b-productos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">shopping_cart</span> Productos</a>
+  <a href="00c-categorias.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">category</span> Categorias</a>
+  <a href="00d-inventario.html" class="nav-item active" style="text-decoration:none;"><span class="material-icons">inventory_2</span> Inventario</a>
+  <a href="00e-clientes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">people</span> Clientes</a>
+  <a href="03-creditos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">credit_score</span> Creditos</a>
+  <div class="nav-divider"></div>
+  <a href="04-reportes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">assessment</span> Reportes</a>
+  <a href="00f-configuracion.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">settings</span> Configuracion</a>
+</div>
+
+<div class="main">
+  <h2 style="font-size: 24px; font-weight: 400; margin-bottom: 24px;">Inventario <span class="badge-admin">SOLO ADMIN</span></h2>
+
+  <div class="filters-row">
+    <input type="text" class="search-field" placeholder="Buscar...">
+    <label class="switch-label">
+      <div class="switch-track" onclick="this.classList.toggle('on')"><div class="switch-thumb"></div></div>
+      Solo bajo stock
+    </label>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Codigo</th>
+          <th>Nombre</th>
+          <th>Categoria</th>
+          <th style="text-align: right;">Precio</th>
+          <th style="text-align: right;">Stock</th>
+          <th style="text-align: right;">Stock Min.</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>P001</td>
+          <td>Coca-Cola 600ml</td>
+          <td>Bebidas / Gaseosas</td>
+          <td style="text-align: right;">$3.500</td>
+          <td style="text-align: right;">24</td>
+          <td style="text-align: right;">5</td>
+          <td><span class="status-ok">OK</span></td>
+          <td>
+            <button class="icon-btn" onclick="showDialog('edit-product-dialog')" title="Editar producto"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn" onclick="showDialog('adjust-dialog')" title="Ajustar stock" style="color: #2e7d32;"><span class="material-icons" style="font-size: 20px;">add_shopping_cart</span></button>
+          </td>
+        </tr>
+        <tr>
+          <td>P002</td>
+          <td>Pan integral</td>
+          <td>Panaderia / Panes</td>
+          <td style="text-align: right;">$5.200</td>
+          <td style="text-align: right;">15</td>
+          <td style="text-align: right;">5</td>
+          <td><span class="status-ok">OK</span></td>
+          <td>
+            <button class="icon-btn" title="Editar producto"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn" title="Ajustar stock" style="color: #2e7d32;"><span class="material-icons" style="font-size: 20px;">add_shopping_cart</span></button>
+          </td>
+        </tr>
+        <tr class="low-stock-row">
+          <td>P004</td>
+          <td>Leche entera 1L</td>
+          <td>Lacteos / Leches</td>
+          <td style="text-align: right;">$4.800</td>
+          <td style="text-align: right; color: #c62828; font-weight: 700;">3</td>
+          <td style="text-align: right;">5</td>
+          <td><span class="status-low">BAJO</span></td>
+          <td>
+            <button class="icon-btn" title="Editar producto"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn" title="Ajustar stock" style="color: #2e7d32;"><span class="material-icons" style="font-size: 20px;">add_shopping_cart</span></button>
+          </td>
+        </tr>
+        <tr class="low-stock-row">
+          <td>P010</td>
+          <td>Queso tajado</td>
+          <td>Lacteos / Quesos</td>
+          <td style="text-align: right;">$7.500</td>
+          <td style="text-align: right; color: #c62828; font-weight: 700;">2</td>
+          <td style="text-align: right;">5</td>
+          <td><span class="status-low">BAJO</span></td>
+          <td>
+            <button class="icon-btn" title="Editar producto"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn" title="Ajustar stock" style="color: #2e7d32;"><span class="material-icons" style="font-size: 20px;">add_shopping_cart</span></button>
+          </td>
+        </tr>
+        <tr>
+          <td>P005</td>
+          <td>Galletas Oreo</td>
+          <td>Snacks / Galletas</td>
+          <td style="text-align: right;">$3.200</td>
+          <td style="text-align: right;">18</td>
+          <td style="text-align: right;">5</td>
+          <td><span class="status-ok">OK</span></td>
+          <td>
+            <button class="icon-btn" title="Editar producto"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn" title="Ajustar stock" style="color: #2e7d32;"><span class="material-icons" style="font-size: 20px;">add_shopping_cart</span></button>
+          </td>
+        </tr>
+        <tr>
+          <td>P007</td>
+          <td>Agua 500ml</td>
+          <td>Bebidas / Agua</td>
+          <td style="text-align: right;">$2.000</td>
+          <td style="text-align: right;">30</td>
+          <td style="text-align: right;">10</td>
+          <td><span class="status-ok">OK</span></td>
+          <td>
+            <button class="icon-btn" title="Editar producto"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn" title="Ajustar stock" style="color: #2e7d32;"><span class="material-icons" style="font-size: 20px;">add_shopping_cart</span></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    <span>Filas por pagina: 20</span>
+    <span>1-6 de 6</span>
+    <button class="icon-btn" disabled><span class="material-icons">chevron_left</span></button>
+    <button class="icon-btn" disabled><span class="material-icons">chevron_right</span></button>
+  </div>
+</div>
+
+<!-- Adjust Dialog -->
+<div class="dialog-overlay" id="adjust-dialog">
+  <div class="dialog">
+    <h3>Ajustar Stock: Coca-Cola 600ml</h3>
+    <div class="dialog-sub">Stock actual: <strong>24</strong> unidades. Usa positivos para agregar, negativos para restar.</div>
+
+    <div class="form-group">
+      <label>Ajuste</label>
+      <input type="number" value="10" id="adjust-input" oninput="updatePreview()">
+    </div>
+    <div class="form-group">
+      <label>Razon (opcional)</label>
+      <input type="text" placeholder="Ej: Llego pedido del proveedor" value="Llego pedido del proveedor">
+    </div>
+
+    <div class="adjust-preview">
+      <span>Stock actual: 24</span>
+      <span style="font-weight: 500;">→</span>
+      <span style="font-weight: 700; color: #2e7d32;" id="new-stock">Nuevo stock: 34</span>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideDialog('adjust-dialog')">CANCELAR</button>
+      <button class="btn btn-primary" onclick="hideDialog('adjust-dialog')">APLICAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Product Dialog -->
+<div class="dialog-overlay" id="edit-product-dialog">
+  <div class="dialog">
+    <h3>Editar Producto</h3>
+    <div class="dialog-sub">Coca-Cola 600ml (P001)</div>
+
+    <div class="form-group">
+      <label>Nombre</label>
+      <input type="text" class="input" value="Coca-Cola 600ml" style="width:100%;">
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div class="form-group">
+        <label>Precio</label>
+        <input type="number" class="input" value="3500" style="width:100%;">
+      </div>
+      <div class="form-group">
+        <label>Stock minimo</label>
+        <input type="number" class="input" value="5" style="width:100%;">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Categoria / Subcategoria</label>
+      <input type="text" class="input" value="Bebidas / Gaseosas" disabled style="width:100%;background:#f5f5f5;">
+      <div style="font-size:11px;color:#9e9e9e;margin-top:4px;">Para cambiar categoria, edita desde la pagina de Productos</div>
+    </div>
+
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideDialog('edit-product-dialog')">CANCELAR</button>
+      <button class="btn btn-primary" onclick="hideDialog('edit-product-dialog')">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showDialog(id) { document.getElementById(id).classList.add('active'); }
+function hideDialog(id) { document.getElementById(id).classList.remove('active'); }
+function updatePreview() {
+  const adj = parseInt(document.getElementById('adjust-input').value) || 0;
+  const newStock = 24 + adj;
+  const el = document.getElementById('new-stock');
+  el.textContent = 'Nuevo stock: ' + newStock;
+  el.style.color = newStock < 0 ? '#c62828' : '#2e7d32';
+}
+</script>
+</body>
+</html>

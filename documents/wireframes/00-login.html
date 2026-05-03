@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe - Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #212121; min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* Full page centered */
+  .login-container { flex: 1; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #e3f2fd 0%, #f5f5f5 100%); }
+
+  .login-card { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); max-width: 400px; width: 100%; margin: 16px; overflow: hidden; }
+  .login-card-content { padding: 40px 32px; }
+
+  .login-title { font-size: 24px; font-weight: 700; color: #1976d2; text-align: center; margin-bottom: 4px; }
+  .login-subtitle { font-size: 14px; color: #757575; text-align: center; margin-bottom: 32px; }
+
+  .alert { padding: 10px 16px; border-radius: 4px; font-size: 13px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .alert-error { background: #fdeded; color: #5f2120; border: 1px solid #f5c6cb; }
+  .alert-error .material-icons { color: #d32f2f; font-size: 20px; }
+
+  .form-field { margin-bottom: 20px; }
+  .form-field label { display: block; font-size: 12px; color: #757575; margin-bottom: 6px; font-weight: 500; }
+  .form-field input { width: 100%; padding: 14px 16px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
+  .form-field input:focus { border-color: #1976d2; box-shadow: 0 0 0 2px rgba(25,118,210,0.1); }
+  .form-field input::placeholder { color: #bdbdbd; }
+
+  .btn-login { width: 100%; padding: 14px; background: #1976d2; color: white; border: none; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; transition: background 0.2s; }
+  .btn-login:hover { background: #1565c0; }
+  .btn-login:disabled { background: #bdbdbd; cursor: not-allowed; }
+  .btn-login.loading { background: #90caf9; }
+
+  /* Flow diagram */
+  .flow-section { padding: 32px; background: white; border-top: 4px solid #1976d2; }
+  .flow-title { font-size: 20px; font-weight: 500; margin-bottom: 24px; text-align: center; }
+
+  .flow-diagram { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; padding: 20px; }
+  .flow-box { padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; text-align: center; min-width: 120px; }
+  .flow-box.start { background: #e3f2fd; color: #1565c0; border: 2px solid #1976d2; }
+  .flow-box.process { background: #fff3e0; color: #e65100; border: 2px solid #ff9800; }
+  .flow-box.decision { background: #fce4ec; color: #c62828; border: 2px solid #e91e63; transform: rotate(0deg); }
+  .flow-box.end { background: #e8f5e9; color: #2e7d32; border: 2px solid #4caf50; }
+  .flow-arrow { color: #9e9e9e; font-size: 24px; }
+
+  .roles-section { display: flex; gap: 24px; justify-content: center; margin-top: 32px; }
+  .role-card { background: #fafafa; border-radius: 8px; padding: 20px; text-align: center; flex: 1; max-width: 280px; border: 1px solid #e0e0e0; }
+  .role-icon { font-size: 40px; margin-bottom: 8px; }
+  .role-name { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+  .role-desc { font-size: 13px; color: #757575; line-height: 1.6; }
+  .role-pages { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+  .role-chip { padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+  .role-chip.admin { background: #e3f2fd; color: #1565c0; }
+  .role-chip.cashier { background: #f3e5f5; color: #7b1fa2; }
+
+  .view-toggle { position: fixed; bottom: 24px; right: 24px; display: flex; gap: 4px; z-index: 100; }
+  .view-toggle button { padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 500; font-family: 'Roboto', sans-serif; }
+  .view-toggle button.active { background: #1976d2; color: white; }
+  .view-toggle button:not(.active) { background: #e0e0e0; color: #424242; }
+
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* Logout section in AppBar */
+  .appbar { background: #1976d2; color: white; height: 64px; display: flex; align-items: center; padding: 0 24px; }
+  .appbar h1 { font-size: 20px; font-weight: 500; flex: 1; }
+  .appbar-user { display: flex; align-items: center; gap: 12px; }
+  .chip-role { padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; background: #ce93d8; color: white; }
+  .btn-logout { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 6px 16px; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 13px; cursor: pointer; font-weight: 500; }
+  .btn-logout:hover { background: rgba(255,255,255,0.1); }
+
+  .logout-dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 200; }
+  .logout-dialog-overlay.active { display: flex; }
+  .dialog { background: white; border-radius: 8px; padding: 24px; min-width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .dialog h3 { font-size: 20px; font-weight: 500; margin-bottom: 12px; }
+  .dialog p { font-size: 14px; color: #616161; margin-bottom: 20px; }
+  .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .btn { padding: 8px 22px; border-radius: 4px; border: none; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; }
+  .btn-text { background: transparent; color: #1976d2; }
+  .btn-danger { background: #d32f2f; color: white; }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 1: Login Normal -->
+<div class="screen active" id="screen-login">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-card-content">
+        <div class="login-title">cafe-pos</div>
+        <div class="login-subtitle">Sistema de inventario y punto de venta</div>
+
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" placeholder="admin@cafepos.com" value="admin@cafepos.com">
+        </div>
+        <div class="form-field">
+          <label>Contrasena</label>
+          <input type="password" placeholder="********" value="admin123">
+        </div>
+        <button class="btn-login" onclick="window.location.href='01-caja.html'">INGRESAR</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 2: Login con Error -->
+<div class="screen" id="screen-error">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-card-content">
+        <div class="login-title">cafe-pos</div>
+        <div class="login-subtitle">Sistema de inventario y punto de venta</div>
+
+        <div class="alert alert-error">
+          <span class="material-icons">error_outline</span>
+          Credenciales invalidas
+        </div>
+
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" value="usuario@test.com" style="border-color: #d32f2f;">
+        </div>
+        <div class="form-field">
+          <label>Contrasena</label>
+          <input type="password" value="wrongpass" style="border-color: #d32f2f;">
+        </div>
+        <button class="btn-login">INGRESAR</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3: Login Loading -->
+<div class="screen" id="screen-loading">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-card-content">
+        <div class="login-title">cafe-pos</div>
+        <div class="login-subtitle">Sistema de inventario y punto de venta</div>
+
+        <div class="form-field">
+          <label>Email</label>
+          <input type="email" value="admin@cafepos.com" disabled style="background: #f5f5f5;">
+        </div>
+        <div class="form-field">
+          <label>Contrasena</label>
+          <input type="password" value="admin123" disabled style="background: #f5f5f5;">
+        </div>
+        <button class="btn-login loading" disabled>INGRESANDO...</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: Logout (AppBar) -->
+<div class="screen" id="screen-logout">
+  <div class="appbar">
+    <h1>Cafeteria El Buen Sabor</h1>
+    <div class="appbar-user">
+      <span class="chip-role">Admin</span>
+      <span style="font-size: 14px;">Juan Perez</span>
+      <button class="btn-logout" onclick="showLogoutDialog()">SALIR</button>
+    </div>
+  </div>
+  <div style="flex: 1; display: flex; justify-content: center; align-items: center; flex-direction: column; gap: 16px;">
+    <span class="material-icons" style="font-size: 48px; color: #1976d2;">logout</span>
+    <p style="font-size: 16px; color: #616161;">El boton "SALIR" esta en el AppBar (barra superior derecha)</p>
+    <p style="font-size: 14px; color: #9e9e9e;">Limpia el JWT del localStorage y redirige a /login</p>
+  </div>
+</div>
+
+<!-- SCREEN 5: Flujo completo -->
+<div class="screen" id="screen-flow">
+  <div class="flow-section" style="flex: 1;">
+    <div class="flow-title">Flujo de Autenticacion</div>
+
+    <div class="flow-diagram">
+      <div class="flow-box start">
+        <span class="material-icons" style="font-size: 20px;">person</span><br>
+        Usuario abre la app
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box decision">
+        <span class="material-icons" style="font-size: 20px;">security</span><br>
+        Tiene JWT valido?
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box process">
+        <span class="material-icons" style="font-size: 20px;">login</span><br>
+        NO: Muestra Login
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box process">
+        <span class="material-icons" style="font-size: 20px;">email</span><br>
+        Ingresa email + password
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box decision">
+        <span class="material-icons" style="font-size: 20px;">verified_user</span><br>
+        POST /api/auth/login
+      </div>
+    </div>
+    <div class="flow-diagram" style="margin-top: -8px;">
+      <div class="flow-box process">
+        <span class="material-icons" style="font-size: 20px;">error</span><br>
+        Error: "Credenciales invalidas"
+      </div>
+      <span class="flow-arrow material-icons">arrow_back</span>
+      <div class="flow-box decision">
+        <span class="material-icons" style="font-size: 20px;">help</span><br>
+        Credenciales OK?
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box end">
+        <span class="material-icons" style="font-size: 20px;">token</span><br>
+        Guarda JWT en localStorage
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box end">
+        <span class="material-icons" style="font-size: 20px;">dashboard</span><br>
+        Redirige segun rol
+      </div>
+    </div>
+
+    <div style="text-align: center; margin: 32px 0 16px; font-size: 16px; font-weight: 500; color: #424242;">Flujo de Cierre de Sesion</div>
+    <div class="flow-diagram">
+      <div class="flow-box start">
+        <span class="material-icons" style="font-size: 20px;">person</span><br>
+        Click "SALIR"
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box process">
+        <span class="material-icons" style="font-size: 20px;">delete_sweep</span><br>
+        Limpia JWT de localStorage
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box process">
+        <span class="material-icons" style="font-size: 20px;">cleaning_services</span><br>
+        Limpia estado de contextos
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box end">
+        <span class="material-icons" style="font-size: 20px;">login</span><br>
+        Redirige a /login
+      </div>
+    </div>
+
+    <div style="text-align: center; margin: 32px 0 16px; font-size: 16px; font-weight: 500; color: #424242;">Sesion expirada (JWT vencido)</div>
+    <div class="flow-diagram">
+      <div class="flow-box start">
+        <span class="material-icons" style="font-size: 20px;">http</span><br>
+        Request a la API
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box decision">
+        <span class="material-icons" style="font-size: 20px;">warning</span><br>
+        API retorna 401
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box process">
+        <span class="material-icons" style="font-size: 20px;">security</span><br>
+        Interceptor detecta 401
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box process">
+        <span class="material-icons" style="font-size: 20px;">delete_sweep</span><br>
+        Auto-logout
+      </div>
+      <span class="flow-arrow material-icons">arrow_forward</span>
+      <div class="flow-box end">
+        <span class="material-icons" style="font-size: 20px;">login</span><br>
+        Redirige a /login
+      </div>
+    </div>
+
+    <!-- Roles -->
+    <div style="text-align: center; margin: 40px 0 16px; font-size: 16px; font-weight: 500; color: #424242;">Vistas por Rol despues del Login</div>
+    <div class="roles-section">
+      <div class="role-card">
+        <div class="role-icon" style="color: #1565c0;">
+          <span class="material-icons" style="font-size: 40px;">admin_panel_settings</span>
+        </div>
+        <div class="role-name">Admin</div>
+        <div class="role-desc">Acceso completo a todos los modulos. Gestiona productos, inventario, reportes y configuracion.</div>
+        <div class="role-pages">
+          <span class="role-chip admin">Caja</span>
+          <span class="role-chip admin">POS</span>
+          <span class="role-chip admin">Productos</span>
+          <span class="role-chip admin">Categorias</span>
+          <span class="role-chip admin">Inventario</span>
+          <span class="role-chip admin">Clientes</span>
+          <span class="role-chip admin">Creditos</span>
+          <span class="role-chip admin">Reportes</span>
+          <span class="role-chip admin">Config</span>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="role-icon" style="color: #7b1fa2;">
+          <span class="material-icons" style="font-size: 40px;">badge</span>
+        </div>
+        <div class="role-name">Cajero</div>
+        <div class="role-desc">Vista limitada. Opera la caja, realiza ventas y consulta productos.</div>
+        <div class="role-pages">
+          <span class="role-chip cashier">Caja</span>
+          <span class="role-chip cashier">POS</span>
+          <span class="role-chip cashier">Productos</span>
+          <span class="role-chip cashier">Categorias</span>
+          <span class="role-chip cashier">Clientes*</span>
+        </div>
+        <div style="font-size: 11px; color: #9e9e9e; margin-top: 8px;">* Solo si usesCredit = true</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Logout confirmation dialog -->
+<div class="logout-dialog-overlay" id="logout-dialog">
+  <div class="dialog">
+    <h3>Cerrar Sesion</h3>
+    <p>Estas seguro de que deseas cerrar tu sesion? Tendras que volver a iniciar sesion para acceder al sistema.</p>
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideLogoutDialog()">CANCELAR</button>
+      <button class="btn btn-danger" onclick="hideLogoutDialog()">CERRAR SESION</button>
+    </div>
+  </div>
+</div>
+
+<!-- Back to index -->
+<a href="index.html" style="position:fixed;top:8px;left:8px;z-index:200;display:flex;align-items:center;gap:6px;padding:6px 14px;background:white;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.15);text-decoration:none;color:#1976d2;font-size:12px;font-weight:500;">
+  <span class="material-icons" style="font-size:16px;">home</span> Mapa de Wireframes
+</a>
+
+<!-- View toggle -->
+<div class="view-toggle">
+  <button class="active" onclick="switchScreen('login')">Login</button>
+  <button onclick="switchScreen('error')">Con Error</button>
+  <button onclick="switchScreen('loading')">Cargando</button>
+  <button onclick="switchScreen('logout')">Logout</button>
+  <button onclick="switchScreen('flow')">Flujos</button>
+</div>
+
+<script>
+function switchScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  document.querySelectorAll('.view-toggle button').forEach((b, i) => {
+    const screens = ['login','error','loading','logout','flow'];
+    b.classList.toggle('active', screens[i] === name);
+  });
+}
+function showLogoutDialog() { document.getElementById('logout-dialog').classList.add('active'); }
+function hideLogoutDialog() { document.getElementById('logout-dialog').classList.remove('active'); }
+</script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe - Punto de Venta (POS)</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #212121; overflow: hidden; }
+
+  .appbar { background: #1976d2; color: white; height: 64px; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.14); }
+  .appbar h1 { font-size: 20px; font-weight: 500; margin-left: 240px; }
+  .appbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; font-size: 14px; }
+
+  .sidebar { width: 240px; background: white; position: fixed; top: 64px; left: 0; bottom: 0; border-right: 1px solid #e0e0e0; }
+  .nav-item { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; font-size: 14px; color: #616161; gap: 16px; }
+  .nav-item:hover { background: #f5f5f5; }
+  .nav-item.active { background: #e3f2fd; color: #1976d2; }
+  .nav-item .material-icons { font-size: 24px; color: inherit; }
+  .nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+
+  .pos-container { margin-left: 240px; margin-top: 64px; display: flex; height: calc(100vh - 64px); }
+
+  /* Left Panel - Products */
+  .products-panel { flex: 6; padding: 16px; overflow-y: auto; border-right: 1px solid #e0e0e0; background: #fafafa; }
+
+  .search-bar { display: flex; align-items: center; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 8px 16px; margin-bottom: 12px; gap: 8px; }
+  .search-bar input { border: none; outline: none; font-size: 15px; flex: 1; font-family: 'Roboto', sans-serif; }
+  .search-bar .material-icons { color: #9e9e9e; }
+
+  .category-chips { display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px; }
+  .cat-chip { padding: 6px 16px; border-radius: 20px; border: 1px solid #e0e0e0; background: white; font-size: 13px; cursor: pointer; white-space: nowrap; font-family: 'Roboto', sans-serif; }
+  .cat-chip:hover { background: #f5f5f5; }
+  .cat-chip.active { background: #1976d2; color: white; border-color: #1976d2; }
+
+  .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 12px; }
+  .product-card { background: white; border-radius: 8px; padding: 14px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .product-card:hover { border-color: #1976d2; box-shadow: 0 2px 8px rgba(25,118,210,0.2); transform: translateY(-1px); }
+  .product-card.low-stock { border-color: #ff9800; }
+  .product-name { font-size: 14px; font-weight: 500; margin-bottom: 6px; line-height: 1.3; }
+  .product-price { font-size: 16px; font-weight: 700; color: #1976d2; margin-bottom: 6px; }
+  .stock-chip { font-size: 11px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+  .stock-normal { background: #e8f5e9; color: #2e7d32; }
+  .stock-low { background: #fff3e0; color: #e65100; }
+  .stock-food { background: #e3f2fd; color: #1565c0; }
+
+  /* Right Panel - Cart */
+  .cart-panel { flex: 4; display: flex; flex-direction: column; background: white; }
+  .cart-header { padding: 16px 20px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; }
+  .cart-header h3 { font-size: 18px; font-weight: 500; }
+  .cart-badge { background: #1976d2; color: white; border-radius: 12px; padding: 2px 10px; font-size: 13px; font-weight: 500; }
+
+  .cart-items { flex: 1; overflow-y: auto; padding: 8px 0; }
+  .cart-item { display: flex; align-items: center; padding: 10px 20px; gap: 12px; border-bottom: 1px solid #f5f5f5; }
+  .cart-item-info { flex: 1; }
+  .cart-item-name { font-size: 14px; font-weight: 500; }
+  .cart-item-price { font-size: 12px; color: #757575; margin-top: 2px; }
+  .cart-item-subtotal { font-size: 14px; font-weight: 500; min-width: 70px; text-align: right; }
+  .qty-controls { display: flex; align-items: center; gap: 4px; }
+  .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .qty-btn:hover { background: #f5f5f5; }
+  .qty-value { width: 32px; text-align: center; font-size: 14px; font-weight: 500; }
+  .cart-remove { color: #bdbdbd; cursor: pointer; border: none; background: none; padding: 4px; }
+  .cart-remove:hover { color: #f44336; }
+
+  .cart-footer { padding: 16px 20px; border-top: 1px solid #e0e0e0; }
+
+  .payment-section { margin-bottom: 16px; }
+  .payment-label { font-size: 13px; color: #757575; margin-bottom: 8px; font-weight: 500; }
+  .toggle-group { display: flex; border: 1px solid #e0e0e0; border-radius: 4px; overflow: hidden; }
+  .toggle-btn { flex: 1; padding: 8px 4px; border: none; background: white; cursor: pointer; font-size: 12px; font-family: 'Roboto', sans-serif; font-weight: 500; border-right: 1px solid #e0e0e0; }
+  .toggle-btn:last-child { border-right: none; }
+  .toggle-btn.active { background: #1976d2; color: white; }
+  .toggle-btn:hover:not(.active) { background: #f5f5f5; }
+
+  .credit-section { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; padding: 8px 12px; background: #fff8e1; border-radius: 6px; }
+  .credit-section input[type="checkbox"] { width: 18px; height: 18px; accent-color: #1976d2; }
+  .credit-section label { font-size: 13px; font-weight: 500; }
+
+  .customer-select { width: 100%; padding: 8px 12px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 13px; margin-bottom: 12px; }
+
+  .total-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .total-label { font-size: 16px; font-weight: 500; color: #424242; }
+  .total-value { font-size: 28px; font-weight: 700; color: #212121; }
+
+  .btn-cobrar { width: 100%; padding: 14px; background: #2e7d32; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Roboto', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+  .btn-cobrar:hover { background: #1b5e20; }
+
+  .empty-cart { text-align: center; padding: 40px 20px; color: #9e9e9e; }
+  .empty-cart .material-icons { font-size: 48px; margin-bottom: 8px; }
+
+  /* Dialogs */
+  .dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 200; }
+  .dialog-overlay.active { display: flex; }
+  .dialog { background: white; border-radius: 12px; padding: 28px; min-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .dialog h3 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
+  .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 24px; }
+  .btn { padding: 8px 22px; border-radius: 4px; border: none; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; }
+  .btn-primary { background: #1976d2; color: white; }
+  .btn-success { background: #2e7d32; color: white; }
+  .btn-text { background: transparent; border: none; color: #1976d2; }
+
+  /* No-register overlay */
+  .no-register { position: fixed; top: 64px; left: 240px; right: 0; bottom: 0; background: white; display: none; justify-content: center; align-items: center; z-index: 50; flex-direction: column; gap: 16px; }
+  .no-register .material-icons { font-size: 80px; color: #bdbdbd; }
+  .no-register p { font-size: 18px; color: #757575; }
+
+  /* Post-sale snackbar */
+  .snackbar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #323232; color: white; padding: 12px 24px; border-radius: 8px; display: none; align-items: center; gap: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 300; }
+  .snackbar.active { display: flex; }
+  .snackbar-btn { padding: 6px 12px; border: 1px solid rgba(255,255,255,0.5); border-radius: 4px; background: transparent; color: white; cursor: pointer; font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 500; }
+  .snackbar-btn.whatsapp { border-color: #25d366; color: #25d366; }
+  .snackbar-btn.pdf { border-color: #90caf9; color: #90caf9; }
+
+  .view-toggle { display: flex; gap: 4px; margin: 0 0 0 auto; }
+  .view-toggle button { padding: 4px 12px; background: #e8f5e9; border: none; border-radius: 12px; cursor: pointer; font-size: 11px; font-weight: 500; color: #2e7d32; }
+  .view-toggle button.active { background: #4caf50; color: white; }
+</style>
+</head>
+<body>
+
+<!-- AppBar -->
+<div class="appbar">
+  <h1 style="flex:1;">Cafeteria El Buen Sabor</h1>
+  <div class="appbar-right">
+    <span class="material-icons" style="font-size: 18px;">lock_open</span>
+    <span style="font-size: 12px; opacity: 0.8;">Caja #45 abierta</span>
+    <span style="width:1px;height:24px;background:rgba(255,255,255,0.3);"></span>
+    <span style="padding:2px 10px;border-radius:12px;font-size:12px;font-weight:500;background:#ce93d8;color:white;">Admin</span>
+    <span style="font-size:14px;">Juan Perez</span>
+    <button style="background:transparent;border:1px solid rgba(255,255,255,0.5);color:white;padding:6px 16px;border-radius:4px;font-size:13px;cursor:pointer;font-weight:500;font-family:'Roboto',sans-serif;" onclick="window.location.href='00-login.html'">SALIR</button>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <a href="index.html" style="display:flex;align-items:center;padding:8px 16px;gap:8px;font-size:12px;color:#1976d2;text-decoration:none;border-bottom:1px solid #e0e0e0;"><span class="material-icons" style="font-size:16px;">home</span> Mapa de Wireframes</a>
+  <a href="01-caja.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">point_of_sale</span> Caja</a>
+  <a href="02-pos.html" class="nav-item active" style="text-decoration:none;"><span class="material-icons">storefront</span> POS</a>
+  <div class="nav-divider"></div>
+  <a href="00b-productos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">shopping_cart</span> Productos</a>
+  <a href="00c-categorias.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">category</span> Categorias</a>
+  <a href="00d-inventario.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">inventory_2</span> Inventario</a>
+  <a href="00e-clientes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">people</span> Clientes</a>
+  <a href="03-creditos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">credit_score</span> Creditos</a>
+  <div class="nav-divider"></div>
+  <a href="04-reportes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">assessment</span> Reportes</a>
+  <a href="00f-configuracion.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">settings</span> Configuracion</a>
+</div>
+
+<!-- POS Container -->
+<div class="pos-container" id="pos-main">
+
+  <!-- Left: Products -->
+  <div class="products-panel">
+    <div class="search-bar">
+      <span class="material-icons">search</span>
+      <input type="text" placeholder="Buscar producto por nombre o codigo...">
+    </div>
+
+    <div class="category-chips">
+      <span class="cat-chip active">Todas</span>
+      <span class="cat-chip">Bebidas</span>
+      <span class="cat-chip">Panaderia</span>
+      <span class="cat-chip">Lacteos</span>
+      <span class="cat-chip">Comidas</span>
+      <span class="cat-chip">Snacks</span>
+      <span class="cat-chip">Aseo</span>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card" onclick="addToCart('Coca-Cola 600ml', 3500)">
+        <div class="product-name">Coca-Cola 600ml</div>
+        <div class="product-price">$3.500</div>
+        <span class="stock-chip stock-normal">stk: 24</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Pan integral', 5200)">
+        <div class="product-name">Pan integral</div>
+        <div class="product-price">$5.200</div>
+        <span class="stock-chip stock-normal">stk: 15</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Cafe latte', 6000)">
+        <div class="product-name">Cafe latte</div>
+        <div class="product-price">$6.000</div>
+        <span class="stock-chip stock-food">Comida</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Torta chocolate', 8500)">
+        <div class="product-name">Torta chocolate</div>
+        <div class="product-price">$8.500</div>
+        <span class="stock-chip stock-food">Comida</span>
+      </div>
+      <div class="product-card low-stock" onclick="addToCart('Leche entera 1L', 4800)">
+        <div class="product-name">Leche entera 1L</div>
+        <div class="product-price">$4.800</div>
+        <span class="stock-chip stock-low">stk: 3</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Galletas Oreo', 3200)">
+        <div class="product-name">Galletas Oreo</div>
+        <div class="product-price">$3.200</div>
+        <span class="stock-chip stock-normal">stk: 18</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Agua 500ml', 2000)">
+        <div class="product-name">Agua 500ml</div>
+        <div class="product-price">$2.000</div>
+        <span class="stock-chip stock-normal">stk: 30</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Empanada pollo', 4500)">
+        <div class="product-name">Empanada pollo</div>
+        <div class="product-price">$4.500</div>
+        <span class="stock-chip stock-food">Comida</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Jugo naranja', 5000)">
+        <div class="product-name">Jugo naranja</div>
+        <div class="product-price">$5.000</div>
+        <span class="stock-chip stock-normal">stk: 12</span>
+      </div>
+      <div class="product-card low-stock" onclick="addToCart('Queso tajado', 7500)">
+        <div class="product-name">Queso tajado</div>
+        <div class="product-price">$7.500</div>
+        <span class="stock-chip stock-low">stk: 2</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Arepa mixta', 6500)">
+        <div class="product-name">Arepa mixta</div>
+        <div class="product-price">$6.500</div>
+        <span class="stock-chip stock-food">Comida</span>
+      </div>
+      <div class="product-card" onclick="addToCart('Gaseosa Postobon', 3000)">
+        <div class="product-name">Gaseosa Postobon</div>
+        <div class="product-price">$3.000</div>
+        <span class="stock-chip stock-normal">stk: 20</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Cart -->
+  <div class="cart-panel">
+    <div class="cart-header">
+      <h3>Carrito</h3>
+      <span class="cart-badge" id="cart-count">3 items</span>
+    </div>
+
+    <div class="cart-items">
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">Coca-Cola 600ml</div>
+          <div class="cart-item-price">$3.500 c/u</div>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-btn">-</button>
+          <span class="qty-value">2</span>
+          <button class="qty-btn">+</button>
+        </div>
+        <div class="cart-item-subtotal">$7.000</div>
+        <button class="cart-remove"><span class="material-icons" style="font-size: 18px;">close</span></button>
+      </div>
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">Pan integral</div>
+          <div class="cart-item-price">$5.200 c/u</div>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-btn">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+        <div class="cart-item-subtotal">$5.200</div>
+        <button class="cart-remove"><span class="material-icons" style="font-size: 18px;">close</span></button>
+      </div>
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">Cafe latte</div>
+          <div class="cart-item-price">$6.000 c/u</div>
+        </div>
+        <div class="qty-controls">
+          <button class="qty-btn">-</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn">+</button>
+        </div>
+        <div class="cart-item-subtotal">$6.000</div>
+        <button class="cart-remove"><span class="material-icons" style="font-size: 18px;">close</span></button>
+      </div>
+    </div>
+
+    <div class="cart-footer">
+      <div class="payment-section">
+        <div class="payment-label">Forma de pago</div>
+        <div class="toggle-group" id="payment-toggle">
+          <button class="toggle-btn active" id="btn-efectivo" onclick="selectPayment(this)">Efectivo</button>
+          <button class="toggle-btn" id="btn-tarjeta" onclick="selectPayment(this)" title="">Tarjeta</button>
+          <button class="toggle-btn" id="btn-transferencia" onclick="selectPayment(this)" title="">Transferencia</button>
+        </div>
+        <div id="credit-payment-note" style="display:none;font-size:11px;color:#757575;margin-top:4px;padding:4px 8px;background:#f5f5f5;border-radius:4px;">
+          <span class="material-icons" style="font-size:13px;vertical-align:middle;">info</span>
+          El crédito siempre se registra en efectivo
+        </div>
+      </div>
+
+      <div class="credit-section">
+        <input type="checkbox" id="credit-check" onchange="toggleCredit()">
+        <label for="credit-check">Venta a credito (fiado)</label>
+      </div>
+
+      <div id="customer-field" style="display: none;">
+        <div style="font-size:12px;color:#c62828;margin-bottom:4px;">* Cliente requerido para crédito</div>
+        <select class="customer-select" id="customer-select" onchange="updateCobrarBtn()">
+          <option value="">Seleccionar cliente...</option>
+          <option value="pedro">Pedro Gomez - 3001234567</option>
+          <option value="ana">Ana Ruiz - 3009876543</option>
+          <option value="carlos">Carlos Mendez - 3005551234</option>
+        </select>
+      </div>
+
+      <div class="total-row">
+        <span class="total-label">TOTAL</span>
+        <span class="total-value">$18.200</span>
+      </div>
+
+      <button class="btn-cobrar" id="btn-cobrar" onclick="showDialog('confirm-dialog')">COBRAR</button>
+      <div id="cobrar-hint" style="display:none;font-size:11px;color:#c62828;text-align:center;margin-top:6px;">Selecciona un cliente para continuar</div>
+    </div>
+  </div>
+</div>
+
+<!-- No Register Overlay (hidden, toggle to see) -->
+<div class="no-register" id="no-register">
+  <span class="material-icons">point_of_sale</span>
+  <p>Debes abrir una caja antes de realizar ventas</p>
+  <a href="01-caja.html" class="btn btn-primary" style="padding: 12px 32px; font-size: 16px; text-decoration:none;">IR A CAJA</a>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="dialog-overlay" id="confirm-dialog">
+  <div class="dialog">
+    <h3>Confirmar Venta</h3>
+    <div style="background: #fafafa; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+        <span>Productos</span><span>3 items</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14px;">
+        <span>Forma de pago</span><span>Efectivo</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 12px 0 0; font-size: 20px; font-weight: 700; border-top: 2px solid #e0e0e0; margin-top: 8px;">
+        <span>Total</span><span>$18.200</span>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideDialog('confirm-dialog')">CANCELAR</button>
+      <button class="btn btn-success" onclick="hideDialog('confirm-dialog'); showSnackbar()">CONFIRMAR VENTA</button>
+    </div>
+  </div>
+</div>
+
+<!-- Post-sale snackbar -->
+<div class="snackbar" id="post-sale">
+  <span class="material-icons" style="color: #4caf50;">check_circle</span>
+  <span id="snackbar-text">Venta #156 registrada</span>
+  <!-- Ticket: solo si usesTicketsPdf=true -->
+  <button class="snackbar-btn pdf" title="Solo visible si usesTicketsPdf=true">
+    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">picture_as_pdf</span> Ticket
+  </button>
+  <!-- WhatsApp: solo si usesWhatsapp=true AND venta tuvo cliente con teléfono -->
+  <button class="snackbar-btn whatsapp" id="snackbar-whatsapp" style="display:none;" title="Solo visible si usesWhatsapp=true y la venta tuvo cliente con teléfono">
+    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">chat</span> WhatsApp
+  </button>
+  <button class="snackbar-btn" onclick="hideSnackbar()">OK</button>
+</div>
+
+<!-- Demo toggle para ver snackbar con/sin cliente -->
+<div style="position:fixed;bottom:80px;left:256px;z-index:500;background:#fff3e0;border:1px solid #ffe082;border-radius:8px;padding:8px 12px;font-size:12px;display:flex;align-items:center;gap:8px;">
+  <span class="material-icons" style="font-size:15px;color:#f57f17;">info</span>
+  Simular venta con cliente:
+  <label style="cursor:pointer;display:flex;align-items:center;gap:4px;">
+    <input type="checkbox" id="demo-has-client" onchange="updateSnackbarDemo()"> Con cliente (muestra WhatsApp)
+  </label>
+</div>
+
+<!-- Toggle buttons to see different states -->
+<div style="position: fixed; bottom: 16px; left: 256px; z-index: 500; display: flex; gap: 4px;">
+  <button onclick="showView('pos')" style="padding: 6px 12px; background: #4caf50; color: white; border: none; border-radius: 12px; cursor: pointer; font-size: 11px;">Vista: POS Normal</button>
+  <button onclick="showView('noregister')" style="padding: 6px 12px; background: #ff9800; color: white; border: none; border-radius: 12px; cursor: pointer; font-size: 11px;">Vista: Sin Caja</button>
+</div>
+
+<script>
+function showDialog(id) { document.getElementById(id).classList.add('active'); }
+function hideDialog(id) { document.getElementById(id).classList.remove('active'); }
+
+function showSnackbar() {
+  // Determinar si la venta tuvo cliente (en producción: viene del estado del componente)
+  const hasClient = document.getElementById('demo-has-client') && document.getElementById('demo-has-client').checked;
+  const waBtn = document.getElementById('snackbar-whatsapp');
+  if (waBtn) waBtn.style.display = hasClient ? 'inline-flex' : 'none';
+  document.getElementById('post-sale').classList.add('active');
+  // Auto-dismiss a los 6 segundos
+  clearTimeout(window._snackbarTimer);
+  window._snackbarTimer = setTimeout(hideSnackbar, 6000);
+}
+
+function hideSnackbar() {
+  document.getElementById('post-sale').classList.remove('active');
+  clearTimeout(window._snackbarTimer);
+}
+
+function updateSnackbarDemo() {
+  // Actualiza la visibilidad del botón en el snackbar si ya está visible
+  if (document.getElementById('post-sale').classList.contains('active')) {
+    const hasClient = document.getElementById('demo-has-client').checked;
+    document.getElementById('snackbar-whatsapp').style.display = hasClient ? 'inline-flex' : 'none';
+  }
+}
+
+function selectPayment(btn) {
+  // Solo activo si no está en modo crédito
+  if (btn.disabled) return;
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function toggleCredit() {
+  const isCredit = document.getElementById('credit-check').checked;
+  const field = document.getElementById('customer-field');
+  const tarjeta = document.getElementById('btn-tarjeta');
+  const transferencia = document.getElementById('btn-transferencia');
+  const efectivo = document.getElementById('btn-efectivo');
+  const note = document.getElementById('credit-payment-note');
+
+  field.style.display = isCredit ? 'block' : 'none';
+  note.style.display = isCredit ? 'block' : 'none';
+
+  // Deshabilitar Tarjeta y Transferencia cuando crédito está activo
+  tarjeta.disabled = isCredit;
+  transferencia.disabled = isCredit;
+  tarjeta.style.opacity = isCredit ? '0.4' : '1';
+  tarjeta.style.cursor = isCredit ? 'not-allowed' : 'pointer';
+  transferencia.style.opacity = isCredit ? '0.4' : '1';
+  transferencia.style.cursor = isCredit ? 'not-allowed' : 'pointer';
+
+  // Si tenía seleccionado Tarjeta o Transferencia, resetear a Efectivo
+  if (isCredit && (tarjeta.classList.contains('active') || transferencia.classList.contains('active'))) {
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    efectivo.classList.add('active');
+  }
+
+  updateCobrarBtn();
+}
+
+function updateCobrarBtn() {
+  const isCredit = document.getElementById('credit-check').checked;
+  const customerVal = document.getElementById('customer-select') ? document.getElementById('customer-select').value : '';
+  const cobrar = document.getElementById('btn-cobrar');
+  const hint = document.getElementById('cobrar-hint');
+  const blocked = isCredit && !customerVal;
+  cobrar.disabled = blocked;
+  cobrar.style.opacity = blocked ? '0.5' : '1';
+  cobrar.style.cursor = blocked ? 'not-allowed' : 'pointer';
+  if (hint) hint.style.display = blocked ? 'block' : 'none';
+}
+
+function showView(view) {
+  document.getElementById('pos-main').style.display = view === 'pos' ? 'flex' : 'none';
+  document.getElementById('no-register').style.display = view === 'noregister' ? 'flex' : 'none';
+}
+
+function addToCart(name, price) {
+  const btn = event.currentTarget;
+  btn.style.borderColor = '#4caf50';
+  btn.style.background = '#f1f8e9';
+  setTimeout(() => { btn.style.borderColor = 'transparent'; btn.style.background = 'white'; }, 300);
+}
+</script>
+</body>
+</html>
