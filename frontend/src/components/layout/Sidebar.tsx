@@ -1,5 +1,5 @@
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Divider, Box, Tooltip } from '@mui/material';
-import { Inventory2, Category, ShoppingCart, People, Settings, Assessment, PointOfSale, Storefront, CreditScore } from '@mui/icons-material';
+import { Inventory2, Category, ShoppingCart, People, Settings, Assessment, PointOfSale, Storefront, CreditScore, ManageAccounts } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useConfig } from '../../context/ConfigContext';
@@ -29,6 +29,7 @@ const navItems: NavEntry[] = [
   'divider',
   { label: 'Reportes', path: '/reportes', icon: <Assessment />, adminOnly: true, featureFlag: 'usesReports' },
   { label: 'Configuracion', path: '/configuracion', icon: <Settings />, adminOnly: true },
+  { label: 'Usuarios', path: '/usuarios', icon: <ManageAccounts />, adminOnly: true },
 ];
 
 function isVisible(item: NavItem, role: string | undefined, config: Record<string, unknown> | null): boolean {

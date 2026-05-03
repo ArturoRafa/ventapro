@@ -14,6 +14,7 @@ import CashRegisterPage from './pages/CashRegisterPage';
 import PosPage from './pages/PosPage';
 import CreditsPage from './pages/CreditsPage';
 import ReportsPage from './pages/ReportsPage';
+import UsersPage from './pages/UsersPage';
 
 function App(): React.ReactElement {
   return (
@@ -59,6 +60,14 @@ function App(): React.ReactElement {
                   element={
                     <ProtectedRoute allowedRoles={['admin']}>
                       <ConfigPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="usuarios"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <UsersPage />
                     </ProtectedRoute>
                   }
                 />
