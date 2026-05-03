@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe - Categorias y Subcategorias</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #212121; }
+  .appbar { background: #1976d2; color: white; height: 64px; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.14); }
+  .appbar h1 { font-size: 20px; font-weight: 500; margin-left: 240px; flex: 1; }
+  .appbar-user { display: flex; align-items: center; gap: 12px; }
+  .chip-role { padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; background: #ce93d8; color: white; }
+  .btn-logout { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 6px 16px; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500; font-family: 'Roboto', sans-serif; }
+
+  .sidebar { width: 240px; background: white; position: fixed; top: 64px; left: 0; bottom: 0; border-right: 1px solid #e0e0e0; }
+  .nav-item { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; font-size: 14px; color: #616161; gap: 16px; }
+  .nav-item:hover { background: #f5f5f5; }
+  .nav-item.active { background: #e3f2fd; color: #1976d2; }
+  .nav-item .material-icons { font-size: 24px; color: inherit; }
+  .nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+
+  .main { margin-left: 240px; margin-top: 64px; padding: 24px; }
+
+  .two-panel { display: grid; grid-template-columns: 5fr 7fr; gap: 24px; }
+
+  .panel { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 20px; }
+  .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .panel-header h3 { font-size: 18px; font-weight: 500; }
+
+  .btn { padding: 6px 16px; border-radius: 4px; border: none; font-family: 'Roboto', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; }
+  .btn-primary { background: #1976d2; color: white; }
+  .btn-text { background: transparent; color: #1976d2; }
+  .btn-sm { padding: 4px 12px; font-size: 12px; }
+
+  .list-item { display: flex; align-items: center; padding: 12px 16px; border-radius: 6px; cursor: pointer; gap: 8px; margin-bottom: 4px; transition: background 0.15s; }
+  .list-item:hover { background: #f5f5f5; }
+  .list-item.selected { background: #e3f2fd; }
+  .list-item-text { flex: 1; }
+  .list-item-primary { font-size: 14px; font-weight: 500; }
+  .list-item-secondary { font-size: 12px; color: #757575; }
+
+  .chip { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 16px; font-size: 11px; font-weight: 500; }
+  .chip-green { background: #e8f5e9; color: #2e7d32; }
+  .chip-grey { background: #f5f5f5; color: #757575; }
+  .chip-blue { background: #e3f2fd; color: #1565c0; font-size: 12px; padding: 2px 8px; margin-left: 8px; }
+
+  .icon-btn { background: transparent; border: none; cursor: pointer; padding: 4px; border-radius: 50%; color: #757575; }
+  .icon-btn:hover { background: #e0e0e0; }
+
+  .divider { height: 1px; background: #e0e0e0; margin: 12px 0; }
+
+  .empty-state { text-align: center; padding: 32px 16px; color: #9e9e9e; }
+  .empty-state .material-icons { font-size: 40px; margin-bottom: 8px; }
+
+  .dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 200; }
+  .dialog-overlay.active { display: flex; }
+  .dialog { background: white; border-radius: 8px; padding: 24px; min-width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .dialog h3 { font-size: 18px; font-weight: 500; margin-bottom: 16px; }
+  .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; color: #757575; margin-bottom: 4px; }
+  .form-group input { width: 100%; padding: 10px 14px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; }
+
+  .cascade-warning { background: #fff3e0; padding: 10px 14px; border-radius: 6px; font-size: 13px; color: #e65100; display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <h1>Cafeteria El Buen Sabor</h1>
+  <div class="appbar-user">
+    <span class="chip-role">Admin</span>
+    <span style="font-size: 14px;">Juan Perez</span>
+    <button class="btn-logout">SALIR</button>
+  </div>
+</div>
+
+<div class="sidebar">
+  <a href="index.html" style="display:flex;align-items:center;padding:8px 16px;gap:8px;font-size:12px;color:#1976d2;text-decoration:none;border-bottom:1px solid #e0e0e0;"><span class="material-icons" style="font-size:16px;">home</span> Mapa de Wireframes</a>
+  <a href="01-caja.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">point_of_sale</span> Caja</a>
+  <a href="02-pos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">storefront</span> POS</a>
+  <div class="nav-divider"></div>
+  <a href="00b-productos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">shopping_cart</span> Productos</a>
+  <a href="00c-categorias.html" class="nav-item active" style="text-decoration:none;"><span class="material-icons">category</span> Categorias</a>
+  <a href="00d-inventario.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">inventory_2</span> Inventario</a>
+  <a href="00e-clientes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">people</span> Clientes</a>
+  <a href="03-creditos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">credit_score</span> Creditos</a>
+  <div class="nav-divider"></div>
+  <a href="04-reportes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">assessment</span> Reportes</a>
+  <a href="00f-configuracion.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">settings</span> Configuracion</a>
+</div>
+
+<div class="main">
+  <h2 style="font-size: 24px; font-weight: 400; margin-bottom: 24px;">Categorias y Subcategorias</h2>
+
+  <div class="two-panel">
+    <!-- Left: Categories -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Categorias</h3>
+        <button class="btn btn-sm btn-primary" onclick="showDialog('cat-dialog')">
+          <span class="material-icons" style="font-size: 16px;">add</span> NUEVA
+        </button>
+      </div>
+
+      <div class="list-item selected" onclick="selectCat(this)">
+        <div class="list-item-text">
+          <div class="list-item-primary">Bebidas</div>
+          <div class="list-item-secondary">Orden: 1 | 3 subcategorias</div>
+        </div>
+        <span class="chip chip-green">Activo</span>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">edit</span></button>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">toggle_off</span></button>
+      </div>
+      <div class="list-item" onclick="selectCat(this)">
+        <div class="list-item-text">
+          <div class="list-item-primary">Panaderia</div>
+          <div class="list-item-secondary">Orden: 2 | 4 subcategorias</div>
+        </div>
+        <span class="chip chip-green">Activo</span>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">edit</span></button>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">toggle_off</span></button>
+      </div>
+      <div class="list-item" onclick="selectCat(this)">
+        <div class="list-item-text">
+          <div class="list-item-primary">Lacteos</div>
+          <div class="list-item-secondary">Orden: 3 | 3 subcategorias</div>
+        </div>
+        <span class="chip chip-green">Activo</span>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">edit</span></button>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">toggle_off</span></button>
+      </div>
+      <div class="list-item" style="opacity: 0.6;" onclick="selectCat(this)">
+        <div class="list-item-text">
+          <div class="list-item-primary">Comidas</div>
+          <div class="list-item-secondary">Orden: 4 | 4 subcategorias</div>
+        </div>
+        <span class="chip chip-grey">Inactivo</span>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">edit</span></button>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px; color: #4caf50;">toggle_on</span></button>
+      </div>
+    </div>
+
+    <!-- Right: Subcategories -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Subcategorias <span class="chip chip-blue">Bebidas</span></h3>
+        <button class="btn btn-sm btn-primary" onclick="showDialog('sub-dialog')">
+          <span class="material-icons" style="font-size: 16px;">add</span> NUEVA
+        </button>
+      </div>
+      <div class="divider"></div>
+
+      <div class="list-item">
+        <div class="list-item-text">
+          <div class="list-item-primary">Gaseosas</div>
+          <div class="list-item-secondary">Orden: 1</div>
+        </div>
+        <span class="chip chip-green">Activo</span>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">edit</span></button>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">toggle_off</span></button>
+      </div>
+      <div class="list-item">
+        <div class="list-item-text">
+          <div class="list-item-primary">Jugos</div>
+          <div class="list-item-secondary">Orden: 2</div>
+        </div>
+        <span class="chip chip-green">Activo</span>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">edit</span></button>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">toggle_off</span></button>
+      </div>
+      <div class="list-item">
+        <div class="list-item-text">
+          <div class="list-item-primary">Agua</div>
+          <div class="list-item-secondary">Orden: 3</div>
+        </div>
+        <span class="chip chip-green">Activo</span>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">edit</span></button>
+        <button class="icon-btn"><span class="material-icons" style="font-size: 18px;">toggle_off</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category Dialog -->
+<div class="dialog-overlay" id="cat-dialog">
+  <div class="dialog">
+    <h3>Nueva Categoria</h3>
+    <div class="form-group">
+      <label>Nombre</label>
+      <input type="text" placeholder="Nombre de la categoria">
+    </div>
+    <div class="form-group">
+      <label>Orden</label>
+      <input type="number" value="5">
+    </div>
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideDialog('cat-dialog')">CANCELAR</button>
+      <button class="btn btn-primary" onclick="hideDialog('cat-dialog')">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- Subcategory Dialog -->
+<div class="dialog-overlay" id="sub-dialog">
+  <div class="dialog">
+    <h3>Nueva Subcategoria</h3>
+    <div style="font-size: 13px; color: #757575; margin-bottom: 16px;">Categoria padre: <strong>Bebidas</strong></div>
+    <div class="form-group">
+      <label>Nombre</label>
+      <input type="text" placeholder="Nombre de la subcategoria">
+    </div>
+    <div class="form-group">
+      <label>Orden</label>
+      <input type="number" value="4">
+    </div>
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideDialog('sub-dialog')">CANCELAR</button>
+      <button class="btn btn-primary" onclick="hideDialog('sub-dialog')">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showDialog(id) { document.getElementById(id).classList.add('active'); }
+function hideDialog(id) { document.getElementById(id).classList.remove('active'); }
+function selectCat(el) {
+  document.querySelectorAll('.list-item').forEach(li => li.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>

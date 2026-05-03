@@ -10,6 +10,10 @@ import CategoriesPage from './pages/CategoriesPage';
 import InventoryPage from './pages/InventoryPage';
 import CustomersPage from './pages/CustomersPage';
 import ConfigPage from './pages/ConfigPage';
+import CashRegisterPage from './pages/CashRegisterPage';
+import PosPage from './pages/PosPage';
+import CreditsPage from './pages/CreditsPage';
+import ReportsPage from './pages/ReportsPage';
 
 function App(): React.ReactElement {
   return (
@@ -27,7 +31,9 @@ function App(): React.ReactElement {
                   </ProtectedRoute>
                 }
               >
-                <Route index element={<Navigate to="/productos" replace />} />
+                <Route index element={<Navigate to="/pos" replace />} />
+                <Route path="caja" element={<CashRegisterPage />} />
+                <Route path="pos" element={<PosPage />} />
                 <Route path="productos" element={<ProductsPage />} />
                 <Route path="categorias" element={<CategoriesPage />} />
                 <Route
@@ -39,6 +45,15 @@ function App(): React.ReactElement {
                   }
                 />
                 <Route path="clientes" element={<CustomersPage />} />
+                <Route path="creditos" element={<CreditsPage />} />
+                <Route
+                  path="reportes"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <ReportsPage />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="configuracion"
                   element={

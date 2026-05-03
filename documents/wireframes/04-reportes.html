@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe - Reportes</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #212121; }
+  .appbar { background: #1976d2; color: white; height: 64px; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.14); }
+  .appbar h1 { font-size: 20px; font-weight: 500; margin-left: 240px; }
+  .sidebar { width: 240px; background: white; position: fixed; top: 64px; left: 0; bottom: 0; border-right: 1px solid #e0e0e0; }
+  .nav-item { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; font-size: 14px; color: #616161; gap: 16px; }
+  .nav-item:hover { background: #f5f5f5; }
+  .nav-item.active { background: #e3f2fd; color: #1976d2; }
+  .nav-item .material-icons { font-size: 24px; color: inherit; }
+  .nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+  .main { margin-left: 240px; margin-top: 64px; padding: 24px; }
+  .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .page-header h2 { font-size: 24px; font-weight: 400; }
+  .badge-admin { font-size: 11px; background: #e3f2fd; color: #1565c0; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+
+  /* Tabs */
+  .tabs { display: flex; border-bottom: 2px solid #e0e0e0; margin-bottom: 24px; }
+  .tab { padding: 12px 24px; cursor: pointer; font-size: 14px; font-weight: 500; color: #757575; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+  .tab:hover { color: #1976d2; background: #f5f5f5; }
+  .tab.active { color: #1976d2; border-bottom-color: #1976d2; }
+
+  /* Date filter */
+  .date-filter { display: flex; gap: 12px; align-items: center; margin-bottom: 24px; padding: 12px 16px; background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .input { padding: 10px 14px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; outline: none; }
+  .select { padding: 10px 14px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; background: white; }
+  .btn { padding: 8px 22px; border-radius: 4px; border: none; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; }
+  .btn-primary { background: #1976d2; color: white; }
+
+  /* KPI Cards */
+  .kpi-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .kpi-card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .kpi-label { font-size: 13px; color: #757575; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .kpi-value { font-size: 32px; font-weight: 700; }
+  .kpi-sub { font-size: 13px; color: #757575; margin-top: 4px; }
+
+  /* Breakdown cards */
+  .breakdown-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .breakdown-card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .breakdown-title { font-size: 14px; font-weight: 500; margin-bottom: 16px; color: #424242; }
+  .breakdown-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .breakdown-item:last-child { border-bottom: none; }
+  .breakdown-item-label { font-size: 14px; display: flex; align-items: center; gap: 8px; }
+  .breakdown-item-value { font-size: 14px; font-weight: 500; }
+  .breakdown-item-count { font-size: 12px; color: #757575; }
+  .color-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  /* Tables */
+  .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 500; color: #757575; border-bottom: 2px solid #e0e0e0; }
+  td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #fafafa; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .chip { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500; }
+  .chip-green { background: #e8f5e9; color: #2e7d32; }
+  .chip-orange { background: #fff3e0; color: #e65100; }
+
+  .rank { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 13px; font-weight: 700; }
+  .rank-1 { background: #fff8e1; color: #f9a825; }
+  .rank-2 { background: #f5f5f5; color: #757575; }
+  .rank-3 { background: #fff3e0; color: #e65100; }
+  .rank-n { background: #fafafa; color: #9e9e9e; }
+
+  .extra-filters { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<!-- AppBar -->
+<div class="appbar">
+  <h1 style="flex:1;">Cafeteria El Buen Sabor</h1>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span style="padding:2px 10px;border-radius:12px;font-size:12px;font-weight:500;background:#ce93d8;color:white;">Admin</span>
+    <span style="font-size:14px;">Juan Perez</span>
+    <button style="background:transparent;border:1px solid rgba(255,255,255,0.5);color:white;padding:6px 16px;border-radius:4px;font-size:13px;cursor:pointer;font-weight:500;font-family:'Roboto',sans-serif;" onclick="window.location.href='00-login.html'">SALIR</button>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <a href="index.html" style="display:flex;align-items:center;padding:8px 16px;gap:8px;font-size:12px;color:#1976d2;text-decoration:none;border-bottom:1px solid #e0e0e0;"><span class="material-icons" style="font-size:16px;">home</span> Mapa de Wireframes</a>
+  <a href="01-caja.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">point_of_sale</span> Caja</a>
+  <a href="02-pos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">storefront</span> POS</a>
+  <div class="nav-divider"></div>
+  <a href="00b-productos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">shopping_cart</span> Productos</a>
+  <a href="00c-categorias.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">category</span> Categorias</a>
+  <a href="00d-inventario.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">inventory_2</span> Inventario</a>
+  <a href="00e-clientes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">people</span> Clientes</a>
+  <a href="03-creditos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">credit_score</span> Creditos</a>
+  <div class="nav-divider"></div>
+  <a href="04-reportes.html" class="nav-item active" style="text-decoration:none;"><span class="material-icons">assessment</span> Reportes</a>
+  <a href="00f-configuracion.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">settings</span> Configuracion</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <div class="page-header">
+    <h2>Reportes <span class="badge-admin">SOLO ADMIN</span></h2>
+  </div>
+
+  <!-- Feature flags demo (simula config real) -->
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;padding:10px 16px;background:#fff8e1;border-radius:8px;border:1px solid #ffe082;font-size:13px;">
+    <span class="material-icons" style="color:#f57f17;font-size:18px;">info</span>
+    <strong>Feature flags — demo interactivo:</strong>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+      <input type="checkbox" id="flag-credit" checked onchange="applyFlags()"> usesCredit
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+      <input type="checkbox" id="flag-cashregister" checked onchange="applyFlags()"> usesCashRegister
+    </label>
+    <span style="color:#757575;">Desactiva un flag para ver cómo se ocultan los tabs correspondientes.</span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('ventas')">Ventas</div>
+    <div class="tab" onclick="switchTab('productos')">Productos Top</div>
+    <div class="tab" onclick="switchTab('cajeros')">Por Cajero</div>
+    <div class="tab" id="tab-btn-creditos" onclick="switchTab('creditos')">Creditos</div>
+    <div class="tab" id="tab-btn-cajas" onclick="switchTab('cajas')">Cajas</div>
+  </div>
+
+  <!-- Date Filter (shared) -->
+  <div class="date-filter">
+    <span class="material-icons" style="color: #757575;">date_range</span>
+    <span style="font-size: 14px; color: #757575;">Periodo:</span>
+    <input type="date" class="input" value="2026-04-01" style="width: 160px;">
+    <span style="color: #757575;">a</span>
+    <input type="date" class="input" value="2026-04-15" style="width: 160px;">
+    <button class="btn btn-primary">APLICAR</button>
+  </div>
+
+  <!-- TAB 1: Ventas -->
+  <div class="tab-content active" id="tab-ventas">
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Ventas</div>
+        <div class="kpi-value" style="color: #1976d2;">$1.250.000</div>
+        <div class="kpi-sub">del 1 al 15 de abril</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Cantidad de Ventas</div>
+        <div class="kpi-value">47</div>
+        <div class="kpi-sub">ventas registradas</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Ticket Promedio</div>
+        <div class="kpi-value" style="color: #424242;">$26.595</div>
+        <div class="kpi-sub">por venta</div>
+      </div>
+    </div>
+
+    <div class="breakdown-row">
+      <div class="breakdown-card">
+        <div class="breakdown-title">Por Forma de Pago</div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">
+            <span class="color-dot" style="background: #4caf50;"></span> Efectivo
+          </div>
+          <div>
+            <span class="breakdown-item-value">$800.000</span>
+            <span class="breakdown-item-count"> (34 ventas)</span>
+          </div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">
+            <span class="color-dot" style="background: #2196f3;"></span> Tarjeta
+          </div>
+          <div>
+            <span class="breakdown-item-value">$350.000</span>
+            <span class="breakdown-item-count"> (10 ventas)</span>
+          </div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">
+            <span class="color-dot" style="background: #ff9800;"></span> Transferencia
+          </div>
+          <div>
+            <span class="breakdown-item-value">$100.000</span>
+            <span class="breakdown-item-count"> (3 ventas)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="breakdown-card">
+        <div class="breakdown-title">Por Estado</div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">
+            <span class="color-dot" style="background: #4caf50;"></span> Pagadas
+          </div>
+          <div>
+            <span class="breakdown-item-value">$1.100.000</span>
+            <span class="breakdown-item-count"> (40 ventas)</span>
+          </div>
+        </div>
+        <div class="breakdown-item">
+          <div class="breakdown-item-label">
+            <span class="color-dot" style="background: #ff9800;"></span> Pendientes (credito)
+          </div>
+          <div>
+            <span class="breakdown-item-value">$150.000</span>
+            <span class="breakdown-item-count"> (7 ventas)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: Productos Top -->
+  <div class="tab-content" id="tab-productos">
+    <div class="extra-filters" style="align-items: center;">
+      <select class="select" style="min-width: 180px;">
+        <option>Ordenar por: Cantidad</option>
+        <option>Ordenar por: Ingresos</option>
+      </select>
+      <select class="select" style="min-width: 120px;">
+        <option>Top 10</option>
+        <option>Top 5</option>
+        <option>Top 20</option>
+        <option>Top 50</option>
+      </select>
+      <span style="font-size: 13px; color: #757575; margin-left: 8px;">
+        <span class="material-icons" style="font-size: 15px; vertical-align: middle; color: #9e9e9e;">date_range</span>
+        En el período seleccionado · Sin paginación
+      </span>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Codigo</th><th>Producto</th><th>Cantidad Vendida</th><th>Ingresos</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="rank rank-1">1</span></td><td>P001</td><td><strong>Coca-Cola 600ml</strong></td><td>156</td><td style="font-weight: 500;">$546.000</td></tr>
+          <tr><td><span class="rank rank-2">2</span></td><td>P015</td><td><strong>Pan integral</strong></td><td>98</td><td style="font-weight: 500;">$509.600</td></tr>
+          <tr><td><span class="rank rank-3">3</span></td><td>P008</td><td><strong>Cafe latte</strong></td><td>87</td><td style="font-weight: 500;">$522.000</td></tr>
+          <tr><td><span class="rank rank-n">4</span></td><td>P003</td><td>Agua 500ml</td><td>72</td><td>$144.000</td></tr>
+          <tr><td><span class="rank rank-n">5</span></td><td>P012</td><td>Empanada pollo</td><td>65</td><td>$292.500</td></tr>
+          <tr><td><span class="rank rank-n">6</span></td><td>P007</td><td>Galletas Oreo</td><td>48</td><td>$153.600</td></tr>
+          <tr><td><span class="rank rank-n">7</span></td><td>P019</td><td>Jugo naranja</td><td>42</td><td>$210.000</td></tr>
+          <tr><td><span class="rank rank-n">8</span></td><td>P005</td><td>Torta chocolate</td><td>38</td><td>$323.000</td></tr>
+          <tr><td><span class="rank rank-n">9</span></td><td>P022</td><td>Arepa mixta</td><td>31</td><td>$201.500</td></tr>
+          <tr><td><span class="rank rank-n">10</span></td><td>P009</td><td>Gaseosa Postobon</td><td>28</td><td>$84.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 3: Por Cajero -->
+  <div class="tab-content" id="tab-cajeros">
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Cajero</th><th>Ventas Realizadas</th><th>Total Ingresos</th><th>Ticket Promedio</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Juan Perez</strong></td><td>28</td><td style="font-weight: 500;">$725.000</td><td>$25.892</td></tr>
+          <tr><td><strong>Maria Lopez</strong></td><td>19</td><td style="font-weight: 500;">$525.000</td><td>$27.631</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 4: Creditos -->
+  <div class="tab-content" id="tab-creditos">
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Creditos</div>
+        <div class="kpi-value">15</div>
+        <div class="kpi-sub">8 pendientes, 7 pagados</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Prestado</div>
+        <div class="kpi-value" style="color: #e65100;">$520.000</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Saldo Pendiente</div>
+        <div class="kpi-value" style="color: #c62828;">$285.000</div>
+        <div class="kpi-sub">55% pendiente</div>
+      </div>
+    </div>
+
+    <div style="font-size: 16px; font-weight: 500; margin-bottom: 12px;">Deuda por Cliente</div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Cliente</th><th>Creditos</th><th>Monto Total</th><th>Saldo Pendiente</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Carlos Mendez</strong></td><td>2</td><td>$180.000</td>
+            <td style="color: #c62828; font-weight: 500;">$155.000</td>
+            <td><span class="chip chip-orange">Debe</span></td>
+          </tr>
+          <tr>
+            <td><strong>Pedro Gomez</strong></td><td>3</td><td>$120.000</td>
+            <td style="color: #c62828; font-weight: 500;">$85.000</td>
+            <td><span class="chip chip-orange">Debe</span></td>
+          </tr>
+          <tr>
+            <td><strong>Ana Ruiz</strong></td><td>2</td><td>$90.000</td>
+            <td style="color: #c62828; font-weight: 500;">$45.000</td>
+            <td><span class="chip chip-orange">Debe</span></td>
+          </tr>
+          <tr>
+            <td>Laura Torres</td><td>1</td><td>$35.000</td>
+            <td style="color: #2e7d32;">$0</td>
+            <td><span class="chip chip-green">Al dia</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TAB 5: Cajas -->
+  <div class="tab-content" id="tab-cajas">
+    <div class="extra-filters">
+      <select class="select">
+        <option>Todos los cajeros</option>
+        <option>Juan Perez</option>
+        <option>Maria Lopez</option>
+      </select>
+    </div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Cajero</th><th>Fecha</th><th>Inicial</th><th>Sistema</th><th>Real</th><th>Diferencia</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>#44</td><td><strong>Maria Lopez</strong></td><td>14/04/2026</td>
+            <td>$30.000</td><td>$285.500</td><td>$284.000</td>
+            <td style="color: #c62828; font-weight: 500;">-$1.500</td>
+          </tr>
+          <tr>
+            <td>#43</td><td><strong>Juan Perez</strong></td><td>13/04/2026</td>
+            <td>$50.000</td><td>$320.000</td><td>$320.500</td>
+            <td style="color: #2e7d32; font-weight: 500;">+$500</td>
+          </tr>
+          <tr>
+            <td>#42</td><td><strong>Maria Lopez</strong></td><td>12/04/2026</td>
+            <td>$30.000</td><td>$245.000</td><td>$245.000</td>
+            <td style="color: #2e7d32; font-weight: 500;">$0</td>
+          </tr>
+          <tr>
+            <td>#41</td><td><strong>Juan Perez</strong></td><td>11/04/2026</td>
+            <td>$50.000</td><td>$198.000</td><td>$196.500</td>
+            <td style="color: #c62828; font-weight: 500;">-$1.500</td>
+          </tr>
+          <tr>
+            <td>#40</td><td><strong>Maria Lopez</strong></td><td>10/04/2026</td>
+            <td>$30.000</td><td>$275.000</td><td>$275.200</td>
+            <td style="color: #2e7d32; font-weight: 500;">+$200</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function applyFlags() {
+  const usesCredit = document.getElementById('flag-credit').checked;
+  const usesCashRegister = document.getElementById('flag-cashregister').checked;
+  const tabCredito = document.getElementById('tab-btn-creditos');
+  const tabCajas = document.getElementById('tab-btn-cajas');
+
+  tabCredito.style.display = usesCredit ? '' : 'none';
+  tabCajas.style.display = usesCashRegister ? '' : 'none';
+
+  // Si el tab activo se oculta, volver a Ventas
+  if (!usesCredit && document.getElementById('tab-creditos').classList.contains('active')) {
+    switchTabById('ventas');
+  }
+  if (!usesCashRegister && document.getElementById('tab-cajas').classList.contains('active')) {
+    switchTabById('ventas');
+  }
+}
+
+function switchTabById(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  // Marcar el primer tab visible como activo
+  document.querySelector('.tab:not([style*="display: none"])').classList.add('active');
+}
+</script>
+</body>
+</html>

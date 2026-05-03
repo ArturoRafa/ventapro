@@ -15,6 +15,11 @@ export const env = {
   jwtSecret: process.env.JWT_SECRET || 'default-secret-change-me',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
 
+  // CORS
+  allowedOrigins: process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim())
+    : ['http://localhost:5173'],
+
   // Admin seed
   adminEmail: process.env.ADMIN_EMAIL || 'admin@cafepos.com',
   adminPassword: process.env.ADMIN_PASSWORD || 'admin123',

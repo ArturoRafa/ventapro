@@ -16,11 +16,12 @@ import cashRegisterRoutes from './routes/cash-register.routes';
 import saleRoutes from './routes/sale.routes';
 import creditRoutes from './routes/credit.routes';
 import reportRoutes from './routes/report.routes';
+import userRoutes from './routes/user.routes';
 
 const app = express();
 
 // Global middlewares
-app.use(cors());
+app.use(cors({ origin: env.isProduction ? env.allowedOrigins : true }));
 app.use(express.json());
 
 // Health check
@@ -40,6 +41,7 @@ app.use('/api/cajas', cashRegisterRoutes);
 app.use('/api/ventas', saleRoutes);
 app.use('/api/creditos', creditRoutes);
 app.use('/api/reportes', reportRoutes);
+app.use('/api/usuarios', userRoutes);
 
 // Global error handler (must be last)
 app.use(errorHandler);

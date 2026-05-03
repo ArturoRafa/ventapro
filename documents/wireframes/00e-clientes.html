@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe - Clientes</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #212121; }
+  .appbar { background: #1976d2; color: white; height: 64px; display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 100; }
+  .appbar h1 { font-size: 20px; font-weight: 500; margin-left: 240px; flex: 1; }
+  .appbar-user { display: flex; align-items: center; gap: 12px; }
+  .chip-role { padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 500; background: #ce93d8; color: white; }
+  .btn-logout { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; padding: 6px 16px; border-radius: 4px; font-size: 13px; cursor: pointer; font-weight: 500; font-family: 'Roboto', sans-serif; }
+  .sidebar { width: 240px; background: white; position: fixed; top: 64px; left: 0; bottom: 0; border-right: 1px solid #e0e0e0; }
+  .nav-item { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; font-size: 14px; color: #616161; gap: 16px; }
+  .nav-item:hover { background: #f5f5f5; }
+  .nav-item.active { background: #e3f2fd; color: #1976d2; }
+  .nav-item .material-icons { font-size: 24px; color: inherit; }
+  .nav-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+  .main { margin-left: 240px; margin-top: 64px; padding: 24px; }
+  .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .page-header h2 { font-size: 24px; font-weight: 400; }
+
+  .btn { padding: 8px 22px; border-radius: 4px; border: none; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary { background: #1976d2; color: white; }
+  .btn-text { background: transparent; color: #1976d2; }
+
+  .search-field { padding: 10px 14px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; width: 300px; margin-bottom: 16px; }
+
+  .card { background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; padding: 12px 16px; font-size: 13px; font-weight: 500; color: #757575; border-bottom: 2px solid #e0e0e0; }
+  td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+  tr:hover td { background: #fafafa; }
+
+  .chip { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 16px; font-size: 12px; font-weight: 500; }
+  .chip-green { background: #e8f5e9; color: #2e7d32; }
+  .chip-grey { background: #f5f5f5; color: #757575; }
+
+  .icon-btn { background: transparent; border: none; cursor: pointer; padding: 6px; border-radius: 50%; color: #757575; }
+  .icon-btn:hover { background: #f5f5f5; }
+
+  .pagination { display: flex; justify-content: flex-end; align-items: center; padding: 12px 16px; gap: 16px; font-size: 13px; color: #757575; }
+
+  .dialog-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 200; }
+  .dialog-overlay.active { display: flex; }
+  .dialog { background: white; border-radius: 8px; min-width: 480px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  .dialog-title { padding: 20px 24px 0; font-size: 20px; font-weight: 500; }
+  .dialog-content { padding: 16px 24px; }
+  .dialog-actions { padding: 8px 16px 16px; display: flex; justify-content: flex-end; gap: 8px; }
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 12px; color: #757575; margin-bottom: 4px; }
+  .form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid #c4c4c4; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; }
+  .form-group textarea { resize: vertical; min-height: 60px; }
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <h1>Cafeteria El Buen Sabor</h1>
+  <div class="appbar-user">
+    <span class="chip-role">Admin</span>
+    <span style="font-size: 14px;">Juan Perez</span>
+    <button class="btn-logout">SALIR</button>
+  </div>
+</div>
+
+<div class="sidebar">
+  <a href="index.html" style="display:flex;align-items:center;padding:8px 16px;gap:8px;font-size:12px;color:#1976d2;text-decoration:none;border-bottom:1px solid #e0e0e0;"><span class="material-icons" style="font-size:16px;">home</span> Mapa de Wireframes</a>
+  <a href="01-caja.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">point_of_sale</span> Caja</a>
+  <a href="02-pos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">storefront</span> POS</a>
+  <div class="nav-divider"></div>
+  <a href="00b-productos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">shopping_cart</span> Productos</a>
+  <a href="00c-categorias.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">category</span> Categorias</a>
+  <a href="00d-inventario.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">inventory_2</span> Inventario</a>
+  <a href="00e-clientes.html" class="nav-item active" style="text-decoration:none;"><span class="material-icons">people</span> Clientes</a>
+  <a href="03-creditos.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">credit_score</span> Creditos</a>
+  <div class="nav-divider"></div>
+  <a href="04-reportes.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">assessment</span> Reportes</a>
+  <a href="00f-configuracion.html" class="nav-item" style="text-decoration:none;"><span class="material-icons">settings</span> Configuracion</a>
+</div>
+
+<div class="main">
+  <div class="page-header">
+    <h2>Clientes</h2>
+    <button class="btn btn-primary" onclick="showDialog('create-dialog')">
+      <span class="material-icons" style="font-size: 18px;">add</span> NUEVO CLIENTE
+    </button>
+  </div>
+
+  <input type="text" class="search-field" placeholder="Buscar por nombre o telefono...">
+
+  <div class="card">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Telefono</th>
+          <th>Telefono Alt.</th>
+          <th>Direccion</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Pedro Gomez</strong></td>
+          <td>300 123 4567</td>
+          <td>310 987 6543</td>
+          <td>Calle 45 #12-34</td>
+          <td><span class="chip chip-green">Activo</span></td>
+          <td>
+            <button class="icon-btn" onclick="showDialog('edit-dialog')"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn"><span class="material-icons" style="font-size: 20px;">toggle_off</span></button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Ana Ruiz</strong></td>
+          <td>300 987 6543</td>
+          <td>—</td>
+          <td>Carrera 15 #78-90</td>
+          <td><span class="chip chip-green">Activo</span></td>
+          <td>
+            <button class="icon-btn"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn"><span class="material-icons" style="font-size: 20px;">toggle_off</span></button>
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Carlos Mendez</strong></td>
+          <td>300 555 1234</td>
+          <td>—</td>
+          <td>—</td>
+          <td><span class="chip chip-green">Activo</span></td>
+          <td>
+            <button class="icon-btn"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn"><span class="material-icons" style="font-size: 20px;">toggle_off</span></button>
+          </td>
+        </tr>
+        <tr style="opacity: 0.6;">
+          <td>Laura Torres</td>
+          <td>315 222 3333</td>
+          <td>—</td>
+          <td>Avenida 80 #50-12</td>
+          <td><span class="chip chip-grey">Inactivo</span></td>
+          <td>
+            <button class="icon-btn"><span class="material-icons" style="font-size: 20px;">edit</span></button>
+            <button class="icon-btn"><span class="material-icons" style="font-size: 20px; color: #4caf50;">toggle_on</span></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="pagination">
+    <span>Filas por pagina: 20</span>
+    <span>1-4 de 4</span>
+    <button class="icon-btn" disabled><span class="material-icons">chevron_left</span></button>
+    <button class="icon-btn" disabled><span class="material-icons">chevron_right</span></button>
+  </div>
+</div>
+
+<!-- Create Dialog -->
+<div class="dialog-overlay" id="create-dialog">
+  <div class="dialog">
+    <div class="dialog-title">Nuevo Cliente</div>
+    <div class="dialog-content">
+      <div class="form-group">
+        <label>Nombre *</label>
+        <input type="text" placeholder="Nombre completo">
+      </div>
+      <div class="form-group">
+        <label>Telefono *</label>
+        <input type="text" placeholder="300 000 0000">
+      </div>
+      <div class="form-group">
+        <label>Telefono alternativo</label>
+        <input type="text" placeholder="Opcional">
+      </div>
+      <div class="form-group">
+        <label>Direccion</label>
+        <textarea placeholder="Direccion del cliente (opcional)"></textarea>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideDialog('create-dialog')">CANCELAR</button>
+      <button class="btn btn-primary" onclick="hideDialog('create-dialog')">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Dialog -->
+<div class="dialog-overlay" id="edit-dialog">
+  <div class="dialog">
+    <div class="dialog-title">Editar Cliente</div>
+    <div class="dialog-content">
+      <div class="form-group">
+        <label>Nombre *</label>
+        <input type="text" value="Pedro Gomez">
+      </div>
+      <div class="form-group">
+        <label>Telefono *</label>
+        <input type="text" value="300 123 4567">
+      </div>
+      <div class="form-group">
+        <label>Telefono alternativo</label>
+        <input type="text" value="310 987 6543">
+      </div>
+      <div class="form-group">
+        <label>Direccion</label>
+        <textarea>Calle 45 #12-34</textarea>
+      </div>
+    </div>
+    <div class="dialog-actions">
+      <button class="btn btn-text" onclick="hideDialog('edit-dialog')">CANCELAR</button>
+      <button class="btn btn-primary" onclick="hideDialog('edit-dialog')">GUARDAR</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showDialog(id) { document.getElementById(id).classList.add('active'); }
+function hideDialog(id) { document.getElementById(id).classList.remove('active'); }
+</script>
+</body>
+</html>

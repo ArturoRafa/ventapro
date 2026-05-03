@@ -4,7 +4,7 @@ import {
   TableHead, TableRow, Paper, IconButton, TextField, TablePagination,
   Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select,
   FormControl, InputLabel, RadioGroup, FormControlLabel, Radio, FormLabel,
-  CircularProgress,
+  CircularProgress, Autocomplete,
 } from '@mui/material';
 import { Add, Edit, ToggleOn, ToggleOff } from '@mui/icons-material';
 import type { Product, CreateProductDto } from '../types/product.types';
@@ -210,12 +210,41 @@ export default function ProductsPage(): React.ReactElement {
               {categories.filter((c) => c.status === 'activo').map((c) => <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>)}
             </Select>
           </FormControl>
-          <FormControl fullWidth margin="dense">
-            <InputLabel>Subcategoria</InputLabel>
-            <Select value={form.subcategoryId} label="Subcategoria" onChange={(e) => setForm({ ...form, subcategoryId: Number(e.target.value) })}>
-              {subcategories.map((s) => <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>)}
-            </Select>
-          </FormControl>
+          <Autocomplete
+            freeSolo
+            options={subcategories}
+            getOptionLabel={(option) => typeof option === 'string' ? option : option.name}
+            value={subcategories.find((s) => s.id === form.subcategoryId) ?? null}
+            onChange={async (_, newValue) => {
+              if (typeof newValue === 'string') {
+                if (newValue.trim() && selectedCategoryId > 0) {
+                  try {
+                    const created = await categoryService.createSubcategory({ categoryId: selectedCategoryId, name: newValue.trim() });
+                    await fetchCategories();
+                    setForm({ ...form, subcategoryId: created.id });
+                  } catch { showSnackbar('Error al crear subcategoria', 'error'); }
+                }
+              } else if (newValue) {
+                setForm({ ...form, subcategoryId: newValue.id });
+              } else {
+                setForm({ ...form, subcategoryId: 0 });
+              }
+            }}
+            onBlur={async (e) => {
+              const val = (e.target as HTMLInputElement).value?.trim();
+              if (val && !subcategories.some((s) => s.name === val) && selectedCategoryId > 0) {
+                try {
+                  const created = await categoryService.createSubcategory({ categoryId: selectedCategoryId, name: val });
+                  await fetchCategories();
+                  setForm((prev) => ({ ...prev, subcategoryId: created.id }));
+                } catch { showSnackbar('Error al crear subcategoria', 'error'); }
+              }
+            }}
+            isOptionEqualToValue={(option, value) => typeof option !== 'string' && typeof value !== 'string' && option.id === value.id}
+            renderInput={(params) => <TextField {...params} label="Subcategoria" margin="dense" />}
+            disabled={selectedCategoryId === 0}
+            noOptionsText="Escribe para crear nueva"
+          />
           <FormControl margin="dense">
             <FormLabel>Tipo</FormLabel>
             <RadioGroup row value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as 'inventory' | 'food' })}>

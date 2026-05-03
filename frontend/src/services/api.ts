@@ -77,4 +77,26 @@ export const api = {
     request<T>(endpoint, {
       method: 'DELETE',
     }),
+
+  getBlob: async (endpoint: string): Promise<Blob> => {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+        throw new ApiError('Sesion expirada', 'UNAUTHORIZED', 401);
+      }
+      throw new ApiError(`Error al descargar archivo (${response.status})`, 'DOWNLOAD_ERROR', response.status);
+    }
+
+    return response.blob();
+  },
 };

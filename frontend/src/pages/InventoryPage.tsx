@@ -5,9 +5,10 @@ import {
   Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControlLabel, Switch,
   CircularProgress,
 } from '@mui/material';
-import { TuneRounded } from '@mui/icons-material';
+import { TuneRounded, Edit } from '@mui/icons-material';
 import type { Product } from '../types/product.types';
 import * as inventoryService from '../services/inventory.service';
+import * as productService from '../services/product.service';
 import { useSnackbar } from '../context/SnackbarContext';
 import { formatCurrency } from '../utils/formatCurrency';
 import { useDebounce } from '../hooks/useDebounce';
@@ -28,6 +29,11 @@ export default function InventoryPage(): React.ReactElement {
   const [adjustTarget, setAdjustTarget] = useState<Product | null>(null);
   const [adjustment, setAdjustment] = useState(0);
   const [reason, setReason] = useState('');
+
+  // Edit dialog
+  const [editOpen, setEditOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<Product | null>(null);
+  const [editForm, setEditForm] = useState({ price: 0, minStock: 0 });
 
   const fetchStock = useCallback(async () => {
     setLoading(true);
@@ -63,6 +69,24 @@ export default function InventoryPage(): React.ReactElement {
     }
   };
 
+  const openEdit = (product: Product): void => {
+    setEditTarget(product);
+    setEditForm({ price: product.price, minStock: product.minStock });
+    setEditOpen(true);
+  };
+
+  const handleEdit = async (): Promise<void> => {
+    if (!editTarget) return;
+    try {
+      await productService.updateProduct(editTarget.id, editForm);
+      showSnackbar('Producto actualizado');
+      setEditOpen(false);
+      fetchStock();
+    } catch {
+      showSnackbar('Error al actualizar producto', 'error');
+    }
+  };
+
   return (
     <Box>
       <Typography variant="h5" sx={{ mb: 3 }}>Inventario</Typography>
@@ -95,7 +119,7 @@ export default function InventoryPage(): React.ReactElement {
               <TableCell align="right">Stock</TableCell>
               <TableCell align="right">Stock Min.</TableCell>
               <TableCell>Estado</TableCell>
-              <TableCell>Ajustar</TableCell>
+              <TableCell>Acciones</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -111,6 +135,7 @@ export default function InventoryPage(): React.ReactElement {
                 <TableCell align="right">{p.minStock}</TableCell>
                 <TableCell>{p.stock <= p.minStock ? 'BAJO' : 'OK'}</TableCell>
                 <TableCell>
+                  <IconButton size="small" onClick={() => openEdit(p)}><Edit fontSize="small" /></IconButton>
                   <IconButton size="small" onClick={() => openAdjust(p)}><TuneRounded fontSize="small" /></IconButton>
                 </TableCell>
               </TableRow>
@@ -132,6 +157,20 @@ export default function InventoryPage(): React.ReactElement {
         onPageChange={(_, newPage) => setPage(newPage)}
       />
 
+      {/* Edit Dialog */}
+      <Dialog open={editOpen} onClose={() => setEditOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>Editar: {editTarget?.name}</DialogTitle>
+        <DialogContent>
+          <TextField fullWidth label="Precio" type="number" value={editForm.price} onChange={(e) => setEditForm({ ...editForm, price: Number(e.target.value) })} margin="dense" inputProps={{ min: 0 }} />
+          <TextField fullWidth label="Stock minimo" type="number" value={editForm.minStock} onChange={(e) => setEditForm({ ...editForm, minStock: Number(e.target.value) })} margin="dense" inputProps={{ min: 0 }} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditOpen(false)}>Cancelar</Button>
+          <Button variant="contained" onClick={handleEdit}>Guardar</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Adjust Dialog */}
       <Dialog open={adjustOpen} onClose={() => setAdjustOpen(false)}>
         <DialogTitle>Ajustar Stock: {adjustTarget?.name}</DialogTitle>
         <DialogContent>

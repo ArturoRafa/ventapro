@@ -91,11 +91,6 @@ export default function ConfigPage(): React.ReactElement {
           <Grid item xs={12} sm={6}><FormControlLabel control={<Switch checked={form.requiresOpeningAmount ?? false} onChange={(e) => updateField('requiresOpeningAmount', e.target.checked)} />} label="Requiere monto de apertura" /></Grid>
         </Grid>
 
-        <Divider sx={{ my: 3 }} />
-
-        <Typography variant="h6" gutterBottom>WhatsApp</Typography>
-        <TextField fullWidth label="Numero WhatsApp" value={form.whatsappNumber ?? ''} onChange={(e) => updateField('whatsappNumber', e.target.value)} sx={{ maxWidth: 300 }} />
-
         <Box sx={{ mt: 4 }}>
           <Button variant="contained" size="large" onClick={handleSave} disabled={loading}>
             {loading ? 'Guardando...' : 'Guardar Configuracion'}

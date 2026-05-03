@@ -15,7 +15,6 @@ export interface UpdateConfigDto {
   usesReports?: boolean;
   usesTicketsPdf?: boolean;
   requiresOpeningAmount?: boolean;
-  whatsappNumber?: string | null;
 }
 
 export function validateUpdateConfigDto(body: Record<string, unknown>): UpdateConfigDto {
@@ -31,7 +30,6 @@ export function validateUpdateConfigDto(body: Record<string, unknown>): UpdateCo
     ['logoUrl', 'logoUrl'],
     ['businessPhone', 'businessPhone'],
     ['businessAddress', 'businessAddress'],
-    ['whatsappNumber', 'whatsappNumber'],
   ];
   const boolFields: Array<[string, keyof UpdateConfigDto]> = [
     ['usesCredit', 'usesCredit'],

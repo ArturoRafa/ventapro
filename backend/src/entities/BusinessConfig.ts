@@ -60,6 +60,4 @@ export class BusinessConfig {
   @Column({ name: 'requiere_monto_apertura', type: 'boolean', default: false })
   requiresOpeningAmount!: boolean;
 
-  @Column({ name: 'numero_whatsapp', type: 'varchar', length: 20, nullable: true })
-  whatsappNumber!: string | null;
 }

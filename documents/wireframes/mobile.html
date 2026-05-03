@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframes Mobile — Todas las pantallas</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #263238; color: #212121; min-height: 100vh; }
+
+  /* ===== PAGE SELECTOR (desktop wrapper) ===== */
+  .page-selector {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: #37474f; color: white; z-index: 1000;
+    display: flex; align-items: center; gap: 0;
+    height: 56px; padding: 0 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .page-selector h2 { font-size: 16px; font-weight: 500; white-space: nowrap; margin-right: 20px; }
+  .page-selector a { color: rgba(255,255,255,0.7); font-size: 12px; text-decoration: none; margin-right: 16px; }
+  .page-selector a:hover { color: white; }
+  .screen-tabs {
+    display: flex; gap: 0; overflow-x: auto; flex: 1;
+  }
+  .screen-tab {
+    padding: 8px 16px; font-size: 13px; font-weight: 500;
+    cursor: pointer; white-space: nowrap; border: none;
+    background: transparent; color: rgba(255,255,255,0.6);
+    font-family: 'Roboto', sans-serif; border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .screen-tab:hover { color: white; background: rgba(255,255,255,0.05); }
+  .screen-tab.active { color: #64b5f6; border-bottom-color: #64b5f6; }
+
+  /* ===== PHONE FRAME ===== */
+  .phone-wrapper {
+    display: flex; justify-content: center; align-items: flex-start;
+    padding: 80px 20px 40px;
+    min-height: 100vh;
+  }
+  .phone-frame {
+    width: 390px; min-height: 844px;
+    background: white; border-radius: 40px;
+    box-shadow: 0 0 0 8px #1a1a1a, 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden; position: relative;
+  }
+  .phone-notch {
+    width: 150px; height: 28px; background: #1a1a1a;
+    border-radius: 0 0 20px 20px; margin: 0 auto;
+    position: relative; z-index: 50;
+  }
+
+  /* ===== MOBILE APP SHELL ===== */
+  .mobile-appbar {
+    background: #1976d2; color: white;
+    height: 56px; display: flex; align-items: center;
+    padding: 0 12px; gap: 8px;
+    position: relative; z-index: 10;
+    margin-top: -8px;
+  }
+  .mobile-appbar .material-icons { font-size: 24px; cursor: pointer; }
+  .mobile-appbar h1 { font-size: 18px; font-weight: 500; flex: 1; }
+  .mobile-appbar-actions { display: flex; gap: 4px; }
+
+  .mobile-content {
+    padding: 12px;
+    min-height: 680px;
+    padding-bottom: 72px;
+    overflow-y: auto;
+    background: #f5f5f5;
+  }
+
+  /* Bottom Navigation */
+  .bottom-nav {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 64px; background: white;
+    display: flex; border-top: 1px solid #e0e0e0;
+    z-index: 50;
+  }
+  .bottom-nav-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 2px; cursor: pointer; color: #9e9e9e;
+    font-size: 11px; text-decoration: none;
+    position: relative;
+  }
+  .bottom-nav-item .material-icons { font-size: 24px; }
+  .bottom-nav-item.active { color: #1976d2; }
+  .bottom-nav-item .nav-badge {
+    position: absolute; top: 4px; right: calc(50% - 18px);
+    background: #f44336; color: white; font-size: 10px;
+    padding: 1px 5px; border-radius: 8px; font-weight: 700;
+  }
+
+  /* ===== REUSABLE MOBILE COMPONENTS ===== */
+  .m-card {
+    background: white; border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    padding: 16px; margin-bottom: 12px;
+  }
+  .m-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .m-card-title { font-size: 14px; font-weight: 500; }
+  .m-card-subtitle { font-size: 12px; color: #757575; }
+
+  .m-chip {
+    display: inline-flex; align-items: center;
+    padding: 3px 10px; border-radius: 12px;
+    font-size: 11px; font-weight: 500;
+  }
+  .m-chip-green { background: #e8f5e9; color: #2e7d32; }
+  .m-chip-grey { background: #f5f5f5; color: #757575; }
+  .m-chip-orange { background: #fff3e0; color: #e65100; }
+  .m-chip-red { background: #ffebee; color: #c62828; }
+  .m-chip-blue { background: #e3f2fd; color: #1565c0; }
+
+  .m-btn {
+    padding: 10px 20px; border-radius: 8px; border: none;
+    font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; text-transform: uppercase; width: 100%;
+    letter-spacing: 0.5px;
+  }
+  .m-btn-primary { background: #1976d2; color: white; }
+  .m-btn-warning { background: #ed6c02; color: white; }
+  .m-btn-success { background: #2e7d32; color: white; }
+  .m-btn-outlined { background: transparent; border: 1px solid #1976d2; color: #1976d2; }
+  .m-btn-sm { padding: 6px 12px; font-size: 12px; width: auto; }
+
+  .m-input {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid #c4c4c4; border-radius: 8px;
+    font-family: 'Roboto', sans-serif; font-size: 14px;
+  }
+  .m-label { font-size: 12px; color: #757575; margin-bottom: 6px; font-weight: 500; display: block; }
+
+  .m-kpi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .m-kpi { background: white; border-radius: 12px; padding: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center; }
+  .m-kpi .label { font-size: 11px; color: #757575; text-transform: uppercase; letter-spacing: 0.5px; }
+  .m-kpi .value { font-size: 20px; font-weight: 700; margin-top: 2px; }
+
+  .m-list-item {
+    display: flex; align-items: center; padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0; gap: 12px;
+  }
+  .m-list-item:last-child { border-bottom: none; }
+
+  .m-section-title { font-size: 16px; font-weight: 500; margin: 16px 0 12px; color: #424242; }
+
+  .m-fab {
+    position: absolute; bottom: 80px; right: 16px;
+    width: 56px; height: 56px; border-radius: 28px;
+    background: #1976d2; color: white; border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 20;
+  }
+  .m-fab .material-icons { font-size: 24px; }
+
+  /* Fullscreen dialog */
+  .m-fullscreen-dialog {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: white; z-index: 100; display: none;
+  }
+  .m-fullscreen-dialog.active { display: block; }
+  .m-dialog-appbar {
+    background: #1976d2; color: white;
+    height: 56px; display: flex; align-items: center;
+    padding: 0 12px; gap: 12px;
+  }
+  .m-dialog-appbar h2 { font-size: 18px; font-weight: 500; flex: 1; }
+  .m-dialog-appbar .save-btn {
+    background: transparent; border: none; color: white;
+    font-size: 14px; font-weight: 500; font-family: 'Roboto', sans-serif;
+    text-transform: uppercase; cursor: pointer;
+  }
+  .m-dialog-content { padding: 16px; overflow-y: auto; }
+
+  /* Drawer */
+  .m-drawer-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); z-index: 90; display: none;
+  }
+  .m-drawer-overlay.active { display: block; }
+  .m-drawer {
+    position: absolute; top: 0; left: 0; bottom: 0;
+    width: 280px; background: white; z-index: 91;
+    transform: translateX(-100%); transition: transform 0.3s;
+    overflow-y: auto;
+  }
+  .m-drawer.active { transform: translateX(0); }
+  .m-drawer-header {
+    background: #1976d2; color: white;
+    padding: 24px 16px 16px; min-height: 120px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+  }
+  .m-drawer-header h3 { font-size: 18px; font-weight: 500; }
+  .m-drawer-header p { font-size: 13px; opacity: 0.8; margin-top: 4px; }
+  .m-drawer-item {
+    display: flex; align-items: center; padding: 14px 16px;
+    gap: 16px; font-size: 14px; color: #616161;
+    cursor: pointer; text-decoration: none;
+  }
+  .m-drawer-item:hover { background: #f5f5f5; }
+  .m-drawer-item.active { color: #1976d2; background: #e3f2fd; }
+  .m-drawer-item .material-icons { font-size: 24px; color: inherit; }
+  .m-drawer-divider { height: 1px; background: #e0e0e0; margin: 8px 0; }
+
+  /* Screen visibility */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Annotation labels */
+  .annotation {
+    background: #ff9800; color: white; font-size: 10px;
+    padding: 2px 8px; border-radius: 4px; font-weight: 700;
+    display: inline-block; margin: 4px 0;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .annotation-info {
+    background: #e3f2fd; color: #1565c0; font-size: 11px;
+    padding: 8px 12px; border-radius: 8px; margin: 8px 0;
+    line-height: 1.5;
+  }
+
+  /* Progress bar */
+  .m-progress { height: 8px; background: #e0e0e0; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+  .m-progress-fill { height: 100%; border-radius: 4px; background: #1976d2; }
+
+  /* Toggle group compact */
+  .m-toggle-group { display: flex; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; }
+  .m-toggle-btn {
+    flex: 1; padding: 8px 4px; border: none; background: white;
+    font-size: 11px; font-family: 'Roboto', sans-serif; font-weight: 500;
+    cursor: pointer; border-right: 1px solid #e0e0e0;
+  }
+  .m-toggle-btn:last-child { border-right: none; }
+  .m-toggle-btn.active { background: #1976d2; color: white; }
+
+  /* Tabs */
+  .m-tabs {
+    display: flex; background: white; border-bottom: 2px solid #e0e0e0;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .m-tab {
+    padding: 12px 16px; font-size: 13px; font-weight: 500;
+    cursor: pointer; white-space: nowrap; color: #757575;
+    border-bottom: 2px solid transparent; margin-bottom: -2px;
+    background: none; border-top: none; border-left: none; border-right: none;
+    font-family: 'Roboto', sans-serif;
+  }
+  .m-tab.active { color: #1976d2; border-bottom-color: #1976d2; }
+
+  /* Filter collapse */
+  .m-filter-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px; background: white; border-radius: 8px;
+    margin-bottom: 12px; cursor: pointer; font-size: 13px; color: #757575;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  .m-filters-collapsed { display: none; margin-bottom: 12px; }
+  .m-filters-collapsed.active { display: block; }
+
+  /* WhatsApp button */
+  .m-wa-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 8px; border: 1px solid #25d366;
+    background: white; color: #25d366; font-size: 13px;
+    font-weight: 500; font-family: 'Roboto', sans-serif; cursor: pointer;
+  }
+  .m-wa-btn .material-icons { font-size: 18px; }
+
+  /* Snackbar mobile */
+  .m-snackbar {
+    position: absolute; bottom: 72px; left: 8px; right: 8px;
+    background: #323232; color: white; padding: 12px 16px;
+    border-radius: 8px; display: flex; align-items: center;
+    gap: 8px; font-size: 13px; z-index: 80;
+  }
+  .m-snackbar .material-icons { font-size: 18px; }
+  .m-snackbar-actions { margin-left: auto; display: flex; gap: 4px; }
+  .m-snackbar-btn {
+    background: none; border: none; color: #64b5f6;
+    font-size: 12px; font-weight: 500; font-family: 'Roboto', sans-serif;
+    cursor: pointer; text-transform: uppercase; padding: 4px 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE SELECTOR BAR ===== -->
+<div class="page-selector">
+  <h2>Mobile Wireframes</h2>
+  <a href="index.html" style="display:flex;align-items:center;gap:4px;margin-right:24px;">
+    <span class="material-icons" style="font-size:16px;">home</span> Hub
+  </a>
+  <div class="screen-tabs">
+    <button class="screen-tab active" onclick="showScreen('login')">Login</button>
+    <button class="screen-tab" onclick="showScreen('drawer')">Drawer</button>
+    <button class="screen-tab" onclick="showScreen('caja')">Caja</button>
+    <button class="screen-tab" onclick="showScreen('caja-dialogs')">Caja Dialogs</button>
+    <button class="screen-tab" onclick="showScreen('pos-nocaja')">POS Sin Caja</button>
+    <button class="screen-tab" onclick="showScreen('pos')">POS</button>
+    <button class="screen-tab" onclick="showScreen('pos-empty')">POS Vacío</button>
+    <button class="screen-tab" onclick="showScreen('pos-cart')">POS Carrito</button>
+    <button class="screen-tab" onclick="showScreen('pos-confirm')">POS Confirmar</button>
+    <button class="screen-tab" onclick="showScreen('productos')">Productos</button>
+    <button class="screen-tab" onclick="showScreen('creditos')">Creditos</button>
+    <button class="screen-tab" onclick="showScreen('credito-detail')">Credito Detalle</button>
+    <button class="screen-tab" onclick="showScreen('reportes')">Reportes</button>
+    <button class="screen-tab" onclick="showScreen('config')">Config</button>
+    <button class="screen-tab" onclick="showScreen('inventario')">Inventario</button>
+    <button class="screen-tab" onclick="showScreen('bottom-nav-flags')">Bottom Nav Flags</button>
+  </div>
+</div>
+
+<div class="phone-wrapper">
+<div class="phone-frame">
+<div class="phone-notch"></div>
+
+<!-- ================================================================== -->
+<!--                        SCREEN: LOGIN                               -->
+<!-- ================================================================== -->
+<div class="screen active" id="screen-login">
+  <div style="background: #1976d2; min-height: 816px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px;">
+    <span class="material-icons" style="font-size: 64px; color: white; margin-bottom: 16px;">storefront</span>
+    <h1 style="color: white; font-size: 28px; font-weight: 300; margin-bottom: 8px;">cafe-pos</h1>
+    <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 40px;">Sistema de punto de venta</p>
+
+    <div style="width: 100%; max-width: 320px;">
+      <div style="margin-bottom: 16px;">
+        <label class="m-label" style="color: rgba(255,255,255,0.8);">Correo electronico</label>
+        <input class="m-input" type="email" value="admin@cafepos.com" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: white;">
+      </div>
+      <div style="margin-bottom: 24px;">
+        <label class="m-label" style="color: rgba(255,255,255,0.8);">Contrasena</label>
+        <input class="m-input" type="password" value="admin123" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: white;">
+      </div>
+      <button class="m-btn" style="background: white; color: #1976d2; font-size: 16px; padding: 14px;" onclick="showScreen('caja')">INGRESAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                        SCREEN: DRAWER NAV                          -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-drawer">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>cafe-pos</h1>
+  </div>
+  <div class="mobile-content" style="background: #f5f5f5; padding: 0; min-height: 0;">
+    <div class="annotation-info" style="margin: 12px; border-radius: 8px;">
+      <strong>Navegacion mobile:</strong> Bottom Navigation muestra las 5 pantallas principales.
+      El menu hamburger (drawer) da acceso a TODAS las opciones + info del usuario + cerrar sesion.
+    </div>
+  </div>
+
+  <!-- Drawer open -->
+  <div style="position: absolute; top: 48px; left: 0; right: 0; bottom: 64px;">
+    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5);"></div>
+    <div style="position: absolute; top: 0; left: 0; bottom: 0; width: 280px; background: white; z-index: 1;">
+      <div class="m-drawer-header">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom: 8px;">
+          <span class="material-icons" style="font-size:40px;">account_circle</span>
+          <div>
+            <h3 style="font-size: 16px;">Juan Perez</h3>
+            <span class="m-chip m-chip-blue" style="font-size: 10px;">Admin</span>
+          </div>
+        </div>
+        <p style="font-size: 12px; opacity: 0.8;">admin@cafepos.com</p>
+      </div>
+      <div class="m-drawer-item active" onclick="showScreen('caja')"><span class="material-icons">point_of_sale</span> Caja</div>
+      <div class="m-drawer-item" onclick="showScreen('pos')"><span class="material-icons">storefront</span> POS</div>
+      <div class="m-drawer-divider"></div>
+      <div class="m-drawer-item" onclick="showScreen('productos')"><span class="material-icons">shopping_cart</span> Productos</div>
+      <div class="m-drawer-item"><span class="material-icons">category</span> Categorias</div>
+      <div class="m-drawer-item" onclick="showScreen('inventario')"><span class="material-icons">inventory_2</span> Inventario <span class="annotation" style="margin-left:auto;">Admin</span></div>
+      <div class="m-drawer-item"><span class="material-icons">people</span> Clientes</div>
+      <div class="m-drawer-item" onclick="showScreen('creditos')"><span class="material-icons">credit_score</span> Creditos</div>
+      <div class="m-drawer-divider"></div>
+      <div class="m-drawer-item" onclick="showScreen('reportes')"><span class="material-icons">assessment</span> Reportes <span class="annotation" style="margin-left:auto;">Admin</span></div>
+      <div class="m-drawer-item" onclick="showScreen('config')"><span class="material-icons">settings</span> Configuracion <span class="annotation" style="margin-left:auto;">Admin</span></div>
+      <div class="m-drawer-divider"></div>
+      <div class="m-drawer-item" style="color: #f44336;" onclick="showScreen('login')"><span class="material-icons">logout</span> Cerrar sesion</div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item active" onclick="nav('caja')"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item" onclick="nav('pos')"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item" onclick="nav('productos')"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item" onclick="nav('creditos')"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item" onclick="nav('drawer')"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                        SCREEN: CAJA                                -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-caja">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Caja</h1>
+  </div>
+  <div class="mobile-content">
+    <!-- Status card -->
+    <div class="m-card" style="border-left: 4px solid #4caf50;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span style="font-size: 16px; font-weight: 500;">Estado actual</span>
+        <span class="m-chip m-chip-green">Abierta</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+        <div>
+          <div style="font-size: 11px; color: #757575;">Cajero</div>
+          <div style="font-size: 14px; font-weight: 500;">Juan Perez</div>
+        </div>
+        <div>
+          <div style="font-size: 11px; color: #757575;">Monto inicial</div>
+          <div style="font-size: 14px; font-weight: 500;">$50.000</div>
+        </div>
+        <div>
+          <div style="font-size: 11px; color: #757575;">Apertura</div>
+          <div style="font-size: 14px; font-weight: 500;">08:00 AM</div>
+        </div>
+        <div>
+          <div style="font-size: 11px; color: #757575;">Tiempo</div>
+          <div style="font-size: 14px; font-weight: 500;">4h 32m</div>
+        </div>
+      </div>
+      <button class="m-btn m-btn-warning">CERRAR CAJA</button>
+    </div>
+
+    <!-- Sin caja (alternative state) -->
+    <div class="annotation-info">
+      <strong>Estado alternativo:</strong> Si no hay caja abierta, se muestra:
+    </div>
+    <div class="m-card" style="border-left: 4px solid #9e9e9e; text-align: center; padding: 32px 16px;">
+      <span class="material-icons" style="font-size: 48px; color: #bdbdbd; margin-bottom: 8px;">point_of_sale</span>
+      <p style="font-size: 15px; color: #757575; margin-bottom: 16px;">No tienes una caja abierta</p>
+      <button class="m-btn m-btn-primary">ABRIR CAJA</button>
+    </div>
+
+    <!-- Admin: Historial (card list, not table) -->
+    <div class="annotation" style="margin-top: 8px;">Solo admin</div>
+    <div class="m-section-title">Historial de cajas</div>
+
+    <div class="m-filter-toggle" onclick="this.nextElementSibling.classList.toggle('active')">
+      <span><span class="material-icons" style="font-size: 16px; vertical-align: middle;">filter_list</span> Filtros</span>
+      <span class="material-icons" style="font-size: 18px;">expand_more</span>
+    </div>
+    <div class="m-filters-collapsed">
+      <div class="m-card" style="padding: 12px;">
+        <div style="margin-bottom: 8px;">
+          <label class="m-label">Cajero</label>
+          <select class="m-input" style="padding: 10px;"><option>Todos</option></select>
+        </div>
+        <div style="margin-bottom: 8px;">
+          <label class="m-label">Estado</label>
+          <select class="m-input" style="padding: 10px;"><option>Todos</option><option>Abierta</option><option>Cerrada</option></select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div><label class="m-label">Desde</label><input class="m-input" type="date" style="padding: 10px;"></div>
+          <div><label class="m-label">Hasta</label><input class="m-input" type="date" style="padding: 10px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card list (replaces table) -->
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Caja #42</div>
+          <div style="font-size: 12px; color: #757575;">Maria Lopez</div>
+        </div>
+        <span class="m-chip m-chip-grey">Cerrada</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; font-size: 12px;">
+        <div><span style="color: #757575;">Inicial:</span> $50.000</div>
+        <div><span style="color: #757575;">Sistema:</span> $245.000</div>
+        <div><span style="color: #757575;">Real:</span> $243.500</div>
+        <div><span style="color: #757575;">Diferencia:</span> <span style="color: #c62828;">-$1.500</span></div>
+      </div>
+      <div style="font-size: 11px; color: #9e9e9e; margin-top: 8px;">14/04/2026 08:00 - 18:30</div>
+    </div>
+
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Caja #41</div>
+          <div style="font-size: 12px; color: #757575;">Juan Perez</div>
+        </div>
+        <span class="m-chip m-chip-grey">Cerrada</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; font-size: 12px;">
+        <div><span style="color: #757575;">Inicial:</span> $30.000</div>
+        <div><span style="color: #757575;">Sistema:</span> $180.000</div>
+        <div><span style="color: #757575;">Real:</span> $180.500</div>
+        <div><span style="color: #757575;">Diferencia:</span> <span style="color: #2e7d32;">+$500</span></div>
+      </div>
+      <div style="font-size: 11px; color: #9e9e9e; margin-top: 8px;">13/04/2026 07:30 - 17:45</div>
+    </div>
+
+    <div style="text-align: center; padding: 8px; font-size: 12px; color: #9e9e9e;">
+      Mostrando 1-2 de 15 &nbsp; &lt; 1 2 3 &gt;
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item active" onclick="nav('caja')"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item" onclick="nav('pos')"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item" onclick="nav('productos')"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item" onclick="nav('creditos')"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item" onclick="nav('drawer')"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                   SCREEN: POS - PRODUCTS TAB                       -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-pos">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>POS</h1>
+    <div class="mobile-appbar-actions">
+      <span class="m-chip m-chip-green" style="font-size: 10px; padding: 2px 8px;">Caja #45</span>
+    </div>
+  </div>
+
+  <!-- Tabs: Productos / Carrito -->
+  <div class="m-tabs" style="position: relative; z-index: 5;">
+    <button class="m-tab active" style="flex: 1;" onclick="showScreen('pos')">
+      <span class="material-icons" style="font-size: 16px; vertical-align: middle;">grid_view</span> Productos
+    </button>
+    <button class="m-tab" style="flex: 1; position: relative;" onclick="showScreen('pos-cart')">
+      <span class="material-icons" style="font-size: 16px; vertical-align: middle;">shopping_cart</span> Carrito
+      <span style="background: #f44336; color: white; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 4px; font-weight: 700;">3</span>
+    </button>
+  </div>
+
+  <div class="mobile-content" style="padding-bottom: 72px; background: #fafafa;">
+    <!-- Search -->
+    <div style="display: flex; align-items: center; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; gap: 8px;">
+      <span class="material-icons" style="color: #9e9e9e; font-size: 20px;">search</span>
+      <input type="text" placeholder="Buscar producto..." style="border: none; outline: none; font-size: 14px; flex: 1; font-family: 'Roboto', sans-serif;">
+    </div>
+
+    <!-- Category chips (horizontal scroll) -->
+    <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 4px; -webkit-overflow-scrolling: touch;">
+      <span class="m-chip m-chip-blue" style="cursor: pointer; white-space: nowrap; padding: 5px 12px;">Todas</span>
+      <span class="m-chip" style="background: #f5f5f5; cursor: pointer; white-space: nowrap; padding: 5px 12px;">Bebidas</span>
+      <span class="m-chip" style="background: #f5f5f5; cursor: pointer; white-space: nowrap; padding: 5px 12px;">Panaderia</span>
+      <span class="m-chip" style="background: #f5f5f5; cursor: pointer; white-space: nowrap; padding: 5px 12px;">Comidas</span>
+      <span class="m-chip" style="background: #f5f5f5; cursor: pointer; white-space: nowrap; padding: 5px 12px;">Snacks</span>
+    </div>
+
+    <!-- Product grid 2 columns -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+      <div class="m-card" style="padding: 12px; cursor: pointer; margin-bottom: 0; border: 2px solid transparent;">
+        <div style="font-size: 13px; font-weight: 500; line-height: 1.3;">Coca-Cola 600ml</div>
+        <div style="font-size: 16px; font-weight: 700; color: #1976d2; margin: 4px 0;">$3.500</div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">stk: 24</span>
+      </div>
+      <div class="m-card" style="padding: 12px; cursor: pointer; margin-bottom: 0; border: 2px solid transparent;">
+        <div style="font-size: 13px; font-weight: 500; line-height: 1.3;">Pan integral</div>
+        <div style="font-size: 16px; font-weight: 700; color: #1976d2; margin: 4px 0;">$5.200</div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">stk: 15</span>
+      </div>
+      <div class="m-card" style="padding: 12px; cursor: pointer; margin-bottom: 0; border: 2px solid #ff9800;">
+        <div style="font-size: 13px; font-weight: 500; line-height: 1.3;">Galletas choco</div>
+        <div style="font-size: 16px; font-weight: 700; color: #1976d2; margin: 4px 0;">$2.800</div>
+        <span class="m-chip m-chip-orange" style="font-size: 10px;">stk: 3</span>
+      </div>
+      <div class="m-card" style="padding: 12px; cursor: pointer; margin-bottom: 0; border: 2px solid transparent;">
+        <div style="font-size: 13px; font-weight: 500; line-height: 1.3;">Cafe latte</div>
+        <div style="font-size: 16px; font-weight: 700; color: #1976d2; margin: 4px 0;">$6.000</div>
+        <span class="m-chip m-chip-blue" style="font-size: 10px;">Comida</span>
+      </div>
+      <div class="m-card" style="padding: 12px; cursor: pointer; margin-bottom: 0; border: 2px solid transparent;">
+        <div style="font-size: 13px; font-weight: 500; line-height: 1.3;">Torta chocolate</div>
+        <div style="font-size: 16px; font-weight: 700; color: #1976d2; margin: 4px 0;">$8.500</div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">stk: 8</span>
+      </div>
+      <div class="m-card" style="padding: 12px; cursor: pointer; margin-bottom: 0; border: 2px solid transparent;">
+        <div style="font-size: 13px; font-weight: 500; line-height: 1.3;">Jugo naranja</div>
+        <div style="font-size: 16px; font-weight: 700; color: #1976d2; margin: 4px 0;">$4.000</div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">stk: 12</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item active"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                   SCREEN: POS - CART TAB                           -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-pos-cart">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>POS</h1>
+    <div class="mobile-appbar-actions">
+      <span class="m-chip m-chip-green" style="font-size: 10px; padding: 2px 8px;">Caja #45</span>
+    </div>
+  </div>
+
+  <div class="m-tabs" style="position: relative; z-index: 5;">
+    <button class="m-tab" style="flex: 1;" onclick="showScreen('pos')">
+      <span class="material-icons" style="font-size: 16px; vertical-align: middle;">grid_view</span> Productos
+    </button>
+    <button class="m-tab active" style="flex: 1;" onclick="showScreen('pos-cart')">
+      <span class="material-icons" style="font-size: 16px; vertical-align: middle;">shopping_cart</span> Carrito
+      <span style="background: #f44336; color: white; font-size: 10px; padding: 1px 6px; border-radius: 8px; margin-left: 4px; font-weight: 700;">3</span>
+    </button>
+  </div>
+
+  <div class="mobile-content" style="padding: 0; background: white; display: flex; flex-direction: column; min-height: 680px;">
+    <!-- Cart items -->
+    <div style="flex: 1; padding: 0;">
+      <!-- Item 1 -->
+      <div style="display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0; gap: 10px;">
+        <div style="flex: 1;">
+          <div style="font-size: 14px; font-weight: 500;">Coca-Cola 600ml</div>
+          <div style="font-size: 12px; color: #757575;">$3.500 c/u</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; font-size: 16px; cursor: pointer;">-</button>
+          <span style="font-size: 14px; font-weight: 500; min-width: 24px; text-align: center;">2</span>
+          <button style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; font-size: 16px; cursor: pointer;">+</button>
+        </div>
+        <div style="font-size: 14px; font-weight: 500; min-width: 60px; text-align: right;">$7.000</div>
+        <span class="material-icons" style="color: #bdbdbd; font-size: 20px; cursor: pointer;">close</span>
+      </div>
+      <!-- Item 2 -->
+      <div style="display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0; gap: 10px;">
+        <div style="flex: 1;">
+          <div style="font-size: 14px; font-weight: 500;">Pan integral</div>
+          <div style="font-size: 12px; color: #757575;">$5.200 c/u</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; font-size: 16px; cursor: pointer;">-</button>
+          <span style="font-size: 14px; font-weight: 500; min-width: 24px; text-align: center;">1</span>
+          <button style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; font-size: 16px; cursor: pointer;">+</button>
+        </div>
+        <div style="font-size: 14px; font-weight: 500; min-width: 60px; text-align: right;">$5.200</div>
+        <span class="material-icons" style="color: #bdbdbd; font-size: 20px; cursor: pointer;">close</span>
+      </div>
+      <!-- Item 3 -->
+      <div style="display: flex; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0; gap: 10px;">
+        <div style="flex: 1;">
+          <div style="font-size: 14px; font-weight: 500;">Cafe latte</div>
+          <div style="font-size: 12px; color: #757575;">$6.000 c/u</div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; font-size: 16px; cursor: pointer;">-</button>
+          <span style="font-size: 14px; font-weight: 500; min-width: 24px; text-align: center;">1</span>
+          <button style="width: 30px; height: 30px; border-radius: 50%; border: 1px solid #e0e0e0; background: white; font-size: 16px; cursor: pointer;">+</button>
+        </div>
+        <div style="font-size: 14px; font-weight: 500; min-width: 60px; text-align: right;">$6.000</div>
+        <span class="material-icons" style="color: #bdbdbd; font-size: 20px; cursor: pointer;">close</span>
+      </div>
+    </div>
+
+    <!-- Payment section -->
+    <div style="padding: 16px; border-top: 1px solid #e0e0e0;">
+      <div style="font-size: 12px; color: #757575; font-weight: 500; margin-bottom: 8px;">Forma de pago</div>
+      <div class="m-toggle-group" style="margin-bottom: 12px;">
+        <button class="m-toggle-btn active">Efectivo</button>
+        <button class="m-toggle-btn">Tarjeta</button>
+        <button class="m-toggle-btn">Transfer.</button>
+      </div>
+
+      <!-- Credit checkbox -->
+      <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #fff8e1; border-radius: 8px; margin-bottom: 12px;">
+        <input type="checkbox" style="width: 18px; height: 18px; accent-color: #1976d2;">
+        <label style="font-size: 13px; font-weight: 500;">Venta a credito</label>
+      </div>
+
+      <!-- Total + button -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span style="font-size: 14px; color: #757575;">Total (3 items)</span>
+        <span style="font-size: 24px; font-weight: 700;">$18.200</span>
+      </div>
+      <button class="m-btn m-btn-success" style="font-size: 16px; padding: 14px;" onclick="showScreen('pos-confirm')">
+        <span class="material-icons" style="vertical-align: middle; margin-right: 8px; font-size: 20px;">shopping_cart_checkout</span>
+        COBRAR $18.200
+      </button>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item active"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                SCREEN: POS - CONFIRM (fullscreen dialog)           -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-pos-confirm">
+  <div style="background: white; min-height: 816px;">
+    <div class="m-dialog-appbar">
+      <span class="material-icons" onclick="showScreen('pos-cart')" style="cursor: pointer;">close</span>
+      <h2>Confirmar venta</h2>
+    </div>
+    <div style="padding: 24px 16px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span class="material-icons" style="font-size: 56px; color: #1976d2;">receipt_long</span>
+      </div>
+
+      <div class="m-card">
+        <div style="font-size: 13px; color: #757575; margin-bottom: 12px;">Resumen de venta</div>
+        <div style="border-bottom: 1px solid #f0f0f0; padding: 8px 0; display: flex; justify-content: space-between;">
+          <span style="font-size: 14px;">Coca-Cola 600ml x2</span>
+          <span style="font-size: 14px; font-weight: 500;">$7.000</span>
+        </div>
+        <div style="border-bottom: 1px solid #f0f0f0; padding: 8px 0; display: flex; justify-content: space-between;">
+          <span style="font-size: 14px;">Pan integral x1</span>
+          <span style="font-size: 14px; font-weight: 500;">$5.200</span>
+        </div>
+        <div style="padding: 8px 0; display: flex; justify-content: space-between;">
+          <span style="font-size: 14px;">Cafe latte x1</span>
+          <span style="font-size: 14px; font-weight: 500;">$6.000</span>
+        </div>
+      </div>
+
+      <div class="m-card">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 13px; color: #757575;">Forma de pago</span>
+          <span style="font-size: 14px; font-weight: 500;">Efectivo</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 13px; color: #757575;">Productos</span>
+          <span style="font-size: 14px; font-weight: 500;">3 items</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-top: 12px; border-top: 2px solid #e0e0e0;">
+          <span style="font-size: 18px; font-weight: 500;">TOTAL</span>
+          <span style="font-size: 22px; font-weight: 700; color: #1976d2;">$18.200</span>
+        </div>
+      </div>
+
+      <button class="m-btn m-btn-success" style="font-size: 16px; padding: 14px; margin-top: 16px;" onclick="showScreen('pos')">
+        CONFIRMAR VENTA
+      </button>
+      <button class="m-btn m-btn-outlined" style="margin-top: 8px;" onclick="showScreen('pos-cart')">CANCELAR</button>
+
+      <!-- Post-venta snackbar preview -->
+      <div class="annotation-info" style="margin-top: 24px;">
+        <strong>Post-venta:</strong> Tras confirmar, se muestra un snackbar con opciones:
+      </div>
+      <div style="background: #323232; color: white; padding: 12px 16px; border-radius: 8px; margin-top: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <span class="material-icons" style="color: #4caf50; font-size: 18px;">check_circle</span>
+          <span style="font-size: 13px;">Venta #156 registrada</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button style="background: none; border: none; color: #64b5f6; font-size: 12px; font-weight: 500; font-family: 'Roboto', sans-serif; cursor: pointer;">VER TICKET</button>
+          <button style="background: none; border: none; color: #81c784; font-size: 12px; font-weight: 500; font-family: 'Roboto', sans-serif; cursor: pointer;">WHATSAPP</button>
+          <button style="background: none; border: none; color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500; font-family: 'Roboto', sans-serif; cursor: pointer; margin-left: auto;">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                     SCREEN: PRODUCTOS                              -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-productos">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Productos</h1>
+    <div class="mobile-appbar-actions">
+      <span class="material-icons" style="cursor: pointer;">search</span>
+    </div>
+  </div>
+  <div class="mobile-content">
+    <div class="annotation-info">
+      <strong>Tabla → Card List:</strong> En mobile las tablas se reemplazan por tarjetas apiladas.
+      El boton "Agregar" se mueve a un FAB.
+    </div>
+
+    <!-- Search bar (expandable from icon) -->
+    <div style="display: flex; align-items: center; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; gap: 8px;">
+      <span class="material-icons" style="color: #9e9e9e; font-size: 20px;">search</span>
+      <input type="text" placeholder="Buscar producto..." style="border: none; outline: none; font-size: 14px; flex: 1; font-family: 'Roboto', sans-serif;">
+    </div>
+
+    <!-- Product cards -->
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Coca-Cola 600ml</div>
+          <div style="font-size: 12px; color: #757575;">COD-001 · Bebidas &gt; Gaseosas</div>
+        </div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">Activo</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <span style="font-size: 16px; font-weight: 700; color: #1976d2;">$3.500</span>
+        <div style="display: flex; gap: 4px;">
+          <span class="m-chip m-chip-green" style="font-size: 10px;">stk: 24</span>
+          <span class="m-chip" style="background: #f5f5f5; font-size: 10px;">min: 5</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0;">
+        <span class="material-icons" style="color: #757575; font-size: 20px; cursor: pointer;">edit</span>
+        <span class="material-icons" style="color: #757575; font-size: 20px; cursor: pointer;">toggle_on</span>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Pan integral</div>
+          <div style="font-size: 12px; color: #757575;">COD-015 · Panaderia &gt; Panes</div>
+        </div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">Activo</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <span style="font-size: 16px; font-weight: 700; color: #1976d2;">$5.200</span>
+        <div style="display: flex; gap: 4px;">
+          <span class="m-chip m-chip-orange" style="font-size: 10px;">stk: 3</span>
+          <span class="m-chip" style="background: #f5f5f5; font-size: 10px;">min: 5</span>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0;">
+        <span class="material-icons" style="color: #757575; font-size: 20px; cursor: pointer;">edit</span>
+        <span class="material-icons" style="color: #757575; font-size: 20px; cursor: pointer;">toggle_on</span>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Cafe latte</div>
+          <div style="font-size: 12px; color: #757575;">COD-008 · Comidas</div>
+        </div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">Activo</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <span style="font-size: 16px; font-weight: 700; color: #1976d2;">$6.000</span>
+        <span class="m-chip m-chip-blue" style="font-size: 10px;">Comida (sin stock)</span>
+      </div>
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0;">
+        <span class="material-icons" style="color: #757575; font-size: 20px; cursor: pointer;">edit</span>
+        <span class="material-icons" style="color: #757575; font-size: 20px; cursor: pointer;">toggle_on</span>
+      </div>
+    </div>
+
+    <div style="text-align: center; padding: 8px; font-size: 12px; color: #9e9e9e;">
+      Mostrando 1-3 de 28 &nbsp; &lt; 1 2 3 &gt;
+    </div>
+  </div>
+
+  <!-- FAB add product -->
+  <button class="m-fab" style="bottom: 80px;">
+    <span class="material-icons">add</span>
+  </button>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item active"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                       SCREEN: CREDITOS                             -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-creditos">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Creditos</h1>
+  </div>
+  <div class="mobile-content">
+    <!-- KPI cards -->
+    <div class="m-kpi-row">
+      <div class="m-kpi">
+        <div class="label">Total creditos</div>
+        <div class="value">12</div>
+      </div>
+      <div class="m-kpi">
+        <div class="label">Pendiente</div>
+        <div class="value" style="color: #e65100;">$180.000</div>
+      </div>
+    </div>
+
+    <!-- Collapsible filters -->
+    <div class="m-filter-toggle" onclick="this.nextElementSibling.classList.toggle('active')">
+      <span><span class="material-icons" style="font-size: 16px; vertical-align: middle;">filter_list</span> Filtros</span>
+      <span class="material-icons" style="font-size: 18px;">expand_more</span>
+    </div>
+    <div class="m-filters-collapsed">
+      <div class="m-card" style="padding: 12px;">
+        <div style="margin-bottom: 8px;">
+          <label class="m-label">Cliente</label>
+          <input class="m-input" placeholder="Buscar cliente..." style="padding: 10px;">
+        </div>
+        <div style="margin-bottom: 8px;">
+          <label class="m-label">Estado</label>
+          <select class="m-input" style="padding: 10px;"><option>Todos</option><option>Pendiente</option><option>Pagado</option></select>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div><label class="m-label">Desde</label><input class="m-input" type="date" style="padding: 10px;"></div>
+          <div><label class="m-label">Hasta</label><input class="m-input" type="date" style="padding: 10px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Credit card list -->
+    <div class="m-card" onclick="showScreen('credito-detail')" style="cursor: pointer;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Pedro Gomez</div>
+          <div style="font-size: 12px; color: #757575;">Credito #14 · Venta #156</div>
+        </div>
+        <span class="m-chip m-chip-orange">Pendiente</span>
+      </div>
+      <div class="m-progress"><div class="m-progress-fill" style="width: 41%; background: #ff9800;"></div></div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #757575;">
+        <span>Abonado: $35.000</span>
+        <span>Total: $85.000</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0;">
+        <span style="font-size: 16px; font-weight: 700; color: #e65100;">Saldo: $50.000</span>
+        <div style="display: flex; gap: 8px;">
+          <span class="material-icons" style="color: #2e7d32; font-size: 20px;">payments</span>
+          <span class="material-icons" style="color: #25d366; font-size: 20px;">chat</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Ana Ruiz</div>
+          <div style="font-size: 12px; color: #757575;">Credito #11 · Venta #142</div>
+        </div>
+        <span class="m-chip m-chip-green">Pagado</span>
+      </div>
+      <div class="m-progress"><div class="m-progress-fill" style="width: 100%; background: #4caf50;"></div></div>
+      <div style="display: flex; justify-content: space-between; font-size: 12px; color: #757575;">
+        <span>Abonado: $45.000</span>
+        <span>Total: $45.000</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f0f0;">
+        <span style="font-size: 16px; font-weight: 700; color: #2e7d32;">Saldo: $0</span>
+        <span class="material-icons" style="color: #757575; font-size: 20px;">visibility</span>
+      </div>
+    </div>
+
+    <div style="text-align: center; padding: 8px; font-size: 12px; color: #9e9e9e;">
+      Mostrando 1-2 de 12 &nbsp; &lt; 1 2 3 &gt;
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item active"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                  SCREEN: CREDITO DETALLE (fullscreen)              -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-credito-detail">
+  <div style="background: white; min-height: 816px;">
+    <div class="m-dialog-appbar">
+      <span class="material-icons" onclick="showScreen('creditos')" style="cursor: pointer;">arrow_back</span>
+      <h2>Credito #14</h2>
+      <button class="m-wa-btn" style="border-color: white; color: white; font-size: 11px; padding: 4px 10px;">
+        <span class="material-icons" style="font-size: 16px;">chat</span> WhatsApp
+      </button>
+    </div>
+    <div style="padding: 16px;">
+      <!-- Client info -->
+      <div class="m-card">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span class="material-icons" style="font-size: 36px; color: #bdbdbd;">account_circle</span>
+          <div>
+            <div style="font-size: 16px; font-weight: 500;">Pedro Gomez</div>
+            <div style="font-size: 12px; color: #757575;">Tel: 300 987 6543</div>
+          </div>
+          <span class="m-chip m-chip-orange" style="margin-left: auto;">Pendiente</span>
+        </div>
+        <div style="font-size: 12px; color: #757575;">Venta #156 · 10/04/2026</div>
+      </div>
+
+      <!-- Amounts -->
+      <div class="m-kpi-row">
+        <div class="m-kpi">
+          <div class="label">Total</div>
+          <div class="value" style="font-size: 18px;">$85.000</div>
+        </div>
+        <div class="m-kpi">
+          <div class="label">Saldo</div>
+          <div class="value" style="font-size: 18px; color: #e65100;">$50.000</div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="m-card">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #757575; margin-bottom: 4px;">
+          <span>Progreso de pago</span>
+          <span>41%</span>
+        </div>
+        <div class="m-progress" style="height: 12px;"><div class="m-progress-fill" style="width: 41%; background: #ff9800;"></div></div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #757575; margin-top: 4px;">
+          <span>Abonado: $35.000</span>
+          <span>Restante: $50.000</span>
+        </div>
+      </div>
+
+      <!-- Payment history -->
+      <div class="m-section-title">Historial de abonos</div>
+      <div class="m-card" style="padding: 0;">
+        <div style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 13px; font-weight: 500;">$20.000</div>
+            <div style="font-size: 11px; color: #757575;">12/04/2026 10:30 · Caja #42</div>
+            <div style="font-size: 11px; color: #9e9e9e;">Parcial</div>
+          </div>
+          <span class="material-icons" style="color: #4caf50; font-size: 20px;">check_circle</span>
+        </div>
+        <div style="padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 13px; font-weight: 500;">$15.000</div>
+            <div style="font-size: 11px; color: #757575;">13/04/2026 14:15 · Caja #43</div>
+          </div>
+          <span class="material-icons" style="color: #4caf50; font-size: 20px;">check_circle</span>
+        </div>
+      </div>
+
+      <!-- Register payment button -->
+      <button class="m-btn m-btn-success" style="margin-top: 16px; font-size: 15px; padding: 14px;">
+        <span class="material-icons" style="vertical-align: middle; margin-right: 8px;">payments</span>
+        REGISTRAR ABONO
+      </button>
+
+      <div class="annotation-info" style="margin-top: 16px;">
+        <strong>Dialog "Registrar Abono":</strong> Se abre fullscreen en mobile con campos: Monto (max $50.000), Notas (opcional). Requiere caja abierta.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                       SCREEN: REPORTES                             -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-reportes">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Reportes</h1>
+  </div>
+
+  <div class="mobile-content" style="padding-top: 8px;">
+
+    <!-- Report type selector (replaces tabs — better for mobile) -->
+    <div class="m-card" style="padding: 12px; margin-bottom: 12px;">
+      <label class="m-label">Tipo de reporte</label>
+      <select class="m-input" style="padding: 12px; font-size: 14px; font-weight: 500; background: white;" onchange="switchReport(this.value)">
+        <option value="ventas" selected>Resumen de Ventas</option>
+        <option value="top">Productos Top</option>
+        <option value="cajeros">Ventas por Cajero</option>
+        <option value="creditos">Creditos</option>
+        <option value="cajas">Resumen de Cajas</option>
+      </select>
+    </div>
+
+    <!-- Date filter compact -->
+    <div style="display: flex; gap: 8px; margin-bottom: 12px; align-items: center;">
+      <input class="m-input" type="date" value="2026-04-01" style="flex: 1; padding: 8px 10px; font-size: 12px;">
+      <span style="color: #757575; font-size: 12px;">a</span>
+      <input class="m-input" type="date" value="2026-04-21" style="flex: 1; padding: 8px 10px; font-size: 12px;">
+      <button class="m-btn m-btn-primary m-btn-sm" style="width: auto; white-space: nowrap;">IR</button>
+    </div>
+
+    <!-- REPORT: Ventas -->
+    <div id="report-ventas">
+      <div class="m-kpi-row">
+        <div class="m-kpi">
+          <div class="label">Ingresos</div>
+          <div class="value" style="font-size: 18px; color: #2e7d32;">$1.250K</div>
+        </div>
+        <div class="m-kpi">
+          <div class="label">Ventas</div>
+          <div class="value" style="font-size: 18px;">47</div>
+        </div>
+      </div>
+      <div class="m-kpi-row">
+        <div class="m-kpi">
+          <div class="label">Ticket prom.</div>
+          <div class="value" style="font-size: 18px;">$26.595</div>
+        </div>
+        <div class="m-kpi" style="background: transparent; box-shadow: none;"></div>
+      </div>
+
+      <div class="m-section-title" style="font-size: 14px;">Por forma de pago</div>
+      <div class="m-card" style="padding: 0;">
+        <div style="padding: 10px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
+          <span style="font-size: 13px;">Efectivo</span>
+          <span style="font-size: 13px; font-weight: 500;">$800.000 <span style="color: #757575; font-weight: 400;">(34)</span></span>
+        </div>
+        <div style="padding: 10px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
+          <span style="font-size: 13px;">Tarjeta</span>
+          <span style="font-size: 13px; font-weight: 500;">$350.000 <span style="color: #757575; font-weight: 400;">(10)</span></span>
+        </div>
+        <div style="padding: 10px 16px; display: flex; justify-content: space-between;">
+          <span style="font-size: 13px;">Transferencia</span>
+          <span style="font-size: 13px; font-weight: 500;">$100.000 <span style="color: #757575; font-weight: 400;">(3)</span></span>
+        </div>
+      </div>
+
+      <div class="m-section-title" style="font-size: 14px;">Por estado</div>
+      <div class="m-card" style="padding: 0;">
+        <div style="padding: 10px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
+          <span style="font-size: 13px;">Pagadas</span>
+          <span style="font-size: 13px; font-weight: 500; color: #2e7d32;">$1.100.000 <span style="font-weight: 400;">(40)</span></span>
+        </div>
+        <div style="padding: 10px 16px; display: flex; justify-content: space-between;">
+          <span style="font-size: 13px;">Pendientes</span>
+          <span style="font-size: 13px; font-weight: 500; color: #e65100;">$150.000 <span style="font-weight: 400;">(7)</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT: Productos Top (hidden by default) -->
+    <div id="report-top" style="display: none;">
+      <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <select class="m-input" style="flex: 1; padding: 10px; font-size: 13px;">
+          <option>Ordenar: Cantidad</option>
+          <option>Ordenar: Ingresos</option>
+        </select>
+        <select class="m-input" style="width: 80px; padding: 10px; font-size: 13px;">
+          <option>Top 10</option>
+          <option>Top 20</option>
+        </select>
+      </div>
+      <div class="m-card" style="padding: 0;">
+        <div style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 18px; font-weight: 700; color: #1976d2; min-width: 24px;">1</span>
+          <div style="flex: 1;">
+            <div style="font-size: 13px; font-weight: 500;">Coca-Cola 600ml</div>
+            <div style="font-size: 11px; color: #757575;">P001 · 156 vendidos</div>
+          </div>
+          <span style="font-size: 14px; font-weight: 700;">$546K</span>
+        </div>
+        <div style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 18px; font-weight: 700; color: #1976d2; min-width: 24px;">2</span>
+          <div style="flex: 1;">
+            <div style="font-size: 13px; font-weight: 500;">Pan integral</div>
+            <div style="font-size: 11px; color: #757575;">P015 · 98 vendidos</div>
+          </div>
+          <span style="font-size: 14px; font-weight: 700;">$510K</span>
+        </div>
+        <div style="padding: 12px 16px; display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 18px; font-weight: 700; color: #1976d2; min-width: 24px;">3</span>
+          <div style="flex: 1;">
+            <div style="font-size: 13px; font-weight: 500;">Cafe latte</div>
+            <div style="font-size: 11px; color: #757575;">P008 · 87 vendidos</div>
+          </div>
+          <span style="font-size: 14px; font-weight: 700;">$522K</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT: Por Cajero (hidden by default) -->
+    <div id="report-cajeros" style="display: none;">
+      <div class="m-card" style="padding: 0;">
+        <div style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 14px; font-weight: 500;">Juan Perez</div>
+            <div style="font-size: 12px; color: #757575;">28 ventas</div>
+          </div>
+          <span style="font-size: 16px; font-weight: 700; color: #2e7d32;">$725.000</span>
+        </div>
+        <div style="padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-size: 14px; font-weight: 500;">Maria Lopez</div>
+            <div style="font-size: 12px; color: #757575;">19 ventas</div>
+          </div>
+          <span style="font-size: 16px; font-weight: 700; color: #2e7d32;">$525.000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT: Creditos (hidden by default) -->
+    <div id="report-creditos" style="display: none;">
+      <div class="m-kpi-row">
+        <div class="m-kpi">
+          <div class="label">Total creditos</div>
+          <div class="value" style="font-size: 18px;">12</div>
+        </div>
+        <div class="m-kpi">
+          <div class="label">Prestado</div>
+          <div class="value" style="font-size: 18px;">$450K</div>
+        </div>
+      </div>
+      <div class="m-kpi-row">
+        <div class="m-kpi">
+          <div class="label">Pendiente</div>
+          <div class="value" style="font-size: 18px; color: #e65100;">$180K</div>
+        </div>
+        <div class="m-kpi" style="background: transparent; box-shadow: none;"></div>
+      </div>
+      <div class="m-section-title" style="font-size: 14px;">Por cliente</div>
+      <div class="m-card" style="padding: 0;">
+        <div style="padding: 12px 16px; border-bottom: 1px solid #f0f0f0;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+            <span style="font-size: 13px; font-weight: 500;">Pedro Gomez</span>
+            <span style="font-size: 13px;">3 creditos</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: #757575;">
+            <span>Total: $120.000</span>
+            <span style="color: #e65100; font-weight: 500;">Saldo: $85.000</span>
+          </div>
+        </div>
+        <div style="padding: 12px 16px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
+            <span style="font-size: 13px; font-weight: 500;">Ana Ruiz</span>
+            <span style="font-size: 13px;">2 creditos</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 12px; color: #757575;">
+            <span>Total: $90.000</span>
+            <span style="color: #e65100; font-weight: 500;">Saldo: $45.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT: Cajas (hidden by default) -->
+    <div id="report-cajas" style="display: none;">
+      <div style="margin-bottom: 12px;">
+        <select class="m-input" style="width: 100%; padding: 10px; font-size: 13px;">
+          <option>Todos los cajeros</option>
+          <option>Juan Perez</option>
+          <option>Maria Lopez</option>
+        </select>
+      </div>
+      <div class="m-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+          <div>
+            <div style="font-size: 14px; font-weight: 500;">Caja #42</div>
+            <div style="font-size: 12px; color: #757575;">Juan Perez</div>
+          </div>
+          <span style="font-size: 14px; font-weight: 700; color: #c62828;">-$1.500</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; font-size: 11px; color: #757575;">
+          <div>Inicial: $50K</div>
+          <div>Sistema: $245K</div>
+          <div>Real: $243.5K</div>
+        </div>
+      </div>
+      <div class="m-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+          <div>
+            <div style="font-size: 14px; font-weight: 500;">Caja #41</div>
+            <div style="font-size: 12px; color: #757575;">Maria Lopez</div>
+          </div>
+          <span style="font-size: 14px; font-weight: 700; color: #2e7d32;">+$500</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; font-size: 11px; color: #757575;">
+          <div>Inicial: $30K</div>
+          <div>Sistema: $180K</div>
+          <div>Real: $180.5K</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                     SCREEN: CONFIGURACION                          -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-config">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Configuracion</h1>
+  </div>
+  <div class="mobile-content">
+    <div class="annotation" style="margin-bottom: 8px;">Solo admin</div>
+
+    <!-- Identity section -->
+    <div class="m-section-title" style="display: flex; align-items: center; gap: 6px; margin-top: 4px;">
+      <span class="material-icons" style="font-size: 20px; color: #1976d2;">store</span> Identidad
+    </div>
+    <div class="m-card">
+      <div style="margin-bottom: 12px;">
+        <label class="m-label">Nombre del negocio</label>
+        <input class="m-input" value="Cafeteria El Buen Sabor">
+      </div>
+      <div style="margin-bottom: 12px;">
+        <label class="m-label">Telefono</label>
+        <input class="m-input" value="300 123 4567">
+      </div>
+      <div style="margin-bottom: 12px;">
+        <label class="m-label">Direccion</label>
+        <input class="m-input" value="Calle 45 #12-34, Bogota">
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <div>
+          <label class="m-label">Color primario</label>
+          <input class="m-input" value="#1976d2" style="padding: 10px;">
+        </div>
+        <div>
+          <label class="m-label">Color secundario</label>
+          <input class="m-input" value="#9c27b0" style="padding: 10px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Localization -->
+    <div class="m-section-title" style="display: flex; align-items: center; gap: 6px;">
+      <span class="material-icons" style="font-size: 20px; color: #1976d2;">language</span> Localizacion
+    </div>
+    <div class="m-card">
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+        <div>
+          <label class="m-label">Moneda</label>
+          <input class="m-input" value="COP" style="padding: 10px;">
+        </div>
+        <div>
+          <label class="m-label">Simbolo</label>
+          <input class="m-input" value="$" style="padding: 10px;">
+        </div>
+        <div>
+          <label class="m-label">Impuesto</label>
+          <input class="m-input" value="0%" style="padding: 10px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Modules (switches) -->
+    <div class="m-section-title" style="display: flex; align-items: center; gap: 6px;">
+      <span class="material-icons" style="font-size: 20px; color: #1976d2;">extension</span> Modulos
+    </div>
+    <div class="m-card" style="padding: 0;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+          <span class="material-icons" style="font-size: 20px; color: #757575;">credit_score</span> Fiado / Creditos
+        </div>
+        <div style="width: 40px; height: 22px; border-radius: 11px; background: #1976d2; position: relative; cursor: pointer;">
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+          <span class="material-icons" style="font-size: 20px; color: #757575;">restaurant</span> Comidas (sin stock)
+        </div>
+        <div style="width: 40px; height: 22px; border-radius: 11px; background: #1976d2; position: relative; cursor: pointer;">
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+          <span class="material-icons" style="font-size: 20px; color: #757575;">point_of_sale</span> Control de caja
+        </div>
+        <div style="width: 40px; height: 22px; border-radius: 11px; background: #1976d2; position: relative; cursor: pointer;">
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+          <span class="material-icons" style="font-size: 20px; color: #757575;">chat</span> WhatsApp
+          <span style="font-size: 10px; color: #9e9e9e;">(tel. cliente)</span>
+        </div>
+        <div style="width: 40px; height: 22px; border-radius: 11px; background: #1976d2; position: relative; cursor: pointer;">
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+          <span class="material-icons" style="font-size: 20px; color: #757575;">assessment</span> Reportes
+        </div>
+        <div style="width: 40px; height: 22px; border-radius: 11px; background: #1976d2; position: relative; cursor: pointer;">
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+          <span class="material-icons" style="font-size: 20px; color: #757575;">receipt_long</span> Tickets PDF
+        </div>
+        <div style="width: 40px; height: 22px; border-radius: 11px; background: #bdbdbd; position: relative; cursor: pointer;">
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 16px;">
+        <div style="display: flex; align-items: center; gap: 10px; font-size: 14px;">
+          <span class="material-icons" style="font-size: 20px; color: #757575;">lock_open</span> Monto apertura
+        </div>
+        <div style="width: 40px; height: 22px; border-radius: 11px; background: #bdbdbd; position: relative; cursor: pointer;">
+          <div style="width: 18px; height: 18px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; box-shadow: 0 1px 3px rgba(0,0,0,0.3);"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Save -->
+    <button class="m-btn m-btn-primary" style="margin-top: 8px; margin-bottom: 16px;">GUARDAR CONFIGURACION</button>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--                      SCREEN: INVENTARIO                            -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-inventario">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Inventario</h1>
+  </div>
+  <div class="mobile-content">
+    <div class="annotation" style="margin-bottom: 8px;">Solo admin</div>
+
+    <!-- Filter -->
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+      <div style="flex: 1; display: flex; align-items: center; background: white; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px 12px; gap: 8px;">
+        <span class="material-icons" style="color: #9e9e9e; font-size: 20px;">search</span>
+        <input type="text" placeholder="Buscar..." style="border: none; outline: none; font-size: 14px; flex: 1; font-family: 'Roboto', sans-serif;">
+      </div>
+      <button class="m-btn m-btn-outlined m-btn-sm" style="white-space: nowrap; border-radius: 8px;">
+        <span class="material-icons" style="font-size: 16px; vertical-align: middle;">warning</span> Stock bajo
+      </button>
+    </div>
+
+    <!-- Inventory card list — botones con etiqueta para claridad en mobile -->
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Coca-Cola 600ml</div>
+          <div style="font-size: 12px; color: #757575;">COD-001 · Bebidas</div>
+        </div>
+        <span class="m-chip m-chip-green" style="font-size: 10px;">OK</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <div>
+          <span style="font-size: 20px; font-weight: 700;">24</span>
+          <span style="font-size: 12px; color: #757575;"> unidades</span>
+          <span style="font-size: 11px; color: #9e9e9e; margin-left: 8px;">(min: 5)</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button style="display: flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 6px; border: 1px solid #e0e0e0; background: white; cursor: pointer; font-size: 11px; font-weight: 500; color: #616161; font-family: 'Roboto', sans-serif;">
+            <span class="material-icons" style="font-size: 15px;">edit</span> Editar
+          </button>
+          <button style="display: flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 6px; border: 1px solid #2e7d32; background: #e8f5e9; cursor: pointer; font-size: 11px; font-weight: 500; color: #2e7d32; font-family: 'Roboto', sans-serif;">
+            <span class="material-icons" style="font-size: 15px;">add_shopping_cart</span> Ajustar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-card" style="border-left: 3px solid #ff9800;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Pan integral</div>
+          <div style="font-size: 12px; color: #757575;">COD-015 · Panaderia</div>
+        </div>
+        <span class="m-chip m-chip-orange" style="font-size: 10px;">Stock bajo</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <div>
+          <span style="font-size: 20px; font-weight: 700; color: #e65100;">3</span>
+          <span style="font-size: 12px; color: #757575;"> unidades</span>
+          <span style="font-size: 11px; color: #9e9e9e; margin-left: 8px;">(min: 5)</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <button style="display: flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 6px; border: 1px solid #e0e0e0; background: white; cursor: pointer; font-size: 11px; font-weight: 500; color: #616161; font-family: 'Roboto', sans-serif;">
+            <span class="material-icons" style="font-size: 15px;">edit</span> Editar
+          </button>
+          <button style="display: flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 6px; border: 1px solid #2e7d32; background: #e8f5e9; cursor: pointer; font-size: 11px; font-weight: 500; color: #2e7d32; font-family: 'Roboto', sans-serif;">
+            <span class="material-icons" style="font-size: 15px;">add_shopping_cart</span> Ajustar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+          <div style="font-size: 14px; font-weight: 500;">Cafe latte</div>
+          <div style="font-size: 12px; color: #757575;">COD-008 · Comidas</div>
+        </div>
+        <span class="m-chip m-chip-blue" style="font-size: 10px;">Comida</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <div>
+          <span style="font-size: 14px; color: #757575;">Sin control de stock</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <!-- Solo "Editar" — sin "Ajustar" porque es tipo food -->
+          <button style="display: flex; align-items: center; gap: 4px; padding: 6px 10px; border-radius: 6px; border: 1px solid #e0e0e0; background: white; cursor: pointer; font-size: 11px; font-weight: 500; color: #616161; font-family: 'Roboto', sans-serif;">
+            <span class="material-icons" style="font-size: 15px;">edit</span> Editar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation-info">
+      <strong>Dialogs:</strong> Tanto "Editar producto" como "Ajustar stock" se abren como dialogs fullscreen en mobile. Mismos campos que en desktop.
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--              SCREEN: CAJA — DIALOGS (abrir / cerrar)             -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-caja-dialogs">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Caja — Dialogs</h1>
+  </div>
+  <div class="mobile-content">
+    <div class="annotation-info">
+      En mobile los dialogs de <strong>Abrir Caja</strong> y <strong>Cerrar Caja</strong> son fullscreen (<code>fullScreen</code> prop de MUI Dialog). Se muestran ambos a continuación como referencia.
+    </div>
+
+    <!-- Dialog: Abrir Caja -->
+    <div style="border: 2px solid #1976d2; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
+      <div class="m-dialog-appbar" style="position: relative;">
+        <span class="material-icons" style="opacity: 0.5;">close</span>
+        <h2 style="font-size: 17px;">Abrir Caja</h2>
+      </div>
+      <div style="padding: 20px; background: white;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <span class="material-icons" style="font-size: 48px; color: #1976d2;">lock_open</span>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label class="m-label">Monto inicial en caja</label>
+          <input class="m-input" type="number" placeholder="$0" value="50000">
+          <div style="font-size: 11px; color: #757575; margin-top: 4px;">
+            Requerido si <code>requiresOpeningAmount=true</code> · Opcional si <code>false</code>
+          </div>
+        </div>
+        <button class="m-btn m-btn-primary" style="font-size: 15px; padding: 13px;">ABRIR CAJA</button>
+        <button class="m-btn m-btn-outlined" style="margin-top: 8px;">CANCELAR</button>
+      </div>
+    </div>
+
+    <!-- Dialog: Cerrar Caja -->
+    <div style="border: 2px solid #ed6c02; border-radius: 12px; overflow: hidden; margin-bottom: 20px;">
+      <div class="m-dialog-appbar" style="position: relative; background: #ed6c02;">
+        <span class="material-icons" style="opacity: 0.5;">close</span>
+        <h2 style="font-size: 17px;">Cerrar Caja</h2>
+      </div>
+      <div style="padding: 20px; background: white;">
+        <div style="margin-bottom: 16px;">
+          <label class="m-label">Monto real en caja <span style="color: #c62828;">*</span></label>
+          <input class="m-input" type="number" placeholder="$0" value="183000">
+        </div>
+        <div style="margin-bottom: 20px;">
+          <label class="m-label">Notas de cierre (opcional)</label>
+          <textarea class="m-input" rows="2" style="resize: none;" placeholder="Ej: faltante en monedas..."></textarea>
+        </div>
+        <button class="m-btn m-btn-warning" style="font-size: 15px; padding: 13px;">CERRAR CAJA</button>
+        <button class="m-btn m-btn-outlined" style="margin-top: 8px;">CANCELAR</button>
+      </div>
+    </div>
+
+    <!-- Dialog: Resumen de Cierre -->
+    <div style="border: 2px solid #9e9e9e; border-radius: 12px; overflow: hidden;">
+      <div class="m-dialog-appbar" style="background: #424242;">
+        <span class="material-icons" style="opacity:0;">close</span>
+        <h2 style="font-size: 17px;">Resumen de Cierre</h2>
+      </div>
+      <div style="padding: 20px; background: white;">
+        <div class="m-card" style="padding: 0; margin-bottom: 16px;">
+          <div style="padding: 10px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
+            <span style="font-size: 13px; color: #757575;">Monto inicial</span>
+            <span style="font-size: 13px; font-weight: 500;">$50.000</span>
+          </div>
+          <div style="padding: 10px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
+            <span style="font-size: 13px; color: #757575;">Cierre sistema</span>
+            <span style="font-size: 13px; font-weight: 500;">$185.500</span>
+          </div>
+          <div style="padding: 10px 16px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between;">
+            <span style="font-size: 13px; color: #757575;">Cierre real</span>
+            <span style="font-size: 13px; font-weight: 500;">$183.000</span>
+          </div>
+          <div style="padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 14px; font-weight: 500;">Diferencia</span>
+            <span class="m-chip m-chip-red" style="font-size: 13px; font-weight: 700;">-$2.500</span>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #757575; margin-bottom: 16px; padding: 8px 12px; background: #f5f5f5; border-radius: 6px;">
+          Notas: "Faltante en monedas"
+        </div>
+        <div class="annotation-info" style="margin-bottom: 12px;">
+          Al hacer ACEPTAR → dialog cierra → tarjeta vuelve a "Sin caja" → snackbar "Caja cerrada exitosamente". Sin redirección.
+        </div>
+        <button class="m-btn m-btn-primary">ACEPTAR</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item active" onclick="nav('caja')"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item" onclick="nav('pos')"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item" onclick="nav('productos')"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item" onclick="nav('creditos')"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item" onclick="nav('drawer')"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--              SCREEN: POS — SIN CAJA ABIERTA (overlay)            -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-pos-nocaja">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>POS</h1>
+    <div class="mobile-appbar-actions">
+      <span class="m-chip m-chip-red" style="font-size: 10px; padding: 2px 8px; background: #ffebee; color: #c62828;">Sin caja</span>
+    </div>
+  </div>
+
+  <!-- Overlay fullscreen - igual en mobile y desktop -->
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; padding: 40px 24px; min-height: 680px; text-align: center;">
+    <span class="material-icons" style="font-size: 80px; color: #e0e0e0; margin-bottom: 16px;">point_of_sale</span>
+    <h2 style="font-size: 20px; font-weight: 500; color: #424242; margin-bottom: 8px;">Debes abrir una caja</h2>
+    <p style="font-size: 14px; color: #757575; margin-bottom: 32px; max-width: 260px; line-height: 1.5;">No puedes realizar ventas sin una caja registradora activa</p>
+    <button class="m-btn m-btn-primary" style="width: auto; padding: 12px 32px; font-size: 15px;" onclick="showScreen('caja')">
+      <span class="material-icons" style="vertical-align: middle; margin-right: 6px; font-size: 18px;">lock_open</span>
+      IR A CAJA
+    </button>
+    <div class="annotation-info" style="margin-top: 24px; text-align: left;">
+      Este overlay es idéntico en mobile y desktop. El contenido del POS (grid + carrito) queda detrás pero no es accesible. Mismo comportamiento que <code>NoOpenRegisterAlert</code>.
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item" onclick="nav('caja')"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item active" onclick="nav('pos')"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item" onclick="nav('productos')"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item" onclick="nav('creditos')"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item" onclick="nav('drawer')"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--          SCREEN: POS — EMPTY STATES (sin productos / sin búsqueda)-->
+<!-- ================================================================== -->
+<div class="screen" id="screen-pos-empty">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>POS</h1>
+    <div class="mobile-appbar-actions">
+      <span class="m-chip m-chip-green" style="font-size: 10px; padding: 2px 8px;">Caja #45</span>
+    </div>
+  </div>
+
+  <div class="m-tabs">
+    <button class="m-tab active" style="flex: 1;">
+      <span class="material-icons" style="font-size: 16px; vertical-align: middle;">grid_view</span> Productos
+    </button>
+    <button class="m-tab" style="flex: 1;" onclick="showScreen('pos-cart')">
+      <span class="material-icons" style="font-size: 16px; vertical-align: middle;">shopping_cart</span> Carrito
+    </button>
+  </div>
+
+  <div class="mobile-content" style="background: #fafafa;">
+
+    <!-- Estado 1: Búsqueda sin resultados -->
+    <div style="background: #e3f2fd; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 12px; color: #1565c0;">
+      <strong>Estado A:</strong> Búsqueda sin resultados
+    </div>
+    <div style="display: flex; align-items: center; background: white; border: 1px solid #1976d2; border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; gap: 8px;">
+      <span class="material-icons" style="color: #1976d2; font-size: 20px;">search</span>
+      <span style="font-size: 14px; color: #424242; flex: 1;">empanada</span>
+      <span class="material-icons" style="color: #9e9e9e; font-size: 18px; cursor: pointer;">close</span>
+    </div>
+    <div style="text-align: center; padding: 32px 16px; background: white; border-radius: 12px; margin-bottom: 20px;">
+      <span class="material-icons" style="font-size: 56px; color: #e0e0e0; display: block; margin-bottom: 8px;">search_off</span>
+      <div style="font-size: 15px; font-weight: 500; color: #424242; margin-bottom: 4px;">Sin resultados para "empanada"</div>
+      <div style="font-size: 13px; color: #757575;">Intenta con otro nombre o código</div>
+    </div>
+
+    <!-- Estado 2: Sin productos en sistema -->
+    <div style="background: #fff3e0; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; font-size: 12px; color: #e65100;">
+      <strong>Estado B:</strong> No hay productos cargados aún
+    </div>
+    <div style="text-align: center; padding: 32px 16px; background: white; border-radius: 12px;">
+      <span class="material-icons" style="font-size: 56px; color: #e0e0e0; display: block; margin-bottom: 8px;">inventory_2</span>
+      <div style="font-size: 15px; font-weight: 500; color: #424242; margin-bottom: 4px;">No hay productos</div>
+      <div style="font-size: 13px; color: #757575; margin-bottom: 16px;">Agrega productos desde la sección Productos</div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item" onclick="nav('caja')"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item active" onclick="nav('pos')"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item" onclick="nav('productos')"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item" onclick="nav('creditos')"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item" onclick="nav('drawer')"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+<!-- ================================================================== -->
+<!--         SCREEN: BOTTOM NAV CON FEATURE FLAGS DESACTIVADOS        -->
+<!-- ================================================================== -->
+<div class="screen" id="screen-bottom-nav-flags">
+  <div class="mobile-appbar">
+    <span class="material-icons" onclick="showScreen('drawer')" style="cursor: pointer;">menu</span>
+    <h1>Bottom Nav + Flags</h1>
+  </div>
+  <div class="mobile-content">
+    <div class="annotation-info" style="margin-bottom: 16px;">
+      <strong>Regla:</strong> Los ítems se <em>ocultan</em> (no se deshabilitan) cuando su flag está apagado. Los restantes se redistribuyen equitativamente. El Bottom Nav siempre muestra entre 2 y 5 ítems.
+    </div>
+
+    <div class="m-section-title">Todos los flags activos (5 ítems)</div>
+    <div style="background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+      <div style="display: flex; height: 64px; border-top: 1px solid #e0e0e0;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#1976d2;">
+          <span class="material-icons" style="font-size:22px;">point_of_sale</span>Caja
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">storefront</span>POS
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">shopping_cart</span>Productos
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">credit_score</span>Creditos
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">more_horiz</span>Mas
+        </div>
+      </div>
+    </div>
+
+    <div class="m-section-title">usesCashRegister=false (Caja oculto → 4 ítems)</div>
+    <div style="background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+      <div style="display: flex; height: 64px; border-top: 1px solid #e0e0e0;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#1976d2;">
+          <span class="material-icons" style="font-size:22px;">storefront</span>POS
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">shopping_cart</span>Productos
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">credit_score</span>Creditos
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">more_horiz</span>Mas
+        </div>
+      </div>
+    </div>
+
+    <div class="m-section-title">usesCashRegister=false + usesCredit=false (3 ítems)</div>
+    <div style="background: white; border-radius: 12px; overflow: hidden; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+      <div style="display: flex; height: 64px; border-top: 1px solid #e0e0e0;">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#1976d2;">
+          <span class="material-icons" style="font-size:22px;">storefront</span>POS
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">shopping_cart</span>Productos
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10px;color:#9e9e9e;">
+          <span class="material-icons" style="font-size:22px;">more_horiz</span>Mas
+        </div>
+      </div>
+    </div>
+
+    <div class="annotation-info">
+      <strong>Implementación React:</strong> Filtrar el array de nav items por flags activos antes de renderizar. No usar <code>display:none</code> en el ítem — eliminarlo del array. El ítem "Mas" (drawer) es siempre visible.
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="bottom-nav-item active" onclick="nav('caja')"><span class="material-icons">point_of_sale</span>Caja</div>
+    <div class="bottom-nav-item" onclick="nav('pos')"><span class="material-icons">storefront</span>POS</div>
+    <div class="bottom-nav-item" onclick="nav('productos')"><span class="material-icons">shopping_cart</span>Productos</div>
+    <div class="bottom-nav-item" onclick="nav('creditos')"><span class="material-icons">credit_score</span>Creditos</div>
+    <div class="bottom-nav-item" onclick="nav('drawer')"><span class="material-icons">more_horiz</span>Mas</div>
+  </div>
+</div>
+
+</div><!-- /phone-frame -->
+</div><!-- /phone-wrapper -->
+
+<script>
+// Screen navigation
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById('screen-' + id);
+  if (target) target.classList.add('active');
+  // Update top tabs
+  document.querySelectorAll('.screen-tab').forEach(t => {
+    t.classList.remove('active');
+    if (t.getAttribute('onclick') && t.getAttribute('onclick').includes("'" + id + "'")) {
+      t.classList.add('active');
+    }
+  });
+  // Update bottom nav active states
+  const navMap = { caja: 0, pos: 1, 'pos-cart': 1, 'pos-confirm': 1, productos: 2, creditos: 3, 'credito-detail': 3, drawer: 4, reportes: -1, config: -1, inventario: -1 };
+  const activeIdx = navMap[id] !== undefined ? navMap[id] : -1;
+  document.querySelectorAll('.bottom-nav').forEach(nav => {
+    nav.querySelectorAll('.bottom-nav-item').forEach((item, i) => {
+      item.classList.toggle('active', i === activeIdx);
+    });
+  });
+}
+
+// Bottom nav shortcut
+function nav(id) { showScreen(id); }
+
+// Report section switching
+function switchReport(type) {
+  ['ventas', 'top', 'cajeros', 'creditos', 'cajas'].forEach(r => {
+    const el = document.getElementById('report-' + r);
+    if (el) el.style.display = (r === type) ? 'block' : 'none';
+  });
+}
+</script>
+
+</body>
+</html>

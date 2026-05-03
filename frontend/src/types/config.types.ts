@@ -16,5 +16,4 @@ export interface BusinessConfig {
   usesReports: boolean;
   usesTicketsPdf: boolean;
   requiresOpeningAmount: boolean;
-  whatsappNumber: string | null;
 }

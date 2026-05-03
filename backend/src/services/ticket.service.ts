@@ -89,7 +89,7 @@ function calculateHeight(sale: Sale, config: BusinessConfig): number {
 
   // Section 3: Line items
   h += LINE_MD; // table header
-  h += LINE_MD * sale.details.length; // item rows
+  h += LINE_MD * (sale.details ?? []).length; // item rows
   h += SEPARATOR_GAP; // separator
 
   // Section 4-5: Total + payment
@@ -171,7 +171,7 @@ export async function generateTicketPdf(saleId: number): Promise<Buffer> {
   drawRight(page, 'Subtotal', y, bold, FONT_MD, COL_SUBTOTAL);
   y -= LINE_MD;
 
-  for (const detail of sale.details) {
+  for (const detail of sale.details ?? []) {
     const name = truncate(detail.product.name, 16);
     page.drawText(name, { x: MARGIN, y, size: FONT_MD, font });
     drawRight(page, String(detail.quantity), y, font, FONT_MD, COL_QTY + 18);

@@ -1,12 +1,18 @@
-import { Box, AppBar, Toolbar, Typography, Button, Chip } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Chip, IconButton } from '@mui/material';
+import { Logout } from '@mui/icons-material';
 import { Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useConfig } from '../../context/ConfigContext';
-import Sidebar, { DRAWER_WIDTH } from './Sidebar';
+import { useResponsive } from '../../hooks/useResponsive';
+import Sidebar, { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from './Sidebar';
+import BottomNav from './BottomNav';
 
 export default function MainLayout(): React.ReactElement {
   const { user, logout } = useAuth();
   const { config } = useConfig();
+  const { isMobile, isTablet } = useResponsive();
+
+  const drawerWidth = isMobile ? 0 : isTablet ? MINI_DRAWER_WIDTH : DRAWER_WIDTH;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -21,22 +27,41 @@ export default function MainLayout(): React.ReactElement {
                 label={user.role === 'admin' ? 'Admin' : 'Cajero'}
                 color="secondary"
                 size="small"
-                sx={{ mr: 2 }}
+                sx={{ mr: isMobile ? 1 : 2 }}
               />
-              <Typography variant="body2" sx={{ mr: 2 }}>
-                {user.name}
-              </Typography>
-              <Button color="inherit" onClick={logout}>
-                Salir
-              </Button>
+              {!isMobile && (
+                <Typography variant="body2" sx={{ mr: 2 }}>
+                  {user.name}
+                </Typography>
+              )}
+              {isMobile ? (
+                <IconButton color="inherit" onClick={logout} size="small">
+                  <Logout />
+                </IconButton>
+              ) : (
+                <Button color="inherit" onClick={logout}>
+                  Salir
+                </Button>
+              )}
             </>
           )}
         </Toolbar>
       </AppBar>
-      <Sidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, ml: `${DRAWER_WIDTH}px`, mt: '64px' }}>
+      {!isMobile && <Sidebar variant={isTablet ? 'mini' : 'full'} />}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: isMobile ? 2 : 3,
+          ml: `${drawerWidth}px`,
+          mt: '64px',
+          mb: isMobile ? '56px' : 0,
+          minHeight: isMobile ? 'calc(100vh - 64px - 56px)' : 'calc(100vh - 64px)',
+        }}
+      >
         <Outlet />
       </Box>
+      {isMobile && <BottomNav />}
     </Box>
   );
 }

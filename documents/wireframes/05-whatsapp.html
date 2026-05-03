@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe - WhatsApp Integration</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Roboto', sans-serif; background: #f5f5f5; color: #212121; padding: 32px; }
+
+  h1 { font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  .subtitle { font-size: 16px; color: #757575; margin-bottom: 40px; }
+
+  .section { margin-bottom: 48px; }
+  .section-title { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .section-desc { font-size: 14px; color: #757575; margin-bottom: 20px; }
+
+  .mockup-container { display: flex; gap: 32px; flex-wrap: wrap; }
+
+  /* Component showcase */
+  .component-box { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); min-width: 320px; flex: 1; }
+  .component-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #9e9e9e; margin-bottom: 12px; font-weight: 500; }
+
+  /* WhatsApp buttons */
+  .wa-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 20px; border-radius: 4px; border: 1px solid #25d366; color: #25d366; background: transparent; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; }
+  .wa-btn:hover { background: #e8f5e9; }
+  .wa-btn.filled { background: #25d366; color: white; border-color: #25d366; }
+  .wa-btn.filled:hover { background: #1da851; }
+  .wa-icon-btn { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: none; color: #25d366; background: transparent; cursor: pointer; }
+  .wa-icon-btn:hover { background: #e8f5e9; }
+  .wa-icon-btn.small { width: 32px; height: 32px; }
+
+  /* Snackbar mockup */
+  .snackbar-mock { background: #323232; color: white; padding: 12px 20px; border-radius: 8px; display: flex; align-items: center; gap: 16px; max-width: 500px; }
+  .snackbar-btn { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; font-family: 'Roboto', sans-serif; }
+  .snackbar-btn.wa { background: transparent; border: 1px solid #25d366; color: #25d366; }
+  .snackbar-btn.pdf { background: transparent; border: 1px solid #90caf9; color: #90caf9; }
+  .snackbar-btn.ok { background: transparent; border: 1px solid rgba(255,255,255,0.5); color: white; }
+
+  /* Dialog mockup */
+  .dialog-mock { background: white; border-radius: 8px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-width: 500px; }
+  .dialog-mock h3 { font-size: 18px; font-weight: 500; margin-bottom: 16px; }
+
+  .info-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f5f5f5; }
+  .info-row:last-child { border-bottom: none; }
+
+  .chip { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 16px; font-size: 13px; font-weight: 500; }
+  .chip-orange { background: #fff3e0; color: #e65100; }
+
+  .dialog-actions-mock { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #f0f0f0; }
+  .btn-text { background: transparent; border: none; color: #1976d2; padding: 8px 16px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; }
+  .btn-outlined { background: transparent; border: 1px solid #1976d2; color: #1976d2; padding: 8px 16px; border-radius: 4px; font-family: 'Roboto', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-transform: uppercase; }
+
+  /* Phone preview */
+  .phone-frame { width: 280px; height: 420px; border: 3px solid #333; border-radius: 24px; overflow: hidden; background: #e5ddd5; display: flex; flex-direction: column; }
+  .phone-header { background: #075e54; color: white; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .phone-avatar { width: 32px; height: 32px; border-radius: 50%; background: #128c7e; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; }
+  .phone-messages { flex: 1; padding: 12px; overflow-y: auto; }
+  .phone-bubble { background: #dcf8c6; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; max-width: 85%; margin-left: auto; font-size: 12px; line-height: 1.5; box-shadow: 0 1px 1px rgba(0,0,0,0.1); }
+  .phone-time { font-size: 10px; color: #999; text-align: right; margin-top: 4px; }
+
+  .arrow { font-size: 32px; color: #bdbdbd; align-self: center; }
+
+  .feature-flag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 6px; background: #fff3e0; font-size: 13px; color: #e65100; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<a href="index.html" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:white;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,0.15);text-decoration:none;color:#1976d2;font-size:12px;font-weight:500;margin-bottom:16px;">
+  <span class="material-icons" style="font-size:16px;">home</span> Mapa de Wireframes
+</a>
+
+<h1>WhatsApp — Documentacion Tecnica</h1>
+<p class="subtitle">No es una pantalla — es un deep link <code>wa.me/{telefono_cliente}</code> que aparece como boton en POS y Creditos</p>
+
+<div style="background:#fff3e0;border:1px solid #ffe0b2;border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:#e65100;line-height:1.6;">
+  <strong>Implementacion:</strong> Solo <code>window.open('https://wa.me/...')</code> — no hay backend, no hay API de WhatsApp Business.<br>
+  <strong>Activacion:</strong> Switch <code>usesWhatsapp</code> en Configuracion (on/off).<br>
+  <strong>Campo <code>whatsappNumber</code>:</strong> Se eliminara del backend — no se usa. El mensaje va al telefono del <strong>cliente</strong>, no del negocio.<br>
+  <strong>Condicion:</strong> Boton visible solo si <code>usesWhatsapp = true</code> AND el cliente tiene telefono registrado.
+</div>
+
+<div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:16px;">
+  <div class="feature-flag" style="margin-bottom:0;">
+    <span class="material-icons" style="font-size: 16px;">toggle_on</span>
+    Requiere: <strong>usesWhatsapp</strong> = true + cliente con telefono
+  </div>
+  <a href="00f-configuracion.html" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;background:#e8f5e9;border-radius:6px;text-decoration:none;color:#2e7d32;font-size:13px;font-weight:500;">
+    <span class="material-icons" style="font-size:16px;">settings</span> Ir a Configuracion (switch WhatsApp)
+  </a>
+</div>
+
+<!-- Section 1: Component Variants -->
+<div class="section">
+  <div class="section-title">Variantes del Componente WhatsAppButton</div>
+  <div class="section-desc">Se usa en diferentes contextos con diferentes estilos</div>
+
+  <div class="mockup-container">
+    <div class="component-box">
+      <div class="component-label">Boton con texto (dialogs)</div>
+      <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+        <button class="wa-btn">
+          <span class="material-icons" style="font-size: 18px;">chat</span> Enviar WhatsApp
+        </button>
+        <button class="wa-btn filled">
+          <span class="material-icons" style="font-size: 18px;">chat</span> WhatsApp
+        </button>
+      </div>
+    </div>
+    <div class="component-box">
+      <div class="component-label">Icon button (tablas, acciones compactas)</div>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <button class="wa-icon-btn">
+          <span class="material-icons">chat</span>
+        </button>
+        <button class="wa-icon-btn small">
+          <span class="material-icons" style="font-size: 20px;">chat</span>
+        </button>
+        <span style="font-size: 12px; color: #757575;">hover muestra tooltip: "Enviar por WhatsApp"</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 2: POS Post-sale -->
+<div class="section">
+  <div class="section-title">1. POS - Despues de una venta exitosa</div>
+  <div class="section-desc">Snackbar con opciones de ticket PDF y WhatsApp</div>
+
+  <div class="mockup-container">
+    <div class="component-box" style="flex: 2;">
+      <div class="component-label">Snackbar post-venta</div>
+      <div class="snackbar-mock">
+        <span class="material-icons" style="color: #4caf50;">check_circle</span>
+        <span style="flex: 1;">Venta #156 registrada</span>
+        <button class="snackbar-btn pdf">
+          <span class="material-icons" style="font-size: 14px; vertical-align: middle;">picture_as_pdf</span> Ticket
+        </button>
+        <button class="snackbar-btn wa">
+          <span class="material-icons" style="font-size: 14px; vertical-align: middle;">chat</span> WhatsApp
+        </button>
+        <button class="snackbar-btn ok">OK</button>
+      </div>
+      <div style="margin-top: 12px; font-size: 12px; color: #757575;">
+        * Boton WhatsApp solo visible si: usesWhatsapp = true AND la venta tiene cliente con telefono
+      </div>
+    </div>
+
+    <div class="component-box">
+      <div class="component-label">Vista en WhatsApp del cliente</div>
+      <div class="phone-frame">
+        <div class="phone-header">
+          <span class="material-icons" style="font-size: 20px;">arrow_back</span>
+          <div class="phone-avatar">CS</div>
+          <div>
+            <div style="font-size: 13px; font-weight: 500;">Cafeteria El Buen Sabor</div>
+            <div style="font-size: 10px; opacity: 0.8;">en linea</div>
+          </div>
+        </div>
+        <div class="phone-messages">
+          <div class="phone-bubble">
+            Hola Pedro, tu compra en Cafeteria El Buen Sabor:<br><br>
+            Venta #156<br>
+            Total: $18.200<br>
+            Forma de pago: Efectivo<br><br>
+            Gracias por tu compra!
+            <div class="phone-time">12:34 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Credits - Payment reminder -->
+<div class="section">
+  <div class="section-title">2. Creditos - Recordatorio de deuda</div>
+  <div class="section-desc">Desde el detalle de un credito pendiente, enviar recordatorio al cliente</div>
+
+  <div class="mockup-container">
+    <div class="component-box" style="flex: 2;">
+      <div class="component-label">Dentro del dialog de detalle de credito</div>
+      <div class="dialog-mock">
+        <h3>Credito #14</h3>
+        <div style="background: #fafafa; border-radius: 8px; padding: 12px; margin-bottom: 12px;">
+          <div class="info-row"><span>Cliente</span><span><strong>Pedro Gomez</strong></span></div>
+          <div class="info-row"><span>Saldo pendiente</span><span style="color: #c62828; font-weight: 700;">$50.000</span></div>
+          <div class="info-row"><span>Estado</span><span class="chip chip-orange">Pendiente</span></div>
+        </div>
+        <div class="dialog-actions-mock">
+          <button class="wa-btn" style="margin-right: auto; font-size: 12px; padding: 6px 14px;">
+            <span class="material-icons" style="font-size: 16px;">chat</span> Recordatorio
+          </button>
+          <button class="btn-outlined">Registrar Abono</button>
+          <button class="btn-text">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="component-box">
+      <div class="component-label">Mensaje de recordatorio</div>
+      <div class="phone-frame">
+        <div class="phone-header">
+          <span class="material-icons" style="font-size: 20px;">arrow_back</span>
+          <div class="phone-avatar">CS</div>
+          <div>
+            <div style="font-size: 13px; font-weight: 500;">Cafeteria El Buen Sabor</div>
+            <div style="font-size: 10px; opacity: 0.8;">en linea</div>
+          </div>
+        </div>
+        <div class="phone-messages">
+          <div class="phone-bubble">
+            Hola Pedro, te recordamos que tienes un saldo pendiente de $50.000 en Cafeteria El Buen Sabor.<br><br>
+            Puedes acercarte a realizar tu abono en nuestro horario de atencion.<br><br>
+            Gracias!
+            <div class="phone-time">2:15 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Credits - After payment -->
+<div class="section">
+  <div class="section-title">3. Creditos - Confirmacion de abono</div>
+  <div class="section-desc">Despues de registrar un abono, notificar al cliente</div>
+
+  <div class="mockup-container">
+    <div class="component-box" style="flex: 2;">
+      <div class="component-label">Snackbar despues de registrar abono</div>
+      <div class="snackbar-mock">
+        <span class="material-icons" style="color: #4caf50;">check_circle</span>
+        <span style="flex: 1;">Abono de $25.000 registrado</span>
+        <button class="snackbar-btn wa">
+          <span class="material-icons" style="font-size: 14px; vertical-align: middle;">chat</span> Notificar
+        </button>
+        <button class="snackbar-btn ok">OK</button>
+      </div>
+      <div style="margin-top: 12px; font-size: 12px; color: #757575;">
+        * Nuevo saldo pendiente: $25.000
+      </div>
+    </div>
+
+    <div class="component-box">
+      <div class="component-label">Mensaje de confirmacion</div>
+      <div class="phone-frame">
+        <div class="phone-header">
+          <span class="material-icons" style="font-size: 20px;">arrow_back</span>
+          <div class="phone-avatar">CS</div>
+          <div>
+            <div style="font-size: 13px; font-weight: 500;">Cafeteria El Buen Sabor</div>
+            <div style="font-size: 10px; opacity: 0.8;">en linea</div>
+          </div>
+        </div>
+        <div class="phone-messages">
+          <div class="phone-bubble">
+            Hola Pedro, registramos tu abono de $25.000.<br><br>
+            Saldo pendiente: $25.000<br><br>
+            Gracias!
+            <div class="phone-time">3:45 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 5: URL Format -->
+<div class="section">
+  <div class="section-title">Formato de URL</div>
+  <div class="component-box" style="max-width: 600px;">
+    <div class="component-label">Construccion del deep link</div>
+    <pre style="background: #263238; color: #eeffff; padding: 16px; border-radius: 8px; font-size: 13px; overflow-x: auto; line-height: 1.6;">
+<span style="color: #89ddff;">const</span> phone = customer.phone.<span style="color: #82aaff;">replace</span>(<span style="color: #c3e88d;">/\D/g</span>, <span style="color: #c3e88d;">''</span>);
+<span style="color: #89ddff;">const</span> message = <span style="color: #82aaff;">encodeURIComponent</span>(<span style="color: #c3e88d;">`
+  Hola ${customer.name}, tu compra en
+  ${config.businessName}:
+  Venta #${sale.id}
+  Total: ${formatCurrency(sale.total)}
+`</span>);
+
+<span style="color: #89ddff;">const</span> url = <span style="color: #c3e88d;">`https://wa.me/${phone}?text=${message}`</span>;
+window.<span style="color: #82aaff;">open</span>(url, <span style="color: #c3e88d;">'_blank'</span>);
+    </pre>
+  </div>
+</div>
+
+</body>
+</html>
