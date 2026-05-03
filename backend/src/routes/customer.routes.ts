@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', authenticate, customerController.findAll);
 router.get('/:id', authenticate, customerController.findById);
-router.post('/', authenticate, authorize('admin'), customerController.create);
+router.post('/', authenticate, customerController.create);
 router.put('/:id', authenticate, authorize('admin'), customerController.update);
 router.patch('/:id/estado', authenticate, authorize('admin'), customerController.toggleStatus);
 
