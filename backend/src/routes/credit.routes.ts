@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import * as creditController from '../controllers/credit.controller';
-import { authenticate, authorize } from '../middlewares/auth.middleware';
+import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
 
