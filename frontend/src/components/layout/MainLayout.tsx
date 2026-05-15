@@ -53,7 +53,6 @@ export default function MainLayout(): React.ReactElement {
         sx={{
           flexGrow: 1,
           p: isMobile ? 2 : 3,
-          ml: `${drawerWidth}px`,
           mt: '64px',
           mb: isMobile ? '56px' : 0,
           minHeight: isMobile ? 'calc(100vh - 64px - 56px)' : 'calc(100vh - 64px)',

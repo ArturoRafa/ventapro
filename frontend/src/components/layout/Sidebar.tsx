@@ -22,13 +22,13 @@ const navItems: NavEntry[] = [
   { label: 'POS', path: '/pos', icon: <Storefront /> },
   'divider',
   { label: 'Productos', path: '/productos', icon: <ShoppingCart /> },
-  { label: 'Categorias', path: '/categorias', icon: <Category /> },
+  { label: 'Categorías', path: '/categorias', icon: <Category /> },
   { label: 'Inventario', path: '/inventario', icon: <Inventory2 />, adminOnly: true },
   { label: 'Clientes', path: '/clientes', icon: <People />, featureFlag: 'usesCredit' },
-  { label: 'Creditos', path: '/creditos', icon: <CreditScore />, featureFlag: 'usesCredit' },
+  { label: 'Créditos', path: '/creditos', icon: <CreditScore />, featureFlag: 'usesCredit' },
   'divider',
   { label: 'Reportes', path: '/reportes', icon: <Assessment />, adminOnly: true, featureFlag: 'usesReports' },
-  { label: 'Configuracion', path: '/configuracion', icon: <Settings />, adminOnly: true },
+  { label: 'Configuración', path: '/configuracion', icon: <Settings />, adminOnly: true },
   { label: 'Usuarios', path: '/usuarios', icon: <ManageAccounts />, adminOnly: true },
 ];
 
