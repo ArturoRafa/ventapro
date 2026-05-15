@@ -19,7 +19,7 @@ export default function LoginPage(): React.ReactElement {
       await login({ email, password });
       navigate('/productos');
     } catch {
-      setError('Credenciales invalidas');
+      setError('Credenciales inválidas');
     } finally {
       setLoading(false);
     }
@@ -49,7 +49,7 @@ export default function LoginPage(): React.ReactElement {
             />
             <TextField
               fullWidth
-              label="Contrasena"
+              label="Contraseña"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

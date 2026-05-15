@@ -35,7 +35,7 @@ export default function CategoriesPage(): React.ReactElement {
       const cats = await categoryService.getCategories(true);
       setCategories(cats);
     } catch {
-      showSnackbar('Error al cargar categorias', 'error');
+      showSnackbar('Error al cargar categorías', 'error');
     } finally {
       setLoading(false);
     }
@@ -61,22 +61,22 @@ export default function CategoriesPage(): React.ReactElement {
     try {
       if (editingCat) {
         await categoryService.updateCategory(editingCat.id, { name: catName, order: catOrder });
-        showSnackbar('Categoria actualizada');
+        showSnackbar('Categoría actualizada');
       } else {
         await categoryService.createCategory({ name: catName, order: catOrder });
-        showSnackbar('Categoria creada');
+        showSnackbar('Categoría creada');
       }
       setCatDialogOpen(false);
       await fetchCategories();
     } catch {
-      showSnackbar('Error al guardar categoria', 'error');
+      showSnackbar('Error al guardar categoría', 'error');
     }
   };
 
   const toggleCat = async (cat: Category): Promise<void> => {
     try {
       await categoryService.toggleCategoryStatus(cat.id);
-      showSnackbar(`Categoria ${cat.status === 'activo' ? 'desactivada' : 'activada'}`);
+      showSnackbar(`Categoría ${cat.status === 'activo' ? 'desactivada' : 'activada'}`);
       await fetchCategories();
       if (selectedCat?.id === cat.id) {
         const updated = await categoryService.getCategoryById(cat.id);
@@ -96,24 +96,24 @@ export default function CategoriesPage(): React.ReactElement {
     try {
       if (editingSub) {
         await categoryService.updateSubcategory(editingSub.id, { name: subName, order: subOrder });
-        showSnackbar('Subcategoria actualizada');
+        showSnackbar('Subcategoría actualizada');
       } else {
         await categoryService.createSubcategory({ categoryId: selectedCat.id, name: subName, order: subOrder });
-        showSnackbar('Subcategoria creada');
+        showSnackbar('Subcategoría creada');
       }
       setSubDialogOpen(false);
       await fetchCategories();
       const updated = await categoryService.getCategoryById(selectedCat.id);
       setSelectedCat(updated);
     } catch {
-      showSnackbar('Error al guardar subcategoria', 'error');
+      showSnackbar('Error al guardar subcategoría', 'error');
     }
   };
 
   const toggleSub = async (sub: Subcategory): Promise<void> => {
     try {
       await categoryService.toggleSubcategoryStatus(sub.id);
-      showSnackbar(`Subcategoria ${sub.status === 'activo' ? 'desactivada' : 'activada'}`);
+      showSnackbar(`Subcategoría ${sub.status === 'activo' ? 'desactivada' : 'activada'}`);
       await fetchCategories();
       if (selectedCat) {
         const updated = await categoryService.getCategoryById(selectedCat.id);
@@ -126,7 +126,7 @@ export default function CategoriesPage(): React.ReactElement {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: 3 }}>Categorias y Subcategorias</Typography>
+      <Typography variant="h5" sx={{ mb: 3 }}>Categorías y Subcategorías</Typography>
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>
       ) : (
@@ -135,7 +135,7 @@ export default function CategoriesPage(): React.ReactElement {
         <Grid item xs={12} md={5}>
           <Paper sx={{ p: 2 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h6">Categorias</Typography>
+              <Typography variant="h6">Categorías</Typography>
               <Button size="small" startIcon={<Add />} onClick={openCatCreate}>Nueva</Button>
             </Box>
             <List>
@@ -143,7 +143,7 @@ export default function CategoriesPage(): React.ReactElement {
                 <ListItemButton key={cat.id} selected={selectedCat?.id === cat.id} onClick={() => selectCategory(cat)}>
                   <ListItemText
                     primary={cat.name}
-                    secondary={`Orden: ${cat.order} | ${cat.subcategories?.length ?? 0} subcategorias`}
+                    secondary={`Orden: ${cat.order} | ${cat.subcategories?.length ?? 0} subcategorías`}
                   />
                   <StatusChip status={cat.status} />
                   <IconButton size="small" onClick={(e) => { e.stopPropagation(); openCatEdit(cat); }}><Edit fontSize="small" /></IconButton>
@@ -161,15 +161,15 @@ export default function CategoriesPage(): React.ReactElement {
           <Paper sx={{ p: 2 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Typography variant="h6">
-                Subcategorias {selectedCat && <Chip label={selectedCat.name} size="small" sx={{ ml: 1 }} />}
+                Subcategorías {selectedCat && <Chip label={selectedCat.name} size="small" sx={{ ml: 1 }} />}
               </Typography>
               {selectedCat && <Button size="small" startIcon={<Add />} onClick={openSubCreate}>Nueva</Button>}
             </Box>
             <Divider sx={{ mb: 2 }} />
             {!selectedCat ? (
-              <Typography color="text.secondary">Selecciona una categoria</Typography>
+              <Typography color="text.secondary">Selecciona una categoría</Typography>
             ) : subcategories.length === 0 ? (
-              <Typography color="text.secondary">No hay subcategorias</Typography>
+              <Typography color="text.secondary">No hay subcategorías</Typography>
             ) : (
               <List>
                 {subcategories.map((sub) => (
@@ -191,7 +191,7 @@ export default function CategoriesPage(): React.ReactElement {
 
       {/* Category Dialog */}
       <Dialog open={catDialogOpen} onClose={() => setCatDialogOpen(false)}>
-        <DialogTitle>{editingCat ? 'Editar Categoria' : 'Nueva Categoria'}</DialogTitle>
+        <DialogTitle>{editingCat ? 'Editar Categoría' : 'Nueva Categoría'}</DialogTitle>
         <DialogContent>
           <TextField fullWidth label="Nombre" value={catName} onChange={(e) => setCatName(e.target.value)} margin="dense" autoFocus />
           <TextField fullWidth label="Orden" type="number" value={catOrder} onChange={(e) => setCatOrder(Number(e.target.value))} margin="dense" />
@@ -204,7 +204,7 @@ export default function CategoriesPage(): React.ReactElement {
 
       {/* Subcategory Dialog */}
       <Dialog open={subDialogOpen} onClose={() => setSubDialogOpen(false)}>
-        <DialogTitle>{editingSub ? 'Editar Subcategoria' : 'Nueva Subcategoria'}</DialogTitle>
+        <DialogTitle>{editingSub ? 'Editar Subcategoría' : 'Nueva Subcategoría'}</DialogTitle>
         <DialogContent>
           <TextField fullWidth label="Nombre" value={subName} onChange={(e) => setSubName(e.target.value)} margin="dense" autoFocus />
           <TextField fullWidth label="Orden" type="number" value={subOrder} onChange={(e) => setSubOrder(Number(e.target.value))} margin="dense" />

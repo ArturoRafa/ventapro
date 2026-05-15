@@ -91,7 +91,7 @@ export default function CreditsPage(): React.ReactElement {
       setCredits(result.data);
       setTotal(result.meta.total);
     } catch {
-      showSnackbar('Error al cargar creditos', 'error');
+      showSnackbar('Error al cargar créditos', 'error');
     } finally {
       setLoading(false);
     }
@@ -164,7 +164,7 @@ export default function CreditsPage(): React.ReactElement {
 
   return (
     <Box>
-      <Typography variant="h5" sx={{ mb: 3 }}>Creditos</Typography>
+      <Typography variant="h5" sx={{ mb: 3 }}>Créditos</Typography>
 
       {/* Filters */}
       <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
@@ -245,7 +245,7 @@ export default function CreditsPage(): React.ReactElement {
                 </TableRow>
               ))}
               {credits.length === 0 && (
-                <TableRow><TableCell colSpan={8} align="center">No hay creditos</TableCell></TableRow>
+                <TableRow><TableCell colSpan={8} align="center">No hay créditos</TableCell></TableRow>
               )}
             </TableBody>
           </Table>
@@ -263,7 +263,7 @@ export default function CreditsPage(): React.ReactElement {
 
       {/* Detail Dialog */}
       <Dialog open={detailOpen} onClose={() => setDetailOpen(false)} maxWidth="sm" fullWidth fullScreen={isMobile}>
-        <DialogTitle>Credito #{selectedCredit?.id}</DialogTitle>
+        <DialogTitle>Crédito #{selectedCredit?.id}</DialogTitle>
         <DialogContent>
           {loadingDetail ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}><CircularProgress /></Box>
@@ -357,7 +357,7 @@ export default function CreditsPage(): React.ReactElement {
         <DialogTitle>Registrar Abono</DialogTitle>
         <DialogContent>
           <Alert severity="info" sx={{ mb: 2, mt: 1 }}>
-            Credito #{paymentCreditId} — {paymentCustomerName}<br />
+            Crédito #{paymentCreditId} — {paymentCustomerName}<br />
             Saldo pendiente: <strong>{formatCurrency(paymentMaxAmount)}</strong>
           </Alert>
 

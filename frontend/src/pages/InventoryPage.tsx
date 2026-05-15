@@ -112,9 +112,9 @@ export default function InventoryPage(): React.ReactElement {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Codigo</TableCell>
+              <TableCell>Código</TableCell>
               <TableCell>Nombre</TableCell>
-              <TableCell>Categoria</TableCell>
+              <TableCell>Categoría</TableCell>
               <TableCell align="right">Precio</TableCell>
               <TableCell align="right">Stock</TableCell>
               <TableCell align="right">Stock Min.</TableCell>
@@ -162,7 +162,7 @@ export default function InventoryPage(): React.ReactElement {
         <DialogTitle>Editar: {editTarget?.name}</DialogTitle>
         <DialogContent>
           <TextField fullWidth label="Precio" type="number" value={editForm.price} onChange={(e) => setEditForm({ ...editForm, price: Number(e.target.value) })} margin="dense" inputProps={{ min: 0 }} />
-          <TextField fullWidth label="Stock minimo" type="number" value={editForm.minStock} onChange={(e) => setEditForm({ ...editForm, minStock: Number(e.target.value) })} margin="dense" inputProps={{ min: 0 }} />
+          <TextField fullWidth label="Stock mínimo" type="number" value={editForm.minStock} onChange={(e) => setEditForm({ ...editForm, minStock: Number(e.target.value) })} margin="dense" inputProps={{ min: 0 }} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEditOpen(false)}>Cancelar</Button>
@@ -175,10 +175,10 @@ export default function InventoryPage(): React.ReactElement {
         <DialogTitle>Ajustar Stock: {adjustTarget?.name}</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Stock actual: {adjustTarget?.stock} | Usa numeros positivos para agregar, negativos para restar.
+            Stock actual: {adjustTarget?.stock} | Usa números positivos para agregar, negativos para restar.
           </Typography>
           <TextField fullWidth label="Ajuste" type="number" value={adjustment} onChange={(e) => setAdjustment(Number(e.target.value))} margin="dense" autoFocus />
-          <TextField fullWidth label="Razon (opcional)" value={reason} onChange={(e) => setReason(e.target.value)} margin="dense" />
+          <TextField fullWidth label="Razón (opcional)" value={reason} onChange={(e) => setReason(e.target.value)} margin="dense" />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setAdjustOpen(false)}>Cancelar</Button>

@@ -61,7 +61,7 @@ export default function ProductsPage(): React.ReactElement {
       const cats = await categoryService.getCategories(true);
       setCategories(cats);
     } catch {
-      showSnackbar('Error al cargar categorias', 'error');
+      showSnackbar('Error al cargar categorías', 'error');
     }
   }, [showSnackbar]);
 
@@ -137,7 +137,7 @@ export default function ProductsPage(): React.ReactElement {
       </Box>
 
       <TextField
-        placeholder="Buscar por nombre o codigo..."
+        placeholder="Buscar por nombre o código..."
         size="small"
         value={search}
         onChange={(e) => { setSearch(e.target.value); setPage(0); }}
@@ -151,9 +151,9 @@ export default function ProductsPage(): React.ReactElement {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Codigo</TableCell>
+              <TableCell>Código</TableCell>
               <TableCell>Nombre</TableCell>
-              <TableCell>Categoria</TableCell>
+              <TableCell>Categoría</TableCell>
               <TableCell>Tipo</TableCell>
               <TableCell align="right">Precio</TableCell>
               <TableCell align="right">Stock</TableCell>
@@ -202,11 +202,11 @@ export default function ProductsPage(): React.ReactElement {
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} maxWidth="sm" fullWidth>
         <DialogTitle>{editingProduct ? 'Editar Producto' : 'Nuevo Producto'}</DialogTitle>
         <DialogContent>
-          <TextField fullWidth label="Codigo" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} margin="dense" />
+          <TextField fullWidth label="Código" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} margin="dense" />
           <TextField fullWidth label="Nombre" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} margin="dense" />
           <FormControl fullWidth margin="dense">
-            <InputLabel>Categoria</InputLabel>
-            <Select value={selectedCategoryId} label="Categoria" onChange={(e) => { setSelectedCategoryId(Number(e.target.value)); setForm({ ...form, subcategoryId: 0 }); }}>
+            <InputLabel>Categoría</InputLabel>
+            <Select value={selectedCategoryId} label="Categoría" onChange={(e) => { setSelectedCategoryId(Number(e.target.value)); setForm({ ...form, subcategoryId: 0 }); }}>
               {categories.filter((c) => c.status === 'activo').map((c) => <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>)}
             </Select>
           </FormControl>
@@ -222,7 +222,7 @@ export default function ProductsPage(): React.ReactElement {
                     const created = await categoryService.createSubcategory({ categoryId: selectedCategoryId, name: newValue.trim() });
                     await fetchCategories();
                     setForm({ ...form, subcategoryId: created.id });
-                  } catch { showSnackbar('Error al crear subcategoria', 'error'); }
+                  } catch { showSnackbar('Error al crear subcategoría', 'error'); }
                 }
               } else if (newValue) {
                 setForm({ ...form, subcategoryId: newValue.id });
@@ -237,11 +237,11 @@ export default function ProductsPage(): React.ReactElement {
                   const created = await categoryService.createSubcategory({ categoryId: selectedCategoryId, name: val });
                   await fetchCategories();
                   setForm((prev) => ({ ...prev, subcategoryId: created.id }));
-                } catch { showSnackbar('Error al crear subcategoria', 'error'); }
+                } catch { showSnackbar('Error al crear subcategoría', 'error'); }
               }
             }}
             isOptionEqualToValue={(option, value) => typeof option !== 'string' && typeof value !== 'string' && option.id === value.id}
-            renderInput={(params) => <TextField {...params} label="Subcategoria" margin="dense" />}
+            renderInput={(params) => <TextField {...params} label="Subcategoría" margin="dense" />}
             disabled={selectedCategoryId === 0}
             noOptionsText="Escribe para crear nueva"
           />
@@ -256,7 +256,7 @@ export default function ProductsPage(): React.ReactElement {
           {form.type === 'inventory' && (
             <>
               <TextField fullWidth label="Stock" type="number" value={form.stock} onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })} margin="dense" />
-              <TextField fullWidth label="Stock minimo" type="number" value={form.minStock} onChange={(e) => setForm({ ...form, minStock: Number(e.target.value) })} margin="dense" />
+              <TextField fullWidth label="Stock mínimo" type="number" value={form.minStock} onChange={(e) => setForm({ ...form, minStock: Number(e.target.value) })} margin="dense" />
             </>
           )}
         </DialogContent>
