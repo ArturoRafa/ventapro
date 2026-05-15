@@ -9,12 +9,13 @@ const router = Router();
 // Any authenticated user (must have open cash register — checked in service)
 router.post('/', authenticate, saleController.create);
 
-// Admin only
-router.get('/', authenticate, authorize('admin'), saleController.findAll);
+// Any authenticated user — cashier scope enforced in controller
+router.get('/', authenticate, saleController.findAll);
 
 // Ticket PDF — any authenticated user (must be before /:id)
 router.get('/:id/ticket', authenticate, ticketController.generateTicket);
 
-router.get('/:id', authenticate, authorize('admin'), saleController.findById);
+// Any authenticated user — ownership enforced in controller
+router.get('/:id', authenticate, saleController.findById);
 
 export default router;

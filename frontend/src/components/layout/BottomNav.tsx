@@ -76,7 +76,7 @@ export default function BottomNav(): React.ReactElement {
             <BottomNavigationAction key={item.path} label={item.label} icon={item.icon} />
           ))}
           {showMore && (
-            <BottomNavigationAction label="Mas" icon={<MoreHoriz />} />
+            <BottomNavigationAction label="Más" icon={<MoreHoriz />} />
           )}
         </BottomNavigation>
       </Paper>

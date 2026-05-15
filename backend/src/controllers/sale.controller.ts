@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import * as saleService from '../services/sale.service';
 import { validateCreateSaleDto } from '../dtos/sale.dto';
+import { Errors } from '../utils/AppError';
 
 export async function create(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
@@ -15,6 +16,7 @@ export async function create(req: Request, res: Response, next: NextFunction): P
 
 export async function findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
+    const isAdmin = req.user!.role === 'admin';
     const paymentMethodParam = req.query.paymentMethod as string | undefined;
     const statusParam = req.query.status as string | undefined;
 
@@ -22,7 +24,9 @@ export async function findAll(req: Request, res: Response, next: NextFunction): 
       page: req.query.page ? Number(req.query.page) : undefined,
       limit: req.query.limit ? Number(req.query.limit) : undefined,
       cashRegisterId: req.query.cashRegisterId ? Number(req.query.cashRegisterId) : undefined,
-      cashierId: req.query.cashierId ? Number(req.query.cashierId) : undefined,
+      cashierId: isAdmin
+        ? (req.query.cashierId ? Number(req.query.cashierId) : undefined)
+        : req.user!.id,
       paymentMethod:
         paymentMethodParam && ['cash', 'card', 'transfer'].includes(paymentMethodParam)
           ? (paymentMethodParam as 'cash' | 'card' | 'transfer')
@@ -43,6 +47,9 @@ export async function findAll(req: Request, res: Response, next: NextFunction): 
 export async function findById(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const sale = await saleService.findById(Number(req.params.id));
+    if (req.user!.role !== 'admin' && sale.cashierId !== req.user!.id) {
+      throw Errors.forbidden('Solo puedes ver tus propias ventas');
+    }
     res.json({ data: sale });
   } catch (error) {
     next(error);

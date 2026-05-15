@@ -15,6 +15,7 @@ import PosPage from './pages/PosPage';
 import CreditsPage from './pages/CreditsPage';
 import ReportsPage from './pages/ReportsPage';
 import UsersPage from './pages/UsersPage';
+import SalesHistoryPage from './pages/SalesHistoryPage';
 
 function App(): React.ReactElement {
   return (
@@ -47,6 +48,7 @@ function App(): React.ReactElement {
                 />
                 <Route path="clientes" element={<CustomersPage />} />
                 <Route path="creditos" element={<CreditsPage />} />
+                <Route path="ventas" element={<SalesHistoryPage />} />
                 <Route
                   path="reportes"
                   element={
