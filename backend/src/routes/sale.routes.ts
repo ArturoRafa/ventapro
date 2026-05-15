@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import * as saleController from '../controllers/sale.controller';
 import * as ticketController from '../controllers/ticket.controller';
-import { authenticate, authorize } from '../middlewares/auth.middleware';
+import { authenticate } from '../middlewares/auth.middleware';
 
 const router = Router();
 
