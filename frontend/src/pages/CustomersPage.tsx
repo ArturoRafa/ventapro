@@ -97,7 +97,7 @@ export default function CustomersPage(): React.ReactElement {
       </Box>
 
       <TextField
-        placeholder="Buscar por nombre o telefono..."
+        placeholder="Buscar por nombre o teléfono..."
         size="small"
         value={search}
         onChange={(e) => { setSearch(e.target.value); setPage(0); }}
@@ -112,9 +112,9 @@ export default function CustomersPage(): React.ReactElement {
           <TableHead>
             <TableRow>
               <TableCell>Nombre</TableCell>
-              <TableCell>Telefono</TableCell>
-              <TableCell>Telefono Alt.</TableCell>
-              <TableCell>Direccion</TableCell>
+              <TableCell>Teléfono</TableCell>
+              <TableCell>Teléfono Alt.</TableCell>
+              <TableCell>Dirección</TableCell>
               <TableCell>Estado</TableCell>
               {isAdmin && <TableCell>Acciones</TableCell>}
             </TableRow>
@@ -158,9 +158,9 @@ export default function CustomersPage(): React.ReactElement {
         <DialogTitle>{editingCustomer ? 'Editar Cliente' : 'Nuevo Cliente'}</DialogTitle>
         <DialogContent>
           <TextField fullWidth label="Nombre" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} margin="dense" autoFocus />
-          <TextField fullWidth label="Telefono" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} margin="dense" />
-          <TextField fullWidth label="Telefono alternativo" value={form.alternatePhone ?? ''} onChange={(e) => setForm({ ...form, alternatePhone: e.target.value })} margin="dense" />
-          <TextField fullWidth label="Direccion" value={form.address ?? ''} onChange={(e) => setForm({ ...form, address: e.target.value })} margin="dense" multiline rows={2} />
+          <TextField fullWidth label="Teléfono" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} margin="dense" />
+          <TextField fullWidth label="Teléfono alternativo" value={form.alternatePhone ?? ''} onChange={(e) => setForm({ ...form, alternatePhone: e.target.value })} margin="dense" />
+          <TextField fullWidth label="Dirección" value={form.address ?? ''} onChange={(e) => setForm({ ...form, address: e.target.value })} margin="dense" multiline rows={2} />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)}>Cancelar</Button>

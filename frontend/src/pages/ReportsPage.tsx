@@ -41,7 +41,7 @@ export default function ReportsPage(): React.ReactElement {
     { key: 'ventas', label: 'Ventas' },
     { key: 'productos', label: 'Productos Top' },
     { key: 'cajeros', label: 'Por Cajero' },
-    ...(config?.usesCredit !== false ? [{ key: 'creditos', label: 'Creditos' }] : []),
+    ...(config?.usesCredit !== false ? [{ key: 'creditos', label: 'Créditos' }] : []),
     ...(config?.usesCashRegister !== false ? [{ key: 'cajas', label: 'Cajas' }] : []),
   ];
 
@@ -187,8 +187,8 @@ export default function ReportsPage(): React.ReactElement {
                   </Select>
                 </FormControl>
                 <FormControl size="small" sx={{ minWidth: 100 }}>
-                  <InputLabel>Limite</InputLabel>
-                  <Select value={topLimit} label="Limite" onChange={(e) => setTopLimit(Number(e.target.value))}>
+                  <InputLabel>Límite</InputLabel>
+                  <Select value={topLimit} label="Límite" onChange={(e) => setTopLimit(Number(e.target.value))}>
                     <MenuItem value={5}>Top 5</MenuItem>
                     <MenuItem value={10}>Top 10</MenuItem>
                     <MenuItem value={20}>Top 20</MenuItem>
@@ -263,7 +263,7 @@ export default function ReportsPage(): React.ReactElement {
           {activeKey === 'creditos' && creditSummary && (
             <Box>
               <Grid container spacing={2} sx={{ mb: 3 }}>
-                <Grid item xs={12} sm={4}><KpiCard label="Total Creditos" value={String(creditSummary.summary.totalCredits)} /></Grid>
+                <Grid item xs={12} sm={4}><KpiCard label="Total Créditos" value={String(creditSummary.summary.totalCredits)} /></Grid>
                 <Grid item xs={12} sm={4}><KpiCard label="Total Prestado" value={formatCurrency(creditSummary.summary.totalAmount)} /></Grid>
                 <Grid item xs={12} sm={4}><KpiCard label="Saldo Pendiente" value={formatCurrency(creditSummary.summary.totalPending)} /></Grid>
               </Grid>
@@ -290,7 +290,7 @@ export default function ReportsPage(): React.ReactElement {
                       </TableRow>
                     ))}
                     {creditSummary.byCustomer.length === 0 && (
-                      <TableRow><TableCell colSpan={4} align="center">Sin creditos</TableCell></TableRow>
+                      <TableRow><TableCell colSpan={4} align="center">Sin créditos</TableCell></TableRow>
                     )}
                   </TableBody>
                 </Table>
