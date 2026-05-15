@@ -1,5 +1,5 @@
 import { Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar, Divider, Box, Tooltip } from '@mui/material';
-import { Inventory2, Category, ShoppingCart, People, Settings, Assessment, PointOfSale, Storefront, CreditScore, ManageAccounts } from '@mui/icons-material';
+import { Inventory2, Category, ShoppingCart, People, Settings, Assessment, PointOfSale, Storefront, CreditScore, ManageAccounts, Receipt } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useConfig } from '../../context/ConfigContext';
@@ -26,6 +26,7 @@ const navItems: NavEntry[] = [
   { label: 'Inventario', path: '/inventario', icon: <Inventory2 />, adminOnly: true },
   { label: 'Clientes', path: '/clientes', icon: <People />, featureFlag: 'usesCredit' },
   { label: 'Créditos', path: '/creditos', icon: <CreditScore />, featureFlag: 'usesCredit' },
+  { label: 'Ventas', path: '/ventas', icon: <Receipt /> },
   'divider',
   { label: 'Reportes', path: '/reportes', icon: <Assessment />, adminOnly: true, featureFlag: 'usesReports' },
   { label: 'Configuración', path: '/configuracion', icon: <Settings />, adminOnly: true },
