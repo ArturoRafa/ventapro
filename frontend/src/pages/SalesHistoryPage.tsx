@@ -85,8 +85,15 @@ export default function SalesHistoryPage(): React.ReactElement {
     fetchSales();
   }, [fetchSales]);
 
-  function handleFilterChange(setter: (v: string) => void) {
-    return (e: React.ChangeEvent<HTMLInputElement> | SelectChangeEvent) => {
+  function handleTextChange(setter: (v: string) => void) {
+    return (e: React.ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+      setPage(0);
+    };
+  }
+
+  function handleSelectChange(setter: (v: string) => void) {
+    return (e: SelectChangeEvent) => {
       setter(e.target.value);
       setPage(0);
     };
@@ -128,7 +135,7 @@ export default function SalesHistoryPage(): React.ReactElement {
           type="date"
           size="small"
           value={from}
-          onChange={handleFilterChange(setFrom)}
+          onChange={handleTextChange(setFrom)}
           InputLabelProps={{ shrink: true }}
           sx={{ width: 160 }}
         />
@@ -137,13 +144,13 @@ export default function SalesHistoryPage(): React.ReactElement {
           type="date"
           size="small"
           value={to}
-          onChange={handleFilterChange(setTo)}
+          onChange={handleTextChange(setTo)}
           InputLabelProps={{ shrink: true }}
           sx={{ width: 160 }}
         />
         <FormControl size="small" sx={{ width: 160 }}>
           <InputLabel>Método</InputLabel>
-          <Select label="Método" value={paymentMethod} onChange={handleFilterChange(setPaymentMethod)}>
+          <Select label="Método" value={paymentMethod} onChange={handleSelectChange(setPaymentMethod)}>
             <MenuItem value="">Todos</MenuItem>
             <MenuItem value="cash">Efectivo</MenuItem>
             <MenuItem value="card">Tarjeta</MenuItem>
@@ -152,7 +159,7 @@ export default function SalesHistoryPage(): React.ReactElement {
         </FormControl>
         <FormControl size="small" sx={{ width: 140 }}>
           <InputLabel>Estado</InputLabel>
-          <Select label="Estado" value={status} onChange={handleFilterChange(setStatus)}>
+          <Select label="Estado" value={status} onChange={handleSelectChange(setStatus)}>
             <MenuItem value="">Todos</MenuItem>
             <MenuItem value="paid">Pagado</MenuItem>
             <MenuItem value="pending">Pendiente</MenuItem>
@@ -161,7 +168,7 @@ export default function SalesHistoryPage(): React.ReactElement {
         {isAdmin && (
           <FormControl size="small" sx={{ width: 180 }}>
             <InputLabel>Cajero</InputLabel>
-            <Select label="Cajero" value={cashierId} onChange={handleFilterChange(setCashierId)}>
+            <Select label="Cajero" value={cashierId} onChange={handleSelectChange(setCashierId)}>
               <MenuItem value="">Todos</MenuItem>
               {cashiers.map((c) => (
                 <MenuItem key={c.id} value={String(c.id)}>{c.name}</MenuItem>

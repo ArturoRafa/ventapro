@@ -4,15 +4,13 @@ import { Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useConfig } from '../../context/ConfigContext';
 import { useResponsive } from '../../hooks/useResponsive';
-import Sidebar, { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from './Sidebar';
+import Sidebar from './Sidebar';
 import BottomNav from './BottomNav';
 
 export default function MainLayout(): React.ReactElement {
   const { user, logout } = useAuth();
   const { config } = useConfig();
   const { isMobile, isTablet } = useResponsive();
-
-  const drawerWidth = isMobile ? 0 : isTablet ? MINI_DRAWER_WIDTH : DRAWER_WIDTH;
 
   return (
     <Box sx={{ display: 'flex' }}>
